@@ -1,4 +1,4 @@
-section.form.animated.flipInX {}
+
 
 form {
     display: block;
@@ -10,7 +10,7 @@ form {
     top: 35%;
     left: 50%;
     background: #fff;
-    width: 285px;
+    width: 355px;
     margin: -140px 0 0 -182px;
     padding: 40px;
     box-shadow: 0 0 3px rgb(0 0 0 / 30%);
@@ -27,19 +27,20 @@ body {
     font-family: 'open sans', helvetica, arial, sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    display: block;
+    margin: 8px;
 
 
 
 }
 
-img[Attributes Style] {
-    width: 100%;
-    height: 100%;
-}
+
 
 img {
     overflow-clip-margin: content-box;
     overflow: clip;
+    width: 100%;
+    height: 100%;
 }
 
 div {
@@ -65,15 +66,6 @@ element.style {
 
 input {
     writing-mode: horizontal-tb !important;
-    font-style: ;
-    font-variant-ligatures: ;
-    font-variant-caps: ;
-    font-variant-numeric: ;
-    font-variant-east-asian: ;
-    font-weight: ;
-    font-stretch: ;
-    font-size: ;
-    font-family: ;
     text-rendering: auto;
     color: fieldtext;
     letter-spacing: normal;
@@ -95,16 +87,24 @@ input {
     border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
     border-image: initial;
 }
-
-input[type="checkbox" i] {
-    background-color: initial;
-    cursor: default;
-    appearance: auto;
-    box-sizing: border-box;
-    margin: 3px 3px 3px 4px;
-    padding: initial;
-    border: initial;
+h2 {
+    margin: 0 0 20px;
+    line-height: 1;
+    color: #ed0909;
+    font-size: 18px;
+    font-weight: 400;
 }
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+
 
 .forget {
     text-align: center;
@@ -112,11 +112,6 @@ input[type="checkbox" i] {
     font-size: 0.8em;
 }
 
-a:-webkit-any-link {
-    color: -webkit-link;
-    cursor: pointer;
-    text-decoration: underline;
-}
 
 .button {
     cursor: pointer;
@@ -138,13 +133,6 @@ input[type="submit" i] {
     white-space: pre;
     align-items: flex-start;
     text-align: center;
-    cursor: default;
     box-sizing: border-box;
-    background-color: buttonface;
-    color: buttontext;
-    padding: 1px 6px;
-    border-width: 2px;
-    border-style: outset;
-    border-color: buttonborder;
-    border-image: initial;
+    
 }
