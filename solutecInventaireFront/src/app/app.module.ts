@@ -8,6 +8,8 @@ import { AccueilComponent } from './accueil/accueil.component';
 import { GestionStockComponent } from './gestion-stock/gestion-stock.component';
 import { GenerationRapportsComponent } from './generation-rapports/generation-rapports.component';
 import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,11 +18,14 @@ import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.compo
     AccueilComponent,
     GestionStockComponent,
     GenerationRapportsComponent,
-    GestionAlertesComponent
+    GestionAlertesComponent,
+    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
