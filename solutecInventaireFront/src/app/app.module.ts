@@ -10,8 +10,9 @@ import { GenerationRapportsComponent } from './generation-rapports/generation-ra
 import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     GestionStockComponent,
     GenerationRapportsComponent,
     GestionAlertesComponent,
-    
+
   ],
   imports: [
     BrowserModule,
@@ -29,6 +30,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     FormsModule,
     MatTableModule,
+    MatCardModule,
     BrowserAnimationsModule,
   ],
   providers: [],
