@@ -13,7 +13,6 @@ export interface Product {
   exitDate: Date;
 }
 
-var ELEMENT_DATA: Product[] = [];
 
 @Component({
   selector: 'app-gestion-stock',
@@ -24,9 +23,8 @@ export class GestionStockComponent implements  OnInit{
   listProducts: any;
   lengthDataSource:any;
 
-  
-  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate','exitDate'];
-  dataSource = new MatTableDataSource<Product>(ELEMENT_DATA);
+  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate','exitDate','star'];
+  dataSource = new MatTableDataSource<Product>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(private http: HttpClient){
@@ -40,15 +38,11 @@ export class GestionStockComponent implements  OnInit{
   }
   
 
-
   getListProducts(){
-    ELEMENT_DATA= [];
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
         console.log(data)
         this.listProducts = data;
-        this.listProducts.map((p:any)=> ELEMENT_DATA.push({idProduct: p.idProduct, nameProduct: p.nameProduct, refProduct: p.refProduct, owner: p.owner, entryDate: p.entryDate, exitDate: p.exitDate }
-        ))
         this.dataSource = new MatTableDataSource<Product>(this.listProducts);
         this.dataSource.sort=this.sort;
         this.dataSource.paginator = this.paginator;
