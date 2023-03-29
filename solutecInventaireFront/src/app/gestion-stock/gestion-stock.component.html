@@ -1,1 +1,46 @@
-<p>gestion-stock works!</p>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+    <!-- Position Column -->
+    <ng-container matColumnDef="nameProduct">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nameProduct"> nameProduct </th>
+      <td mat-cell *matCellDef="let row"> {{row.nameProduct}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="refProduct">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by refProduct"> refProduct </th>
+      <td mat-cell *matCellDef="let row"> {{row.refProduct}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="owner">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by owner"> owner </th>
+      <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="entryDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDate"> entryDate </th>
+      <td mat-cell *matCellDef="let row"> {{row.entryDate}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="exitDate" >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by exitDate"> exitDate </th>
+      <td mat-cell *matCellDef="let row"> {{row.exitDate}} </td>
+    </ng-container>
+
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+ 
+  <mat-paginator [length]="lengthDataSource" [pageSize]="5" [pageSizeOptions]="[5, 10]" showFirstLastButtons></mat-paginator>
+
+</div>
+
+  
