@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     MatTableModule,
     BrowserAnimationsModule,
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
