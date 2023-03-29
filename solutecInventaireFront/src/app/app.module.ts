@@ -10,9 +10,10 @@ import { GenerationRapportsComponent } from './generation-rapports/generation-ra
 import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule} from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     BrowserAnimationsModule,
     MatSortModule,
+    MatPaginatorModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

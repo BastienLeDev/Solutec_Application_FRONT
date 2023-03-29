@@ -1,6 +1,6 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -20,38 +20,39 @@ var ELEMENT_DATA: Product[] = [];
   templateUrl: './gestion-stock.component.html',
   styleUrls: ['./gestion-stock.component.css']
 })
-export class GestionStockComponent implements OnInit, AfterViewChecked {
+export class GestionStockComponent implements  OnInit{
   listProducts: any;
+  lengthDataSource:any;
 
   
   displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate','exitDate'];
-  dataSource = new MatTableDataSource<Product>(ELEMENT_DATA)  ;
-
+  dataSource = new MatTableDataSource<Product>(ELEMENT_DATA);
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private http: HttpClient){
 
   };
 
-  @ViewChild(MatSort) sort: MatSort;
   
-
   ngOnInit(): void {
     this.getListProducts();
+    
   }
+  
 
-  ngAfterViewChecked(): void {
-    this.dataSource.sort = this.sort;
-  }
 
   getListProducts(){
     ELEMENT_DATA= [];
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
+        console.log(data)
         this.listProducts = data;
-        console.log(this.listProducts);
         this.listProducts.map((p:any)=> ELEMENT_DATA.push({idProduct: p.idProduct, nameProduct: p.nameProduct, refProduct: p.refProduct, owner: p.owner, entryDate: p.entryDate, exitDate: p.exitDate }
         ))
-        console.log(ELEMENT_DATA);
-        this.dataSource = new MatTableDataSource(ELEMENT_DATA)  ;
+        this.dataSource = new MatTableDataSource<Product>(this.listProducts);
+        this.dataSource.sort=this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.lengthDataSource = this.listProducts.length;
       },
       error: (err) => { console.log(err) },
     })
