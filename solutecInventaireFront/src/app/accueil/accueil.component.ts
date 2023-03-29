@@ -26,7 +26,7 @@ export class AccueilComponent implements OnInit {
   Ecran_teletravail: any;
   Ecran_structure: any;
   Alimentation: any;
-  Casque_Mission: any;
+  Casque_mission: any;
   Casque_structure: any;
 
 
@@ -36,20 +36,37 @@ export class AccueilComponent implements OnInit {
   ngOnInit(): void {
     this.getPC();
     this.getAlim();
+    this.getBadgeIntercontrat();
+    this.getBadgeStructure();
+    this.getBase();
+    this.getCableEthernet();
+    this.getCableHDMI();
+    this.getCasqueMission();
+    this.getCasqueStructure();
+    this.getClavier();
+    this.getCoqueTelephone();
+    this.getEcranStructure();
+    this.getEcranTeletravail();
+    this.getPCINT();
+    this.getSouris();
+    this.getSupportPC();
+    this.getTelephoneMission();
+    this.getTelephoneStructure();
+    this.getPosteMission();
+    this.getPosteStructure();
   }
 
   getPC() {
-    this.http.get('http://localhost:8301/getStockPc').subscribe({
+    this.http.get('http://localhost:8301/getStockPc', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.PC_intercontrat = data;
-        console.log(this.PC_intercontrat)
       },
       error: (err) => { console.log(err); }
     });
   }
 
   getSouris() {
-    this.http.get('http://localhost:8301/getStockSouris').subscribe({
+    this.http.get('http://localhost:8301/getStockSouris', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Souris = data;
       },
@@ -58,9 +75,9 @@ export class AccueilComponent implements OnInit {
   }
 
   getAlim() {
-    this.http.get('http://localhost:8301/getStockAlim').subscribe({
+    this.http.get('http://localhost:8301/getStockAlim', { responseType: 'text' }).subscribe({
       next: (data) => {
-        data = JSON.stringify(data);
+        data = data;
         this.Alimentation = data;
 
       },
@@ -69,7 +86,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getBadgeStructure() {
-    this.http.get('http://localhost:8301/getStockBadgeStructure').subscribe({
+    this.http.get('http://localhost:8301/getStockBadgeStructure', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Badge_structure = data;
       },
@@ -78,7 +95,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getBadgeIntercontrat() {
-    this.http.get('http://localhost:8301/getStockBadgeIntercontrat').subscribe({
+    this.http.get('http://localhost:8301/getStockBadgeIntercontrat', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Badge_intercontrat = data;
       },
@@ -86,8 +103,8 @@ export class AccueilComponent implements OnInit {
     });
   }
 
-  getBadgePosteMission() {
-    this.http.get('http://localhost:8301/getStockPosteMission').subscribe({
+  getPosteMission() {
+    this.http.get('http://localhost:8301/getStockPosteMission', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Poste_mission = data;
       },
@@ -95,8 +112,8 @@ export class AccueilComponent implements OnInit {
     });
   }
 
-  getBadgePosteStructure() {
-    this.http.get('http://localhost:8301/getStockPosteStructure').subscribe({
+  getPosteStructure() {
+    this.http.get('http://localhost:8301/getStockPosteStructure', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Poste_structure = data;
       },
@@ -105,7 +122,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getBase() {
-    this.http.get('http://localhost:8301/getStockBase').subscribe({
+    this.http.get('http://localhost:8301/getStockBase', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Base = data;
       },
@@ -114,7 +131,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getTelephoneMission() {
-    this.http.get('http://localhost:8301/getStockTelephoneMission').subscribe({
+    this.http.get('http://localhost:8301/getStockTelephoneMission', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Telephone_mission = data;
       },
@@ -123,7 +140,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getTelephoneStructure() {
-    this.http.get('http://localhost:8301/getStockTelephoneStructure').subscribe({
+    this.http.get('http://localhost:8301/getStockTelephoneStructure', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Telephone_structure = data;
       },
@@ -132,16 +149,16 @@ export class AccueilComponent implements OnInit {
   }
 
   getCasqueMission() {
-    this.http.get('http://localhost:8301/getStockCasqueMission').subscribe({
+    this.http.get('http://localhost:8301/getStockCasqueMission', { responseType: 'text' }).subscribe({
       next: (data) => {
-        this.Casque_Mission = data;
+        this.Casque_mission = data;
       },
       error: (err) => { console.log(err); }
     });
   }
 
   getCasqueStructure() {
-    this.http.get('http://localhost:8301/getStockCasqueStructure').subscribe({
+    this.http.get('http://localhost:8301/getStockCasqueStructure', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Casque_structure = data;
       },
@@ -150,7 +167,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getEcranTeletravail() {
-    this.http.get('http://localhost:8301/getStockEcranTeletravail').subscribe({
+    this.http.get('http://localhost:8301/getStockEcranTeletravail', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Ecran_teletravail = data;
       },
@@ -159,7 +176,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getEcranStructure() {
-    this.http.get('http://localhost:8301/getStockEcranStructure').subscribe({
+    this.http.get('http://localhost:8301/getStockEcranStructure', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Ecran_structure = data;
       },
@@ -168,7 +185,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getPCINT() {
-    this.http.get('http://localhost:8301/getStockPCINT').subscribe({
+    this.http.get('http://localhost:8301/getStockPCINT', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.PC_INT = data;
       },
@@ -177,7 +194,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getSupportPC() {
-    this.http.get('http://localhost:8301/getStockSupportPC').subscribe({
+    this.http.get('http://localhost:8301/getStockSupportPC', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Support_PC = data;
       },
@@ -186,7 +203,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getClavier() {
-    this.http.get('http://localhost:8301/getStockClavier').subscribe({
+    this.http.get('http://localhost:8301/getStockClavier', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Clavier = data;
       },
@@ -195,7 +212,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getCableHDMI() {
-    this.http.get('http://localhost:8301/getStockCablesHDMI').subscribe({
+    this.http.get('http://localhost:8301/getStockCablesHDMI', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Cables_HDMI = data;
       },
@@ -204,7 +221,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getCableEthernet() {
-    this.http.get('http://localhost:8301/getStockCablesEthernet').subscribe({
+    this.http.get('http://localhost:8301/getStockCablesEthernet', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Cables_ethernet = data;
       },
@@ -213,7 +230,7 @@ export class AccueilComponent implements OnInit {
   }
 
   getCoqueTelephone() {
-    this.http.get('http://localhost:8301/getStockCoqueTelephone').subscribe({
+    this.http.get('http://localhost:8301/getStockCoqueTelephone', { responseType: 'text' }).subscribe({
       next: (data) => {
         this.Coque_telephone = data;
       },
