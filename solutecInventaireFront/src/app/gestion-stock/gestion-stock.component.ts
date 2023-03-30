@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort} from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 export interface Product {
@@ -11,6 +11,7 @@ export interface Product {
   owner: string;
   entryDate: Date;
   exitDate: Date;
+  delete: any;
 }
 
 
@@ -19,32 +20,34 @@ export interface Product {
   templateUrl: './gestion-stock.component.html',
   styleUrls: ['./gestion-stock.component.css']
 })
-export class GestionStockComponent implements  OnInit{
+export class GestionStockComponent implements OnInit {
   listProducts: any;
-  lengthDataSource:any;
+  lengthDataSource: any;
 
-  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate','exitDate','star'];
+  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate', 'star'];
   dataSource = new MatTableDataSource<Product>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private http: HttpClient){
+  delete: Object;
+  constructor(private http: HttpClient) {
 
   };
 
-  
+
   ngOnInit(): void {
     this.getListProducts();
-    
-  }
-  
 
-  getListProducts(){
+  }
+
+
+  getListProducts() {
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
         console.log(data)
         this.listProducts = data;
         this.dataSource = new MatTableDataSource<Product>(this.listProducts);
-        this.dataSource.sort=this.sort;
+        console.log(this.dataSource)
+        this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.lengthDataSource = this.listProducts.length;
       },
@@ -52,8 +55,17 @@ export class GestionStockComponent implements  OnInit{
     })
   };
 
-  
-  
 
-  
+  DeleteProduct(val: any) {
+    console.log(val)
+    this.http.delete('http://localhost:8301/delete/' + val).subscribe({
+      next: (data) => {
+        console.log(data)
+        this.delete = data;
+        this.ngOnInit();
+      },
+      error: (err) => { console.log(err) },
+    })
+  };
+
 }
