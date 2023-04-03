@@ -30,16 +30,27 @@ export class GestionStockComponent implements OnInit{
   listProducts: any;
   listDataSource: Array<any> = [];
   lengthDataSource: any;
-  toSupress: [];
+  suppr = false;
 
 
-  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate', 'select'];
+
+  displayedColumns: string[];
   dataSource = new MatTableDataSource<Product>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
   selection = new SelectionModel<Product>(true, []);
+
+  ColumnsToDisplay(){
+    if(this.suppr==true){
+      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate', 'select'];
+    }
+    if(this.suppr==false){
+      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate'];
+    }
+
+  }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -70,12 +81,11 @@ export class GestionStockComponent implements OnInit{
 
 
   ngOnInit(): void {
+    this.ColumnsToDisplay();
     this.listProducts=[];
     this.listDataSource=[];
     this.dataSource = new MatTableDataSource;
-    console.log(this.listProducts);
-    console.log(this.listDataSource);
-    console.log(this.dataSource);
+    this.selection.clear();
     this.getListProducts();
 
 
@@ -86,12 +96,9 @@ export class GestionStockComponent implements OnInit{
   i: any;
 
   getListProducts() {
-    console.log(this.listProducts)
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
-        console.log(data);
         this.listProducts = data;
-        console.log(this.listProducts)
         this.i=1;
         for (let index in this.listProducts) {
           let product = {} as any;
@@ -111,40 +118,35 @@ export class GestionStockComponent implements OnInit{
         this.dataSource.paginator = this.paginator;
         this.lengthDataSource = this.listProducts.length;
         this.listDataSource=[];
-        console.log(this.dataSource)
         
       },
       error: (err) => { console.log(err) },
     })
   };
 
-
+  modeSuppression(){
+    this.suppr=true;
+    console.log(this.suppr);
+    this.ngOnInit();
+  }
 
 
   DeleteProduct() {
-    console.log(this.selection)
-    console.log(this.selection.select)
-    
+    this.suppr=false;
+    this.ColumnsToDisplay();
+    console.log(this.suppr)
     for (let index in this.selection.selected) {
-      console.log(this.selection.selected[index].idProduct)
       this.http.delete('http://localhost:8301/delete/' + this.selection.selected[index].idProduct).subscribe({
       next: (data) => {
         this.delete = data;
-        console.log(this.delete)
         this.ngOnInit();
+        
       },
       error: (err) => { console.log(err) },
     })
-    
+     this.ngOnInit();
+     console.log(this.suppr)
     }
-    console.log(this.listProducts);
-    console.log(this.listDataSource);
-    console.log(this.dataSource);
-    
-    
-    
-    
-    
   };
 
 }

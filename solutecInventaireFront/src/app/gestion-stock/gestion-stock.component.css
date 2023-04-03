@@ -20,3 +20,15 @@ table {
   border-color: rgb(227, 227, 227);
 }
 */
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #ff001947;
+}
+
+.tableau{
+  padding: 50px;
+}
+
+.filtres{
+  padding: 50px;
+}
