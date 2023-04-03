@@ -1,5 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+
+export interface ProductReserved {
+  //Propriétées pour le tableau
+  idProduct: number;
+  nameProduct: string;
+  refProduct: string;
+  owner: string;
+  entryDate: Date;
+
+}
 
 @Component({
   selector: 'app-accueil',
@@ -28,6 +40,14 @@ export class AccueilComponent implements OnInit {
   Alimentation: any;
   Casque_mission: any;
   Casque_structure: any;
+  ProductsReserved: any;
+  RemoveReservation: any;
+  lengthDataSource: any;
+  currentDate = new Date();
+
+  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'star'];
+  dataSource = new MatTableDataSource<ProductReserved>();
+  @ViewChild(MatSort) sort: MatSort;
 
 
 
@@ -54,6 +74,7 @@ export class AccueilComponent implements OnInit {
     this.getTelephoneStructure();
     this.getPosteMission();
     this.getPosteStructure();
+    this.getReservation();
   }
 
   getPC() {
@@ -236,6 +257,29 @@ export class AccueilComponent implements OnInit {
       },
       error: (err) => { console.log(err); }
     });
+  }
+
+  getReservation() {
+    this.http.get('http://localhost:8301/getReservation').subscribe({
+      next: (data) => {
+        this.ProductsReserved = data;
+        this.dataSource = new MatTableDataSource<ProductReserved>(this.ProductsReserved);
+        this.dataSource.sort = this.sort;
+        this.lengthDataSource = this.ProductsReserved.length;
+
+      },
+      error: (err) => { console.log(err) },
+    })
+  }
+
+  removeReservation(val: any) {
+    this.http.get('http://localhost:8301/removeReservation/' + val).subscribe({
+      next: (data) => {
+        this.RemoveReservation = data;
+        this.ngOnInit();
+      },
+      error: (err) => { console.log(err) },
+    })
   }
 
 }
