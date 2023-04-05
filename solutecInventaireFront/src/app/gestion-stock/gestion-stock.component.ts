@@ -1,8 +1,6 @@
-import { DataSource, SelectionModel } from '@angular/cdk/collections';
-import { ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
+import { SelectionModel } from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -44,10 +42,10 @@ export class GestionStockComponent implements OnInit{
 
   ColumnsToDisplay(){
     if(this.suppr==true){
-      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate', 'select'];
+      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif', 'select'];
     }
     if(this.suppr==false){
-      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate'];
+      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif'];
     }
 
   }
