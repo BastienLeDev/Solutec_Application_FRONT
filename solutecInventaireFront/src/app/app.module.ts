@@ -18,6 +18,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTreeModule } from '@angular/material/tree';
+
+
 
 
 @NgModule({
@@ -43,6 +46,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatTreeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
