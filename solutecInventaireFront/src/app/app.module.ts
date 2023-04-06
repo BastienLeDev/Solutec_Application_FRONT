@@ -18,7 +18,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -28,6 +32,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     GestionStockComponent,
     GenerationRapportsComponent,
     GestionAlertesComponent,
+    ConfirmDialogComponent,
 
   ],
   imports: [
@@ -43,6 +48,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

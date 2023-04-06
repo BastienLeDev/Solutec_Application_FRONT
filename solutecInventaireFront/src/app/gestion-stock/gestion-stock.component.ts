@@ -1,9 +1,12 @@
 import { SelectionModel } from '@angular/cdk/collections';
+import { Dialog } from '@angular/cdk/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export interface Product {
   //Propriétées pour le tableau
@@ -17,7 +20,83 @@ export interface Product {
   delete: boolean;
 
 }
+const COLUMNS_SCHEMA = [
+  {
+      key: "nameProduct",
+      type: "text",
+      label: "Type de produit"
+  },
+  {
+      key: "refProduct",
+      type: "text",
+      label: "Référence du produit"
+  },
+  {
+      key: "owner",
+      type: "text",
+      label: "Référent"
+  },
+  {
+      key: "entryDate",
+      type: "date",
+      label: "Entrée en stock"
+  },
+  {
+      key: "exitDate",
+      type: "date",
+      label: "Sortie de stock"
+  },
+  {
+    key: "isEdit",
+    type: "isEdit",
+    label: ""
+  },
+  {
+    key: "isSelected",
+    type: "isSelected",
+    label: ""
+  },
 
+]
+const COLUMNS_SCHEMA_DELETE = [
+  {
+      key: "nameProduct",
+      type: "text",
+      label: "Type de produit"
+  },
+  {
+      key: "refProduct",
+      type: "text",
+      label: "Référence du produit"
+  },
+  {
+      key: "owner",
+      type: "text",
+      label: "Référent"
+  },
+  {
+      key: "entryDate",
+      type: "date",
+      label: "Entrée en stock"
+  },
+  {
+      key: "exitDate",
+      type: "date",
+      label: "Sortie de stock"
+  },
+  {
+    key: "isEdit",
+    type: "isEdit",
+    label: ""
+  },
+  {
+    key: "isSelected",
+    type: "isSelected",
+    label: ""
+  },
+
+
+]
 
 @Component({
   selector: 'app-gestion-stock',
@@ -32,14 +111,18 @@ export class GestionStockComponent implements OnInit{
 
 
 
-  displayedColumns: string[];
+  /*displayedColumns: string[];*/
+  displayedColumns: string[] = COLUMNS_SCHEMA.map((col) => col.key);
   dataSource = new MatTableDataSource<Product>();
+  columnsSchema: any = COLUMNS_SCHEMA;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
   selection = new SelectionModel<Product>(true, []);
 
+  /*
   ColumnsToDisplay(){
     if(this.suppr==true){
       this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif', 'select'];
@@ -48,38 +131,42 @@ export class GestionStockComponent implements OnInit{
       this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif'];
     }
 
-  }
+  }*/
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.dataSource.data.every((item: any) => item.isSelected);
   }
- /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource.data);
+  isAnySelected() {
+    return this.dataSource.data.some((item: any) => item.isSelected);
+  }
+  selectAll(event: any) {
+    this.dataSource.data = this.dataSource.data.map((item: any) => ({
+      ...item,
+      isSelected: event.checked,
+    }));
   }
 
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: Product): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  }
-
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public dialog: MatDialog) {
 
   };
 
+  addRow() {
+    const newRow = {
+      "position":0,
+      "idProduct":0, 
+      "nameProduct": "", 
+      "refProduct": "", 
+      "owner": "", 
+      "entryDate": new Date(), 
+      "delete": false, 
+      "exitDate": new Date()
+    };
+    this.dataSource.data = [newRow, ...this.dataSource.data];
+  }
+
 
   ngOnInit(): void {
-    this.ColumnsToDisplay();
+    /*this.ColumnsToDisplay();*/
     this.listProducts=[];
     this.listDataSource=[];
     this.dataSource = new MatTableDataSource;
@@ -125,16 +212,38 @@ export class GestionStockComponent implements OnInit{
   modeSuppression(){
     this.suppr=true;
     console.log(this.suppr);
+    this.displayedColumns = COLUMNS_SCHEMA_DELETE.map((col) => col.key);
     this.ngOnInit();
   }
 
+  removeSelectedRows() {
+    const products = this.dataSource.data.filter((p:any) => p.isSelected);
+    console.log(products)
+    if(products.length==0){
+      this.suppr=false;
+    }
+    else{
+      this.dialog
+      .open(ConfirmDialogComponent)
+      .afterClosed()
+      .subscribe((confirm: any) => {
+        if (confirm) {
+          console.log(this.selection.selected);
+          this.DeleteProduct();
+        }
+      });
+    }
+    
+  }
 
   DeleteProduct() {
     this.suppr=false;
-    this.ColumnsToDisplay();
+    /*this.ColumnsToDisplay();*/
     console.log(this.suppr)
-    for (let index in this.selection.selected) {
-      this.http.delete('http://localhost:8301/delete/' + this.selection.selected[index].idProduct).subscribe({
+    const products = this.dataSource.data.filter((p:any) => p.isSelected);
+    for (let index in products) {
+      
+      this.http.delete('http://localhost:8301/delete/' + products[index].idProduct).subscribe({
       next: (data) => {
         this.delete = data;
         this.ngOnInit();

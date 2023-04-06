@@ -3,74 +3,61 @@
   <!-- DIV tableau gestion Stock  -->
   <div class="col-9 tableau">
     <div class="mat-elevation-z8">
+      <article class="table-header">
+        <button class="button-add-row" mat-button (click)="addRow()">Add Row</button>
+      </article>
       <table mat-table [dataSource]="dataSource" matSort>
-    
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-    
-        <!-- Position Column -->
-        <ng-container matColumnDef="nameProduct">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nameProduct"> Type Produit
+        <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key" [ngSwitch]="col.key">
+            <span *ngSwitchDefault>{{ col.label }}</span>
+            <div *ngIf="suppr==true">
+              <span *ngSwitchCase="'isSelected'">
+                <mat-checkbox
+                  (change)="selectAll($event)"
+                  [checked]="isAllSelected()"
+                  [indeterminate]="!isAllSelected() && isAnySelected()">
+                </mat-checkbox>
+              </span>  
+            </div>
+            
           </th>
-          <td mat-cell *matCellDef="let row"> {{row.nameProduct}} </td>
-        </ng-container>
-    
-        <!-- Name Column -->
-        <ng-container matColumnDef="refProduct">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by refProduct"> Référence Produit </th>
-          <td mat-cell *matCellDef="let row"> {{row.refProduct}} </td>
-        </ng-container>
-    
-        <!-- Weight Column -->
-        <ng-container matColumnDef="owner">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by owner"> Responsable </th>
-          <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
-        </ng-container>
-    
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="entryDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDate"> Date entrée en stock </th>
-          <td mat-cell *matCellDef="let row"> {{row.entryDate}} </td>
-        </ng-container>
-    
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="exitDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by exitDate"> Date sortie du stock </th>
-          <td mat-cell *matCellDef="let row"> {{row.exitDate}} </td>
+          <td mat-cell *matCellDef="let element">
+            <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+              <div class="btn-edit" *ngSwitchCase="'isEdit'">
+                <button mat-button (click)="element.isEdit = !element.isEdit">Edit</button>
+              </div>
+              <span *ngSwitchDefault>
+                {{ element[col.key] }}
+              </span>
+              <div *ngIf="suppr==true">
+                <ng-container *ngSwitchCase="'isSelected'">
+                  <mat-checkbox
+                  (change)="element.isSelected = $event.checked"
+                  [checked]="element.isSelected">
+                  </mat-checkbox>
+                </ng-container>
+              </div>
+            </div>
+            <div *ngIf="element.isEdit">
+              <div class="btn-edit" *ngIf="col.key === 'isEdit'; else dataField">
+                <button mat-button (click)="element.isEdit = !element.isEdit">Done</button>
+              </div>
+              <ng-template #dataField>
+                <mat-form-field>
+                  <input
+                    [type]="col.type"
+                    matInput
+                    [(ngModel)]="element[col.key]"
+                  />
+                </mat-form-field>
+              </ng-template>
+            </div>
+          </td>
         </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="modif">
-          <th mat-header-cell *matHeaderCellDef> Modifier </th>
-          <td mat-cell *matCellDef="let row"> <button mat-icon-button ><mat-icon>more_horiz</mat-icon>
-          </button> </td>
-        </ng-container>
-    
-        <!-- Checkbox Column -->
-     
-        <div *ngIf="suppr==true">
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              
-              <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()"
-                            [aria-label]="checkboxLabel()">
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)"
-                            [aria-label]="checkboxLabel(row)">
-              </mat-checkbox>
-            </td>
-          </ng-container>
-
-        </div>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     
       <mat-paginator [length]="lengthDataSource" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
@@ -94,7 +81,7 @@
       </div>
       <div *ngIf="suppr==true" class="col-6">
         Supprimer équipement(s)
-        <button mat-icon-button (click)="DeleteProduct()"><mat-icon>delete</mat-icon>
+        <button mat-icon-button (click)="removeSelectedRows()"><mat-icon>delete</mat-icon>
         </button>
       </div>
 
