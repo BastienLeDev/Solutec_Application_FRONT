@@ -10,14 +10,14 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export interface Product {
   //Propriétées pour le tableau
-  position: number;
-  idProduct: number;
+  position: number | null;
+  idProduct: number | null;
   nameProduct: string;
   refProduct: string;
   owner: string;
-  entryDate: Date;
-  exitDate: Date;
-  delete: boolean;
+  entryDate: Date | null;
+  exitDate: Date | null;
+  isEdit: boolean;
 
 }
 const COLUMNS_SCHEMA = [
@@ -120,7 +120,9 @@ export class GestionStockComponent implements OnInit{
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
+  /*
   selection = new SelectionModel<Product>(true, []);
+  */
 
   /*
   ColumnsToDisplay(){
@@ -152,14 +154,14 @@ export class GestionStockComponent implements OnInit{
 
   addRow() {
     const newRow:Product = {
-      position: 0,
-      idProduct:0, 
+      position: null,
+      idProduct: 0, 
       nameProduct: "", 
       refProduct: "", 
       owner: "", 
-      entryDate: new Date(), 
-      delete: false, 
-      exitDate: new Date()
+      entryDate: null, 
+      isEdit: true, 
+      exitDate:null,
     };
     this.dataSource.data = [newRow, ...this.dataSource.data];
   }
@@ -170,7 +172,7 @@ export class GestionStockComponent implements OnInit{
     this.listProducts=[];
     this.listDataSource=[];
     this.dataSource = new MatTableDataSource;
-    this.selection.clear();
+    /*this.selection.clear();*/
     this.getListProducts();
 
 
@@ -194,7 +196,7 @@ export class GestionStockComponent implements OnInit{
           product.owner = this.listProducts[index].owner;
           product.entryDate = this.listProducts[index].entryDate;
           product.exitDate = this.listProducts[index].exitDate;
-          product.delete = false;
+          product.isEdit = false;
           this.listDataSource.push(product);
           this.i+=1;
         }
@@ -228,7 +230,6 @@ export class GestionStockComponent implements OnInit{
       .afterClosed()
       .subscribe((confirm: any) => {
         if (confirm) {
-          console.log(this.selection.selected);
           this.DeleteProduct();
         }
       });
@@ -259,7 +260,7 @@ export class GestionStockComponent implements OnInit{
 
   addProduct(product:any){
     console.log(product)
-    this.http.post('http://localhost:8301/database',product).subscribe({ 
+    this.http.post('http://localhost:8301/add/database',product).subscribe({ 
       next: (data) => {
 
       this.ngOnInit();
@@ -274,16 +275,23 @@ export class GestionStockComponent implements OnInit{
   }
 
   modifProduct(product:any){
-    console.log(product)
-    this.http.patch('http://localhost:8301/patch/product',product).subscribe({
-      next: (data) => {
-        product.isEdit=false;
-        this.ngOnInit();
-        
-        
-      },
-      error: (err) => { console.log(err) },
-    })
+    if(product.idProduct==0){
+      product.idProduct=null;
+      this.addProduct(product);
+    }
+    else{
+      console.log(product)
+      this.http.patch('http://localhost:8301/patch/product',product).subscribe({
+        next: (data) => {
+          product.isEdit=false;
+          this.ngOnInit();
+          
+          
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+    
   }
 
 
