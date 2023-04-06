@@ -151,15 +151,15 @@ export class GestionStockComponent implements OnInit{
   };
 
   addRow() {
-    const newRow = {
-      "position":0,
-      "idProduct":0, 
-      "nameProduct": "", 
-      "refProduct": "", 
-      "owner": "", 
-      "entryDate": new Date(), 
-      "delete": false, 
-      "exitDate": new Date()
+    const newRow:Product = {
+      position: 0,
+      idProduct:0, 
+      nameProduct: "", 
+      refProduct: "", 
+      owner: "", 
+      entryDate: new Date(), 
+      delete: false, 
+      exitDate: new Date()
     };
     this.dataSource.data = [newRow, ...this.dataSource.data];
   }
@@ -255,5 +255,36 @@ export class GestionStockComponent implements OnInit{
      console.log(this.suppr)
     }
   };
+
+
+  addProduct(product:any){
+    console.log(product)
+    this.http.post('http://localhost:8301/database',product).subscribe({ 
+      next: (data) => {
+
+      this.ngOnInit();
+      
+    },
+    error: (err) => { console.log(err) },
+  })
+   this.ngOnInit();
+   console.log(this.suppr)
+  
+     
+  }
+
+  modifProduct(product:any){
+    console.log(product)
+    this.http.patch('http://localhost:8301/patch/product',product).subscribe({
+      next: (data) => {
+        product.isEdit=false;
+        this.ngOnInit();
+        
+        
+      },
+      error: (err) => { console.log(err) },
+    })
+  }
+
 
 }

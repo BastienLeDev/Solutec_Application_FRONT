@@ -40,16 +40,19 @@
             </div>
             <div *ngIf="element.isEdit">
               <div class="btn-edit" *ngIf="col.key === 'isEdit'; else dataField">
-                <button mat-button (click)="element.isEdit = !element.isEdit">Done</button>
+                <button mat-button (click)="modifProduct(element)">Done</button>
               </div>
               <ng-template #dataField>
-                <mat-form-field>
-                  <input
-                    [type]="col.type"
-                    matInput
-                    [(ngModel)]="element[col.key]"
-                  />
-                </mat-form-field>
+                <div *ngIf="col.key!='isSelected'">
+                  <mat-form-field>
+                    <input
+                      [type]="col.type"
+                      matInput
+                      [(ngModel)]="element[col.key]"
+                    />
+                  </mat-form-field>
+                </div>
+                
               </ng-template>
             </div>
           </td>
