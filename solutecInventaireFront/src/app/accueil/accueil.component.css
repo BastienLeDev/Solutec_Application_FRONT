@@ -2,3 +2,15 @@
     height: 300px;
     overflow-y: scroll;
 }
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    background-color: #ff001947;
+}
+
+.card {
+    transition: all .3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.07);
+}
