@@ -22,6 +22,11 @@ import { MatTreeModule } from '@angular/material/tree';
 
 
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -31,6 +36,7 @@ import { MatTreeModule } from '@angular/material/tree';
     GestionStockComponent,
     GenerationRapportsComponent,
     GestionAlertesComponent,
+    ConfirmDialogComponent,
 
   ],
   imports: [
@@ -46,7 +52,11 @@ import { MatTreeModule } from '@angular/material/tree';
     MatIconModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatTreeModule
+    MatTreeModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
