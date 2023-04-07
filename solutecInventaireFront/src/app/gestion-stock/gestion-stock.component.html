@@ -5,19 +5,27 @@
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key" [ngSwitch]="col.key">
-            <span *ngSwitchDefault>{{ col.label }}</span>
-            <div *ngIf="suppr==true">
-              <span *ngSwitchCase="'isSelected'">
-                <mat-checkbox
-                  (change)="selectAll($event)"
-                  [checked]="isAllSelected()"
-                  [indeterminate]="!isAllSelected() && isAnySelected()">
-                </mat-checkbox>
-              </span>  
-            </div>
-            
-          </th>
+          <div *ngIf="col.key!='isEdit' && col.key!='isSelected'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key"
+              [ngSwitch]="col.key">
+              <span *ngSwitchDefault>{{ col.label }}</span>
+
+            </th>
+          </div>
+          <div *ngIf="col.key=='isEdit' || col.key=='isSelected'">
+            <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
+              <span *ngSwitchDefault>{{ col.label }}</span>
+              <div *ngIf="suppr==true">
+                <span *ngSwitchCase="'isSelected'">
+                  <mat-checkbox (change)="selectAll($event)" [checked]="isAllSelected()"
+                    [indeterminate]="!isAllSelected() && isAnySelected()">
+                  </mat-checkbox>
+                </span>
+              </div>
+
+            </th>
+          </div>
+
           <td mat-cell *matCellDef="let element">
             <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
               <div class="btn-edit" *ngSwitchCase="'isEdit'">
@@ -28,9 +36,7 @@
               </span>
               <div *ngIf="suppr==true">
                 <ng-container *ngSwitchCase="'isSelected'">
-                  <mat-checkbox
-                  (change)="element.isSelected = $event.checked"
-                  [checked]="element.isSelected">
+                  <mat-checkbox (change)="element.isSelected = $event.checked" [checked]="element.isSelected">
                   </mat-checkbox>
                 </ng-container>
               </div>
@@ -40,39 +46,61 @@
                 <button mat-button (click)="modifProduct(element)">Done</button>
               </div>
               <ng-template #dataField>
-                <div *ngIf="col.key!='isSelected'">
+                <div *ngIf="col.key!='isSelected'&& col.key!='nameProduct'">
                   <mat-form-field>
-                    <input
-                      [type]="col.type"
-                      matInput
-                      [(ngModel)]="element[col.key]"
-                    />
+                    <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
                   </mat-form-field>
                 </div>
-                
+                <div *ngIf="col.key=='nameProduct'">
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="element[col.key]">
+                      <mat-option value="Poste Mission">Poste Mission</mat-option>
+                      <mat-option value="Base">Base</mat-option>
+                      <mat-option value="Poste Structure">Poste Structure</mat-option>
+                      <mat-option value="Téléphone mission">Téléphone mission</mat-option>
+                      <mat-option value="Téléphone structure">Téléphone structure</mat-option>
+                      <mat-option value="Casque mission">Casque mission</mat-option>
+                      <mat-option value="Casque structure">Casque structure</mat-option>
+                      <mat-option value="Ecran télétravail">Ecran télétravail</mat-option>
+                      <mat-option value="Ecran Structure">Ecran Structure</mat-option>
+                      <mat-option value="PC INT">PC INT</mat-option>
+                      <mat-option value="Support PC">Support PC</mat-option>
+                      <mat-option value="Clavier">Clavier</mat-option>
+                      <mat-option value="Souris">Souris</mat-option>
+                      <mat-option value="Cables HDMI">Cables HDMI</mat-option>
+                      <mat-option value="Cables Ethernet">Cables Ethernet</mat-option>
+                      <mat-option value="PC Intercontrat">PC Intercontrat</mat-option>
+                      <mat-option value="Badge structure">Badge structure</mat-option>
+                      <mat-option value="Badge intercontrat">Badge intercontrat</mat-option>
+                      <mat-option value="Coque / vitre téléphone">Coque / vitre téléphone</mat-option>
+                      <mat-option value="Autres">Autres</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
               </ng-template>
             </div>
           </td>
         </ng-container>
 
-        
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-    
+
       <mat-paginator [length]="lengthDataSource" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
         showFirstLastButtons></mat-paginator>
     </div>
-  
+
   </div>
-  
+
   <div class="col-3 filtres">
     <div class="row">
       <div class="col-6">
         Ajouter un équipement
         <button mat-icon-button (click)="addRow()"><mat-icon>add</mat-icon>
         </button>
-        
+
       </div>
       <div *ngIf="suppr==false" class="col-6">
         Supprimer équipement(s)
@@ -88,8 +116,6 @@
     </div>
 
   </div>
-  
+
 
 </div>
-
-
