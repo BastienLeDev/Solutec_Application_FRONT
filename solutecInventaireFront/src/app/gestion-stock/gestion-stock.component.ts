@@ -10,41 +10,41 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export interface Product {
   //Propriétées pour le tableau
-  position: number;
-  idProduct: number;
+  position: number | null;
+  idProduct: number | null;
   nameProduct: string;
   refProduct: string;
   owner: string;
-  entryDate: Date;
-  exitDate: Date;
-  delete: boolean;
+  entryDate: Date | null;
+  exitDate: Date | null;
+  isEdit: boolean;
 
 }
 const COLUMNS_SCHEMA = [
   {
-      key: "nameProduct",
-      type: "text",
-      label: "Type de produit"
+    key: "nameProduct",
+    type: "text",
+    label: "Type de produit"
   },
   {
-      key: "refProduct",
-      type: "text",
-      label: "Référence du produit"
+    key: "refProduct",
+    type: "text",
+    label: "Référence du produit"
   },
   {
-      key: "owner",
-      type: "text",
-      label: "Référent"
+    key: "owner",
+    type: "text",
+    label: "Référent"
   },
   {
-      key: "entryDate",
-      type: "date",
-      label: "Entrée en stock"
+    key: "entryDate",
+    type: "date",
+    label: "Entrée en stock"
   },
   {
-      key: "exitDate",
-      type: "date",
-      label: "Sortie de stock"
+    key: "exitDate",
+    type: "date",
+    label: "Sortie de stock"
   },
   {
     key: "isEdit",
@@ -58,52 +58,15 @@ const COLUMNS_SCHEMA = [
   },
 
 ]
-const COLUMNS_SCHEMA_DELETE = [
-  {
-      key: "nameProduct",
-      type: "text",
-      label: "Type de produit"
-  },
-  {
-      key: "refProduct",
-      type: "text",
-      label: "Référence du produit"
-  },
-  {
-      key: "owner",
-      type: "text",
-      label: "Référent"
-  },
-  {
-      key: "entryDate",
-      type: "date",
-      label: "Entrée en stock"
-  },
-  {
-      key: "exitDate",
-      type: "date",
-      label: "Sortie de stock"
-  },
-  {
-    key: "isEdit",
-    type: "isEdit",
-    label: ""
-  },
-  {
-    key: "isSelected",
-    type: "isSelected",
-    label: ""
-  },
 
-
-]
 
 @Component({
   selector: 'app-gestion-stock',
   templateUrl: './gestion-stock.component.html',
   styleUrls: ['./gestion-stock.component.css']
 })
-export class GestionStockComponent implements OnInit{
+
+export class GestionStockComponent implements OnInit {
   listProducts: any;
   listDataSource: Array<any> = [];
   lengthDataSource: any;
@@ -120,7 +83,9 @@ export class GestionStockComponent implements OnInit{
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
+  /*
   selection = new SelectionModel<Product>(true, []);
+  */
 
   /*
   ColumnsToDisplay(){
@@ -151,15 +116,15 @@ export class GestionStockComponent implements OnInit{
   };
 
   addRow() {
-    const newRow:Product = {
-      position: 0,
-      idProduct:0, 
-      nameProduct: "", 
-      refProduct: "", 
-      owner: "", 
-      entryDate: new Date(), 
-      delete: false, 
-      exitDate: new Date()
+    const newRow: Product = {
+      position: null,
+      idProduct: 0,
+      nameProduct: "",
+      refProduct: "",
+      owner: "",
+      entryDate: null,
+      isEdit: true,
+      exitDate: null,
     };
     this.dataSource.data = [newRow, ...this.dataSource.data];
   }
@@ -167,10 +132,10 @@ export class GestionStockComponent implements OnInit{
 
   ngOnInit(): void {
     /*this.ColumnsToDisplay();*/
-    this.listProducts=[];
-    this.listDataSource=[];
+    this.listProducts = [];
+    this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    this.selection.clear();
+    /*this.selection.clear();*/
     this.getListProducts();
 
 
@@ -184,106 +149,112 @@ export class GestionStockComponent implements OnInit{
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
         this.listProducts = data;
-        this.i=1;
+        this.i = 1;
         for (let index in this.listProducts) {
           let product = {} as any;
-          product.position=this.i;
+          product.position = this.i;
           product.idProduct = this.listProducts[index].idProduct;
           product.nameProduct = this.listProducts[index].nameProduct;
           product.refProduct = this.listProducts[index].refProduct;
           product.owner = this.listProducts[index].owner;
           product.entryDate = this.listProducts[index].entryDate;
           product.exitDate = this.listProducts[index].exitDate;
-          product.delete = false;
+          product.isEdit = false;
           this.listDataSource.push(product);
-          this.i+=1;
+          this.i += 1;
         }
         this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.lengthDataSource = this.listProducts.length;
-        this.listDataSource=[];
-        
+        this.listDataSource = [];
+
       },
       error: (err) => { console.log(err) },
     })
   };
 
-  modeSuppression(){
-    this.suppr=true;
+  modeSuppression() {
+    this.suppr = true;
     console.log(this.suppr);
-    this.displayedColumns = COLUMNS_SCHEMA_DELETE.map((col) => col.key);
+    this.displayedColumns = COLUMNS_SCHEMA.map((col) => col.key);
     this.ngOnInit();
   }
 
   removeSelectedRows() {
-    const products = this.dataSource.data.filter((p:any) => p.isSelected);
+    const products = this.dataSource.data.filter((p: any) => p.isSelected);
     console.log(products)
-    if(products.length==0){
-      this.suppr=false;
+    if (products.length == 0) {
+      this.suppr = false;
     }
-    else{
+    else {
       this.dialog
-      .open(ConfirmDialogComponent)
-      .afterClosed()
-      .subscribe((confirm: any) => {
-        if (confirm) {
-          console.log(this.selection.selected);
-          this.DeleteProduct();
-        }
-      });
+        .open(ConfirmDialogComponent)
+        .afterClosed()
+        .subscribe((confirm: any) => {
+          if (confirm) {
+            this.DeleteProduct();
+          }
+        });
     }
-    
+
   }
 
   DeleteProduct() {
-    this.suppr=false;
+    this.suppr = false;
     /*this.ColumnsToDisplay();*/
     console.log(this.suppr)
-    const products = this.dataSource.data.filter((p:any) => p.isSelected);
+    const products = this.dataSource.data.filter((p: any) => p.isSelected);
     for (let index in products) {
-      
+
       this.http.delete('http://localhost:8301/delete/' + products[index].idProduct).subscribe({
-      next: (data) => {
-        this.delete = data;
-        this.ngOnInit();
-        
-      },
-      error: (err) => { console.log(err) },
-    })
-     this.ngOnInit();
-     console.log(this.suppr)
+        next: (data) => {
+          this.delete = data;
+          this.ngOnInit();
+
+        },
+        error: (err) => { console.log(err) },
+      })
+      this.ngOnInit();
+      console.log(this.suppr)
     }
   };
 
 
-  addProduct(product:any){
+  addProduct(product: any) {
     console.log(product)
-    this.http.post('http://localhost:8301/database',product).subscribe({ 
+    this.http.post('http://localhost:8301/add/database', product).subscribe({
       next: (data) => {
 
-      this.ngOnInit();
-      
-    },
-    error: (err) => { console.log(err) },
-  })
-   this.ngOnInit();
-   console.log(this.suppr)
-  
-     
-  }
-
-  modifProduct(product:any){
-    console.log(product)
-    this.http.patch('http://localhost:8301/patch/product',product).subscribe({
-      next: (data) => {
-        product.isEdit=false;
         this.ngOnInit();
-        
-        
+
       },
       error: (err) => { console.log(err) },
     })
+    this.ngOnInit();
+    console.log(this.suppr)
+
+
+  }
+
+  modifProduct(product: any) {
+    if (product.idProduct == 0) {
+      product.idProduct = null;
+      this.addProduct(product);
+    }
+    else {
+      console.log(product)
+      this.http.patch('http://localhost:8301/patch/product', product).subscribe({
+        next: (data) => {
+          product.isEdit = false;
+          this.ngOnInit();
+
+
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+
   }
 
 
