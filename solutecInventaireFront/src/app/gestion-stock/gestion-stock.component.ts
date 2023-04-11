@@ -240,14 +240,12 @@ export class GestionStockComponent implements OnInit {
     console.log(product)
     this.http.post('http://localhost:8301/add/database', product).subscribe({
       next: (data) => {
-
-        this.ngOnInit();
-
+        product.isEdit=false;
       },
       error: (err) => { console.log(err) },
     })
-    this.ngOnInit();
-    console.log(this.suppr)
+   
+    
 
 
   }
