@@ -1,26 +1,44 @@
-.example-tree-invisible {
-    display: none;
+table {
+    width: 100%;
 }
 
-.example-tree ul,
-.example-tree li {
-    margin-top: 0;
-    margin-bottom: 0;
-    list-style-type: none;
+.tableau {
+    padding: 50px;
 }
 
-/*
-   * This padding sets alignment of the nested nodes.
-   */
-.example-tree .mat-nested-tree-node div[role=group] {
-    padding-left: 40px;
+
+tr.example-detail-row {
+    height: 0;
 }
 
-/*
-   * Padding for leaf nodes.
-   * Leaf nodes need to have padding so as to align with other non-leaf nodes
-   * under the same parent.
-   */
-.example-tree div[role=group]>.mat-tree-node {
-    padding-left: 40px;
+tr.example-element-row:not(.example-expanded-row):hover {
+    background: #ff001947;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-element-row td {
+    border-bottom-width: 0;
+}
+
+.example-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+
+.example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+}
+
+.example-element-description {
+    padding: 16px;
+}
+
+.example-element-description-attribution {
+    opacity: 0.5;
 }
