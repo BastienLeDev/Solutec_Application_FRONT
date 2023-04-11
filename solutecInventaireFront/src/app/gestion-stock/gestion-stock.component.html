@@ -5,12 +5,19 @@
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
-          <div *ngIf="col.key!='isEdit' && col.key!='isSelected'">
+          <div *ngIf="col.key!='isEdit' && col.key!='isSelected' && col.key!='typeProduct'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key"
               [ngSwitch]="col.key">
               <span *ngSwitchDefault>{{ col.label }}</span>
 
             </th>
+          </div>
+          <div *ngIf="col.key=='typeProduct'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key.nameProduct"
+            [ngSwitch]="col.key">
+            <span *ngSwitchDefault>{{ col.label }}</span>
+
+          </th>
           </div>
           <div *ngIf="col.key=='isEdit' || col.key=='isSelected'">
             <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
@@ -31,6 +38,9 @@
               <div class="btn-edit" *ngSwitchCase="'isEdit'">
                 <button mat-button (click)="element.isEdit = !element.isEdit">Edit</button>
               </div>
+              <div *ngSwitchCase="'TypeProduct'">
+                {{ element[col.key].nameProduct }}
+              </div>
               <span *ngSwitchDefault>
                 {{ element[col.key] }}
               </span>
@@ -46,36 +56,22 @@
                 <button mat-button (click)="modifProduct(element)">Done</button>
               </div>
               <ng-template #dataField>
-                <div *ngIf="col.key!='isSelected'&& col.key!='nameProduct'">
+                <div *ngIf="col.key!='isSelected'&& col.key!='typeProduct'">
                   <mat-form-field>
                     <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
                   </mat-form-field>
                 </div>
-                <div *ngIf="col.key=='nameProduct'">
+                <div *ngIf="col.key=='typeProduct'">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="element[col.key]">
-                      <mat-option value="Poste Mission">Poste Mission</mat-option>
-                      <mat-option value="Base">Base</mat-option>
-                      <mat-option value="Poste Structure">Poste Structure</mat-option>
-                      <mat-option value="Téléphone mission">Téléphone mission</mat-option>
-                      <mat-option value="Téléphone structure">Téléphone structure</mat-option>
-                      <mat-option value="Casque mission">Casque mission</mat-option>
-                      <mat-option value="Casque structure">Casque structure</mat-option>
-                      <mat-option value="Ecran télétravail">Ecran télétravail</mat-option>
-                      <mat-option value="Ecran Structure">Ecran Structure</mat-option>
-                      <mat-option value="PC INT">PC INT</mat-option>
-                      <mat-option value="Support PC">Support PC</mat-option>
-                      <mat-option value="Clavier">Clavier</mat-option>
-                      <mat-option value="Souris">Souris</mat-option>
-                      <mat-option value="Cables HDMI">Cables HDMI</mat-option>
-                      <mat-option value="Cables Ethernet">Cables Ethernet</mat-option>
-                      <mat-option value="PC Intercontrat">PC Intercontrat</mat-option>
-                      <mat-option value="Badge structure">Badge structure</mat-option>
-                      <mat-option value="Badge intercontrat">Badge intercontrat</mat-option>
-                      <mat-option value="Coque / vitre téléphone">Coque / vitre téléphone</mat-option>
-                      <mat-option value="Autres">Autres</mat-option>
+                    <mat-select [(ngModel)]="element[col.key]" [compareWith]="compareWith">
+                      
+                        <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
+                      
+                      
+
                     </mat-select>
                   </mat-form-field>
+                  
                 </div>
 
               </ng-template>
