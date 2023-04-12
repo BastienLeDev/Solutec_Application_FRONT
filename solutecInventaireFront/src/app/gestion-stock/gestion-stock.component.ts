@@ -8,11 +8,17 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+export interface TypeProduct{
+  idTypeProduct: number | null;
+  nameProduct: string;
+}
+
+
 export interface Product {
   //Propriétées pour le tableau
   position: number | null;
   idProduct: number | null;
-  nameProduct: string;
+  typeProduct: TypeProduct;
   refProduct: string;
   owner: string;
   entryDate: Date | null;
@@ -22,8 +28,8 @@ export interface Product {
 }
 const COLUMNS_SCHEMA = [
   {
-    key: "nameProduct",
-    type: "text",
+    key: "typeProduct",
+    type: "TypeProduct",
     label: "Type de produit"
   },
   {
@@ -68,6 +74,7 @@ const COLUMNS_SCHEMA = [
 
 export class GestionStockComponent implements OnInit {
   listProducts: any;
+  listTypeProduct: any;
   listDataSource: Array<any> = [];
   lengthDataSource: any;
   suppr = false;
@@ -119,7 +126,9 @@ export class GestionStockComponent implements OnInit {
     const newRow: Product = {
       position: null,
       idProduct: 0,
-      nameProduct: "",
+      typeProduct: {idTypeProduct:null,
+                    nameProduct:""
+      },
       refProduct: "",
       owner: "",
       entryDate: null,
@@ -136,7 +145,9 @@ export class GestionStockComponent implements OnInit {
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
     /*this.selection.clear();*/
+    this.getTypeProduct();
     this.getListProducts();
+    
 
 
   }
@@ -154,7 +165,9 @@ export class GestionStockComponent implements OnInit {
           let product = {} as any;
           product.position = this.i;
           product.idProduct = this.listProducts[index].idProduct;
-          product.nameProduct = this.listProducts[index].nameProduct;
+          product.typeProduct = this.listProducts[index].typeProduct;
+          console.log(this.listProducts[index].typeProduct);
+          
           product.refProduct = this.listProducts[index].refProduct;
           product.owner = this.listProducts[index].owner;
           product.entryDate = this.listProducts[index].entryDate;
@@ -168,6 +181,8 @@ export class GestionStockComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.lengthDataSource = this.listProducts.length;
         this.listDataSource = [];
+        console.log(this.dataSource);
+        
 
       },
       error: (err) => { console.log(err) },
@@ -225,14 +240,12 @@ export class GestionStockComponent implements OnInit {
     console.log(product)
     this.http.post('http://localhost:8301/add/database', product).subscribe({
       next: (data) => {
-
-        this.ngOnInit();
-
+        product.isEdit=false;
       },
       error: (err) => { console.log(err) },
     })
-    this.ngOnInit();
-    console.log(this.suppr)
+   
+    
 
 
   }
@@ -244,18 +257,38 @@ export class GestionStockComponent implements OnInit {
     }
     else {
       console.log(product)
+      console.log(product.typeProduct)
+      console.log(product.typeProduct.idTypeProduct);
+      
       this.http.patch('http://localhost:8301/patch/product', product).subscribe({
         next: (data) => {
           product.isEdit = false;
-          this.ngOnInit();
 
 
         },
         error: (err) => { console.log(err) },
       })
     }
-
   }
 
+    getTypeProduct(){
+      this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
+        next: (data) => {
+          this.listTypeProduct=data;
+          console.log(this.listTypeProduct);
+          
+        },
+        error: (err) => {console.log(err);
+        }
+      })
+    }
+
+    public compareWith(object1: any, object2: any) {
+      console.log(object1);
+      console.log(object2);
+      
+      
+      return object1 && object2 && object1.nameProduct === object2.nameProduct;
+    }
 
 }
