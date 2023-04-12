@@ -266,6 +266,7 @@ export class AccueilComponent implements OnInit {
         this.dataSource = new MatTableDataSource<ProductReserved>(this.ProductsReserved);
         this.dataSource.sort = this.sort;
         this.lengthDataSource = this.ProductsReserved.length;
+        console.log(this.dataSource)
 
       },
       error: (err) => { console.log(err) },
