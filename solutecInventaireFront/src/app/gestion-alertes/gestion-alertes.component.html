@@ -6,22 +6,23 @@
                 <td mat-cell *matCellDef="let element">
                     <div *ngIf="!element.isEdit">{{element[column]}}</div>
                     <div *ngIf="element.isEdit">
-                        <mat-form-field *ngIf="column==='Alerte'">
-                            <input matInput />
+                        <mat-form-field *ngIf="column==='alerte'">
+                            <input name="Alerte" [(ngModel)]="element.alerte" placeholder="Nom de l'alerte" matInput />
                         </mat-form-field>
-                        <mat-form-field *ngIf="column==='Seuil'">
-                            <input matInput [type]="'number'" />
+                        <mat-form-field *ngIf="column==='seuil'">
+                            <input name="Seuil" [(ngModel)]="element.seuil" placeholder="Limite minimale" matInput
+                                [type]="'number'" />
                         </mat-form-field>
-                        <mat-form-field *ngIf="column==='Active'">
-                            <mat-select>
-                                <mat-option value="true">Activer</mat-option>
-                                <mat-option value="false">Désactiver</mat-option>
+                        <mat-form-field *ngIf="column==='active'">
+                            <mat-select name="Active" [(ngModel)]="element.active" placeholder="Activer/Désactiver">
+                                <mat-option [value]='true'>Activer</mat-option>
+                                <mat-option [value]='false'>Désactiver</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field *ngIf="column==='Email'">
-                            <mat-select>
-                                <mat-option value="true">Activer</mat-option>
-                                <mat-option value="false">Désactiver</mat-option>
+                        <mat-form-field *ngIf="column==='email'">
+                            <mat-select name="Email" [(ngModel)]="element.email" placeholder="Activer/Désactiver">
+                                <mat-option [value]='true'>Activer</mat-option>
+                                <mat-option [value]='false'>Désactiver</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -30,7 +31,7 @@
             <ng-container matColumnDef="expand">
                 <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button aria-label="expand row"
+                    <button *ngIf="!element.isEdit" mat-icon-button aria-label="expand row"
                         (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
                         <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
                         <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
@@ -40,7 +41,11 @@
             <ng-container matColumnDef="isEdit">
                 <th mat-header-cell *matHeaderCellDef>Modifier</th>
                 <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button><mat-icon>edit</mat-icon>
+                    <button *ngIf="element.isEdit" (click)="modifAlert(element)"
+                        mat-icon-button><mat-icon>done</mat-icon>
+                    </button>
+                    <button *ngIf="!element.isEdit" (click)="editMode(element)"
+                        mat-icon-button><mat-icon>edit</mat-icon>
                     </button>
                 </td>
             </ng-container>
@@ -55,15 +60,40 @@
             <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
             <ng-container matColumnDef="expandedDetail">
                 <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
-                    <div class="example-element-detail row"
+                    <div class="example-element-detail row" *ngIf="!element.isEdit"
                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                        <ul *ngFor="let description of element.description">
+                        <ul *ngFor="let product of element.products">
                             <li class="example-element-description">
-                                {{description}}
+                                {{product}}
                             </li>
                         </ul>
-                        <div class="row">
-                        </div>
+                    </div>
+                    <div class="example-element-detail row" *ngIf="element.isEdit"
+                        [@detailExpand]="element == 'expanded'">
+                        <mat-form-field>
+                            <mat-select [(ngModel)]="element.product" placeholder="Matériel">
+                                <mat-option value="Poste Mission">Poste Mission</mat-option>
+                                <mat-option value="Base">Base</mat-option>
+                                <mat-option value="Poste Structure">Poste Structure</mat-option>
+                                <mat-option value="Téléphone mission">Téléphone mission</mat-option>
+                                <mat-option value="Téléphone structure">Téléphone structure</mat-option>
+                                <mat-option value="Casque mission">Casque mission</mat-option>
+                                <mat-option value="Casque structure">Casque structure</mat-option>
+                                <mat-option value="Ecran télétravail">Ecran télétravail</mat-option>
+                                <mat-option value="Ecran Structure">Ecran Structure</mat-option>
+                                <mat-option value="PC INT">PC INT</mat-option>
+                                <mat-option value="Support PC">Support PC</mat-option>
+                                <mat-option value="Clavier">Clavier</mat-option>
+                                <mat-option value="Souris">Souris</mat-option>
+                                <mat-option value="Cables HDMI">Cables HDMI</mat-option>
+                                <mat-option value="Cables Ethernet">Cables Ethernet</mat-option>
+                                <mat-option value="PC Intercontrat">PC Intercontrat</mat-option>
+                                <mat-option value="Badge structure">Badge structure</mat-option>
+                                <mat-option value="Badge intercontrat">Badge intercontrat</mat-option>
+                                <mat-option value="Coque / vitre téléphone">Coque / vitre téléphone</mat-option>
+                                <mat-option value="Autres">Autres</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </td>
             </ng-container>

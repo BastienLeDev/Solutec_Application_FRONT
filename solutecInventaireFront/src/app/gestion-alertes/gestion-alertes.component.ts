@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatFormFieldControl } from '@angular/material/form-field';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+
+
 
 
 
 
 export interface ProductElement {
   Id: any;
-  Alerte: string;
-  Seuil: number;
-  Active: boolean;
-  Triggered: boolean;
-  Email: boolean;
-  description: String[];
+  alerte: string;
+  seuil: number;
+  active: any;
+  triggered: any;
+  email: any;
+  product: String;
+  products: String[];
   isEdit: boolean;
 }
 @Component({
@@ -28,7 +32,13 @@ export interface ProductElement {
     ]),
   ],
   providers: [
-    { provide: MatFormFieldControl, useExisting: GestionAlertesComponent }
+    { provide: MatFormFieldControl, useExisting: GestionAlertesComponent },
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: GestionAlertesComponent,
+    }
+
   ]
 })
 
@@ -36,13 +46,15 @@ export interface ProductElement {
 export class GestionAlertesComponent implements OnInit {
   listAlert: any;
   dataSource: ProductElement[];
-  columnsToDisplay = ['Alerte', "Seuil", 'Active', 'Triggered', 'Email'];
+  columnsToDisplay = ['alerte', "seuil", 'active', 'triggered', 'email'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand', 'isEdit', 'supprimer'];
   expandedElement: ProductElement | null;
   listDataSource: Array<any> = [];
   delete: any;
+  alertCreated: any;
 
   constructor(private http: HttpClient) { }
+
 
   ngOnInit(): void {
     this.getAlert();
@@ -50,33 +62,59 @@ export class GestionAlertesComponent implements OnInit {
 
   addRow() {
     const newRow: ProductElement = {
-      Id: null,
-      Alerte: "",
-      Seuil: 0,
-      Active: false,
-      Triggered: false,
-      Email: false,
+      Id: 0,
+      alerte: "",
+      seuil: 0,
+      active: "off",
+      triggered: "off",
+      product: "",
+      email: "off",
       isEdit: true,
-      description: [""],
+      products: [],
     };
     this.dataSource = [newRow, ...this.dataSource];
   }
+
+  editMode(val: any) {
+    if (val.isEdit == false) {
+      val.isEdit = true;
+    } else {
+      val.isEdit = false;
+    }
+
+  }
+
+  //deleteElement(alert: any, element: any) {
+  //alert.products.filter((item: any) => element !== item)
+  //}
 
 
   getAlert() {
     this.http.get('http://localhost:8301/getAlert').subscribe({
       next: (data) => {
         this.listAlert = data;
-        this.listAlert.map((element: { idAlert: number; nameAlert: string; level: number; state: boolean; notifEmail: boolean; triggered: boolean; products: String[] }) => {
+        this.listAlert.map((element: { idAlert: number; alerte: string; seuil: number; active: boolean; email: boolean; triggered: boolean; products: String[] }) => {
           let Tree = {} as ProductElement;
           Tree.Id = element.idAlert;
-          Tree.Alerte = element.nameAlert;
-          Tree.Seuil = element.level;
-          Tree.Active = element.state;
-          Tree.Email = element.notifEmail;
-          Tree.Triggered = element.triggered;
+          Tree.alerte = element.alerte;
+          Tree.seuil = element.seuil;
           Tree.isEdit = false;
-          Tree.description = element.products;
+          Tree.products = element.products;
+          if (element.active === true) {
+            Tree.active = "On"
+          } else {
+            Tree.active = "Off"
+          }
+          if (element.email === true) {
+            Tree.email = "On"
+          } else {
+            Tree.email = "Off"
+          }
+          if (element.triggered === true) {
+            Tree.triggered = "On"
+          } else {
+            Tree.triggered = "Off"
+          }
           this.listDataSource.push(Tree);
         })
         this.dataSource = this.listDataSource;
@@ -89,11 +127,58 @@ export class GestionAlertesComponent implements OnInit {
     this.http.delete('http://localhost:8301/deleteAlert/' + val).subscribe({
       next: (data) => {
         this.delete = data;
-        this.ngOnInit();
+        location.reload();
       },
       error: (err) => { console.log(err); }
 
     })
+  }
+
+  createAlert(alert: any) {
+    alert.triggered = false;
+    alert.products.push(alert.product)
+    this.http.post('http://localhost:8301/createAlert', alert).subscribe({
+      next: (data) => {
+        alert.isEdit = false;
+        location.reload();
+      },
+      error: (err) => { console.log(err) }
+    })
+
+  }
+
+  modifAlert(alert: ProductElement) {
+    if (alert.Id == 0) {
+      alert.Id = null;
+      this.createAlert(alert)
+    }
+    else {
+      alert.products.push(alert.product)
+      console.log(alert)
+      if (alert.active == "Off") {
+        alert.active = false;
+      } else {
+        alert.active = true;
+      }
+      if (alert.email == "Off") {
+        alert.email = false;
+      } else {
+        alert.email = true;
+      }
+      if (alert.triggered == "Off") {
+        alert.triggered = false;
+      } else {
+        alert.triggered = true;
+      }
+      this.http.patch('http://localhost:8301/modifyAlert/' + alert.Id, alert).subscribe({
+        next: (data) => {
+          alert.isEdit = false;
+          //location.reload();
+
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
   }
 
 
