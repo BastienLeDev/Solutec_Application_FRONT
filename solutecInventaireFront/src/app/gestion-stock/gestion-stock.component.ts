@@ -79,6 +79,9 @@ export class GestionStockComponent implements OnInit {
   lengthDataSource: any;
   suppr = false;
 
+  sortByName=false;
+  nameToSort: any;
+
 
 
   /*displayedColumns: string[];*/
@@ -157,37 +160,50 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
-    this.http.get('http://localhost:8301/liste').subscribe({
-      next: (data) => {
-        this.listProducts = data;
-        this.i = 1;
-        for (let index in this.listProducts) {
-          let product = {} as any;
-          product.position = this.i;
-          product.idProduct = this.listProducts[index].idProduct;
-          product.typeProduct = this.listProducts[index].typeProduct;
-          console.log(this.listProducts[index].typeProduct);
-          
-          product.refProduct = this.listProducts[index].refProduct;
-          product.owner = this.listProducts[index].owner;
-          product.entryDate = this.listProducts[index].entryDate;
-          product.exitDate = this.listProducts[index].exitDate;
-          product.isEdit = false;
-          this.listDataSource.push(product);
-          this.i += 1;
-        }
-        this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.lengthDataSource = this.listProducts.length;
-        this.listDataSource = [];
-        console.log(this.dataSource);
-        
+    if(this.sortByName==false){
+      this.http.get('http://localhost:8301/liste').subscribe({
+        next: (data) => {
+          this.listProducts = data;
+          this.createDatasource(this.listDataSource);
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+    if(this.sortByName==true){
+      this.http.get('http://localhost:8301/filter3/'+ this.nameToSort).subscribe({
+        next: (data) => {
+          this.listProducts = data;
+          this.createDatasource(this.listDataSource);
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+  }
 
-      },
-      error: (err) => { console.log(err) },
-    })
-  };
+  createDatasource(listeProducts: any){
+    this.i = 1;
+    for (let index in this.listProducts) {
+      let product = {} as any;
+      product.position = this.i;
+      product.idProduct = this.listProducts[index].idProduct;
+      product.typeProduct = this.listProducts[index].typeProduct;
+      console.log(this.listProducts[index].typeProduct);
+      
+      product.refProduct = this.listProducts[index].refProduct;
+      product.owner = this.listProducts[index].owner;
+      product.entryDate = this.listProducts[index].entryDate;
+      product.exitDate = this.listProducts[index].exitDate;
+      product.isEdit = false;
+      this.listDataSource.push(product);
+      this.i += 1;
+    }
+    this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.lengthDataSource = this.listProducts.length;
+    this.listDataSource = [];
+    console.log(this.dataSource);
+  }
 
   modeSuppression() {
     this.suppr = true;
@@ -289,6 +305,12 @@ export class GestionStockComponent implements OnInit {
       
       
       return object1 && object2 && object1.nameProduct === object2.nameProduct;
+    }
+
+    toSortByName(name:any){
+      this.sortByName=true;
+      this.nameToSort=name;
+      this.getListProducts();
     }
 
 }

@@ -64,11 +64,7 @@
                 <div *ngIf="col.key=='typeProduct'">
                   <mat-form-field>
                     <mat-select [(ngModel)]="element[col.key]" [compareWith]="compareWith">
-                      
                         <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
-                      
-                      
-
                     </mat-select>
                   </mat-form-field>
                   
@@ -109,6 +105,13 @@
         </button>
       </div>
 
+    </div>
+    <div class="row">
+      <mat-form-field ngForm="" appearance="fill">
+        <mat-label>Input</mat-label>
+        <input matInput>
+        
+      </mat-form-field>
     </div>
 
   </div>
