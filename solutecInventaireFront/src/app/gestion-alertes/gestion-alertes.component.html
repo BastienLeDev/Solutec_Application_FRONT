@@ -64,34 +64,20 @@
                         [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                         <ul *ngFor="let product of element.products">
                             <li class="example-element-description">
-                                {{product}}
+                                {{product.nameProduct}}
                             </li>
                         </ul>
                     </div>
                     <div class="example-element-detail row" *ngIf="element.isEdit"
                         [@detailExpand]="element == 'expanded'">
+                        <ul *ngFor="let product of element.products">
+                            <li class="example-element-description">
+                                {{product.nameProduct}}
+                            </li>
+                        </ul>
                         <mat-form-field>
                             <mat-select [(ngModel)]="element.product" placeholder="Matériel">
-                                <mat-option value="Poste Mission">Poste Mission</mat-option>
-                                <mat-option value="Base">Base</mat-option>
-                                <mat-option value="Poste Structure">Poste Structure</mat-option>
-                                <mat-option value="Téléphone mission">Téléphone mission</mat-option>
-                                <mat-option value="Téléphone structure">Téléphone structure</mat-option>
-                                <mat-option value="Casque mission">Casque mission</mat-option>
-                                <mat-option value="Casque structure">Casque structure</mat-option>
-                                <mat-option value="Ecran télétravail">Ecran télétravail</mat-option>
-                                <mat-option value="Ecran Structure">Ecran Structure</mat-option>
-                                <mat-option value="PC INT">PC INT</mat-option>
-                                <mat-option value="Support PC">Support PC</mat-option>
-                                <mat-option value="Clavier">Clavier</mat-option>
-                                <mat-option value="Souris">Souris</mat-option>
-                                <mat-option value="Cables HDMI">Cables HDMI</mat-option>
-                                <mat-option value="Cables Ethernet">Cables Ethernet</mat-option>
-                                <mat-option value="PC Intercontrat">PC Intercontrat</mat-option>
-                                <mat-option value="Badge structure">Badge structure</mat-option>
-                                <mat-option value="Badge intercontrat">Badge intercontrat</mat-option>
-                                <mat-option value="Coque / vitre téléphone">Coque / vitre téléphone</mat-option>
-                                <mat-option value="Autres">Autres</mat-option>
+                                <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

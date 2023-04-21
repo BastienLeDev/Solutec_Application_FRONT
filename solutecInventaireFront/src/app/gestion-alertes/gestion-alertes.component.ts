@@ -4,11 +4,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
-
-
-
-
-
 export interface ProductElement {
   Id: any;
   alerte: string;
@@ -17,7 +12,7 @@ export interface ProductElement {
   triggered: any;
   email: any;
   product: String;
-  products: String[];
+  products: any;
   isEdit: boolean;
 }
 @Component({
@@ -52,12 +47,14 @@ export class GestionAlertesComponent implements OnInit {
   listDataSource: Array<any> = [];
   delete: any;
   alertCreated: any;
+  listTypeProduct: any;
 
   constructor(private http: HttpClient) { }
 
 
   ngOnInit(): void {
     this.getAlert();
+    this.getTypeProduct();
   }
 
   addRow() {
@@ -93,7 +90,7 @@ export class GestionAlertesComponent implements OnInit {
     this.http.get('http://localhost:8301/getAlert').subscribe({
       next: (data) => {
         this.listAlert = data;
-        this.listAlert.map((element: { idAlert: number; alerte: string; seuil: number; active: boolean; email: boolean; triggered: boolean; products: String[] }) => {
+        this.listAlert.map((element: { idAlert: number; alerte: string; seuil: number; active: boolean; email: boolean; triggered: boolean; products: Object[] }) => {
           let Tree = {} as ProductElement;
           Tree.Id = element.idAlert;
           Tree.alerte = element.alerte;
@@ -137,6 +134,7 @@ export class GestionAlertesComponent implements OnInit {
   createAlert(alert: any) {
     alert.triggered = false;
     alert.products.push(alert.product)
+    console.log(alert)
     this.http.post('http://localhost:8301/createAlert', alert).subscribe({
       next: (data) => {
         alert.isEdit = false;
@@ -154,7 +152,6 @@ export class GestionAlertesComponent implements OnInit {
     }
     else {
       alert.products.push(alert.product)
-      console.log(alert)
       if (alert.active == "Off") {
         alert.active = false;
       } else {
@@ -173,12 +170,23 @@ export class GestionAlertesComponent implements OnInit {
       this.http.patch('http://localhost:8301/modifyAlert/' + alert.Id, alert).subscribe({
         next: (data) => {
           alert.isEdit = false;
-          //location.reload();
+          location.reload();
 
         },
         error: (err) => { console.log(err) },
       })
     }
+  }
+
+  getTypeProduct() {
+    this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
+      next: (data) => {
+        this.listTypeProduct = data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
 
