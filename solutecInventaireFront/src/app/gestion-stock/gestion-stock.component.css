@@ -1,8 +1,9 @@
 table {
   width: 100%;
 }
+
 /*
-.mat-column-nameProduct{
+.mat-column-typeProduct{
   border-right: 1px solid;
   border-color: rgb(227, 227, 227);
 }
@@ -20,6 +21,7 @@ table {
   border-color: rgb(227, 227, 227);
 }
 */
+
 
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: #ff001947;
