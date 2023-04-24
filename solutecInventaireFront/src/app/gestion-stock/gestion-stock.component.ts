@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-export interface TypeProduct{
+export interface TypeProduct {
   idTypeProduct: number | null;
   nameProduct: string;
 }
@@ -79,7 +79,7 @@ export class GestionStockComponent implements OnInit {
   lengthDataSource: any;
   suppr = false;
 
-  sortByName=false;
+  sortByName = false;
   nameToSort: any;
 
 
@@ -129,8 +129,9 @@ export class GestionStockComponent implements OnInit {
     const newRow: Product = {
       position: null,
       idProduct: 0,
-      typeProduct: {idTypeProduct:null,
-                    nameProduct:""
+      typeProduct: {
+        idTypeProduct: null,
+        nameProduct: ""
       },
       refProduct: "",
       owner: "",
@@ -150,7 +151,7 @@ export class GestionStockComponent implements OnInit {
     /*this.selection.clear();*/
     this.getTypeProduct();
     this.getListProducts();
-    
+
 
 
   }
@@ -160,7 +161,9 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
-    if(this.sortByName==false){
+    console.log(this.nameToSort);
+
+    if (this.sortByName == false) {
       this.http.get('http://localhost:8301/liste').subscribe({
         next: (data) => {
           this.listProducts = data;
@@ -169,8 +172,8 @@ export class GestionStockComponent implements OnInit {
         error: (err) => { console.log(err) },
       })
     }
-    if(this.sortByName==true){
-      this.http.get('http://localhost:8301/filter3/'+ this.nameToSort).subscribe({
+    if (this.sortByName == true) {
+      this.http.get('http://localhost:8301/filter3/' + this.nameToSort).subscribe({
         next: (data) => {
           this.listProducts = data;
           this.createDatasource(this.listDataSource);
@@ -180,7 +183,7 @@ export class GestionStockComponent implements OnInit {
     }
   }
 
-  createDatasource(listeProducts: any){
+  createDatasource(listeProducts: any) {
     this.i = 1;
     for (let index in this.listProducts) {
       let product = {} as any;
@@ -188,7 +191,7 @@ export class GestionStockComponent implements OnInit {
       product.idProduct = this.listProducts[index].idProduct;
       product.typeProduct = this.listProducts[index].typeProduct;
       console.log(this.listProducts[index].typeProduct);
-      
+
       product.refProduct = this.listProducts[index].refProduct;
       product.owner = this.listProducts[index].owner;
       product.entryDate = this.listProducts[index].entryDate;
@@ -256,12 +259,12 @@ export class GestionStockComponent implements OnInit {
     console.log(product)
     this.http.post('http://localhost:8301/add/database', product).subscribe({
       next: (data) => {
-        product.isEdit=false;
+        product.isEdit = false;
       },
       error: (err) => { console.log(err) },
     })
-   
-    
+
+
 
 
   }
@@ -275,7 +278,7 @@ export class GestionStockComponent implements OnInit {
       console.log(product)
       console.log(product.typeProduct)
       console.log(product.typeProduct.idTypeProduct);
-      
+
       this.http.patch('http://localhost:8301/patch/product', product).subscribe({
         next: (data) => {
           product.isEdit = false;
@@ -287,30 +290,31 @@ export class GestionStockComponent implements OnInit {
     }
   }
 
-    getTypeProduct(){
-      this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
-        next: (data) => {
-          this.listTypeProduct=data;
-          console.log(this.listTypeProduct);
-          
-        },
-        error: (err) => {console.log(err);
-        }
-      })
-    }
+  getTypeProduct() {
+    this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
+      next: (data) => {
+        this.listTypeProduct = data;
+        console.log(this.listTypeProduct);
 
-    public compareWith(object1: any, object2: any) {
-      console.log(object1);
-      console.log(object2);
-      
-      
-      return object1 && object2 && object1.nameProduct === object2.nameProduct;
-    }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
 
-    toSortByName(name:any){
-      this.sortByName=true;
-      this.nameToSort=name;
-      this.getListProducts();
-    }
+  public compareWith(object1: any, object2: any) {
+    console.log(object1);
+    console.log(object2);
+
+
+    return object1 && object2 && object1.nameProduct === object2.nameProduct;
+  }
+
+  toSortByName(name: any) {
+    this.sortByName = true;
+    this.nameToSort = name.owner;
+    this.getListProducts();
+  }
 
 }

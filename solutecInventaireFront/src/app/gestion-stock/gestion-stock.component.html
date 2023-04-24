@@ -14,10 +14,10 @@
           </div>
           <div *ngIf="col.key=='typeProduct'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key.nameProduct"
-            [ngSwitch]="col.key">
-            <span *ngSwitchDefault>{{ col.label }}</span>
+              [ngSwitch]="col.key">
+              <span *ngSwitchDefault>{{ col.label }}</span>
 
-          </th>
+            </th>
           </div>
           <div *ngIf="col.key=='isEdit' || col.key=='isSelected'">
             <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">
@@ -64,10 +64,10 @@
                 <div *ngIf="col.key=='typeProduct'">
                   <mat-form-field>
                     <mat-select [(ngModel)]="element[col.key]" [compareWith]="compareWith">
-                        <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
+                      <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
                     </mat-select>
                   </mat-form-field>
-                  
+
                 </div>
 
               </ng-template>
@@ -107,11 +107,13 @@
 
     </div>
     <div class="row">
-      <mat-form-field ngForm="" appearance="fill">
-        <mat-label>Input</mat-label>
-        <input matInput>
-        
-      </mat-form-field>
+      <form #nomResponsable="ngForm" (ngSubmit)="toSortByName(nomResponsable.value)">
+        <mat-form-field appearance="fill">
+          <mat-label>Input</mat-label>
+          <input name="owner" ngModel="" type="text" class="form-control" matInput>
+        </mat-form-field>
+        <button type="submit">ok</button>
+      </form>
     </div>
 
   </div>
