@@ -82,6 +82,9 @@ export class GestionStockComponent implements OnInit {
   sortByName = false;
   nameToSort: any;
 
+  sortByReference = false;
+  referenceToSort: any;
+
 
 
   /*displayedColumns: string[];*/
@@ -162,8 +165,10 @@ export class GestionStockComponent implements OnInit {
 
   getListProducts() {
     console.log(this.nameToSort);
+    console.log(this.referenceToSort);
 
-    if (this.sortByName == false) {
+
+    if (this.sortByName == false && this.sortByReference == false) {
       this.http.get('http://localhost:8301/liste').subscribe({
         next: (data) => {
           this.listProducts = data;
@@ -174,6 +179,15 @@ export class GestionStockComponent implements OnInit {
     }
     if (this.sortByName == true) {
       this.http.get('http://localhost:8301/filter3/' + this.nameToSort).subscribe({
+        next: (data) => {
+          this.listProducts = data;
+          this.createDatasource(this.listDataSource);
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+    if (this.sortByReference == true) {
+      this.http.get('http://localhost:8301/filter2/' + this.referenceToSort).subscribe({
         next: (data) => {
           this.listProducts = data;
           this.createDatasource(this.listDataSource);
@@ -312,9 +326,27 @@ export class GestionStockComponent implements OnInit {
   }
 
   toSortByName(name: any) {
-    this.sortByName = true;
-    this.nameToSort = name.owner;
-    this.getListProducts();
+    if (name.owner != "") {
+      this.sortByName = true;
+      this.nameToSort = name.owner;
+      this.getListProducts();
+    }
+    else {
+      this.sortByName = false;
+      this.getListProducts();
+    }
+  }
+
+  toSortByReference(reference: any) {
+    if (reference.refProduct != "") {
+      this.sortByReference = true;
+      this.referenceToSort = reference.refProduct;
+      this.getListProducts();
+    }
+    else {
+      this.sortByReference = false;
+      this.getListProducts();
+    }
   }
 
 }
