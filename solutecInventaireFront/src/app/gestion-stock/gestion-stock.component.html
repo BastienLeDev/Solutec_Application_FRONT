@@ -128,6 +128,29 @@
       </form>
     </div>
 
+    <!-- FILTRE REFERENCE PRODUCT -->
+    <div class="row">
+      <form #entryDateForm="ngForm" (ngSubmit)="toSortByEntryDate(entryDateForm.value.entryDate)">
+        <mat-form-field appearance="fill">
+          <mat-label>Input</mat-label>
+          <input name="entryDate" ngModel="" type="text" class="form-control" matInput>
+        </mat-form-field>
+        <button type="submit">ok</button>
+      </form>
+    </div>
+
+
+    <!-- FILTRE REFERENCE PRODUCT -->
+    <div class="row">
+      <form #exitDateForm="ngForm" (ngSubmit)="toSortByExitDate(exitDateForm.value.exitDate)">
+        <mat-form-field appearance="fill">
+          <mat-label>Input</mat-label>
+          <input name="exitDate" ngModel="" type="text" class="form-control" matInput>
+        </mat-form-field>
+        <button type="submit">ok</button>
+      </form>
+    </div>
+
   </div>
 
 

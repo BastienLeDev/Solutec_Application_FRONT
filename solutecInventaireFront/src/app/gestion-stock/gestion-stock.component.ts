@@ -85,6 +85,12 @@ export class GestionStockComponent implements OnInit {
   sortByReference = false;
   referenceToSort: any;
 
+  sortByEntryDate = false;
+  entryDateToSort: any;
+
+  sortByExitDate = false;
+  exitDateToSort: any;
+
 
 
   /*displayedColumns: string[];*/
@@ -168,7 +174,7 @@ export class GestionStockComponent implements OnInit {
     console.log(this.referenceToSort);
 
 
-    if (this.sortByName == false && this.sortByReference == false) {
+    if (this.sortByName == false && this.sortByReference == false && this.sortByEntryDate == false && this.sortByExitDate == false) {
       this.http.get('http://localhost:8301/liste').subscribe({
         next: (data) => {
           this.listProducts = data;
@@ -188,6 +194,24 @@ export class GestionStockComponent implements OnInit {
     }
     if (this.sortByReference == true) {
       this.http.get('http://localhost:8301/filter2/' + this.referenceToSort).subscribe({
+        next: (data) => {
+          this.listProducts = data;
+          this.createDatasource(this.listDataSource);
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+    if (this.sortByEntryDate == true) {
+      this.http.get('http://localhost:8301/filter4/' + this.entryDateToSort).subscribe({
+        next: (data) => {
+          this.listProducts = data;
+          this.createDatasource(this.listDataSource);
+        },
+        error: (err) => { console.log(err) },
+      })
+    }
+    if (this.sortByExitDate == true) {
+      this.http.get('http://localhost:8301/filter5/' + this.exitDateToSort).subscribe({
         next: (data) => {
           this.listProducts = data;
           this.createDatasource(this.listDataSource);
@@ -348,5 +372,30 @@ export class GestionStockComponent implements OnInit {
       this.getListProducts();
     }
   }
+
+  toSortByEntryDate(entryDate: any) {
+    if (entryDate != "") {
+      this.sortByEntryDate = true;
+      this.entryDateToSort = entryDate;
+      this.getListProducts();
+    }
+    else {
+      this.sortByEntryDate = false;
+      this.getListProducts();
+    }
+  }
+
+  toSortByExitDate(exitDate: any) {
+    if (exitDate != "") {
+      this.sortByExitDate = true;
+      this.exitDateToSort = exitDate;
+      this.getListProducts();
+    }
+    else {
+      this.sortByExitDate = false;
+      this.getListProducts();
+    }
+  }
+
 
 }
