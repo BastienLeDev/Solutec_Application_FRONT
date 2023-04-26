@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
 
-export interface ProductElement {
+export interface AlertElement {
   Id: any;
   alerte: string;
   seuil: number;
@@ -39,33 +40,43 @@ export interface ProductElement {
 
 
 export class GestionAlertesComponent implements OnInit {
+  //Table des alertes
   listAlert: any;
-  dataSource: ProductElement[];
+  dataSource: AlertElement[];
   columnsToDisplay = ['alerte', "seuil", 'active', 'triggered', 'email'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand', 'isEdit', 'supprimer'];
-  expandedElement: ProductElement | null;
+  expandedElement: AlertElement | null;
   listDataSource: Array<any> = [];
   delete: any;
   alertCreated: any;
   listTypeProduct: any;
+  refresh: any;
+
+  //Table des alertes déclenchées
+  displayedColumns: string[] = ['Alerte', 'Seuil', 'Heure', 'Actions'];
+  dataSourceT = new MatTableDataSource<AlertElement>();
+  listTriggered: any;
 
   constructor(private http: HttpClient) { }
 
 
   ngOnInit(): void {
+    this.refreshAlert();
     this.getAlert();
     this.getTypeProduct();
+    this.getTriggered();
+
   }
 
   addRow() {
-    const newRow: ProductElement = {
+    const newRow: AlertElement = {
       Id: 0,
       alerte: "",
       seuil: 0,
-      active: "off",
-      triggered: "off",
+      active: "Off",
+      triggered: "Off",
       product: "",
-      email: "off",
+      email: "Off",
       isEdit: true,
       products: [],
     };
@@ -78,12 +89,20 @@ export class GestionAlertesComponent implements OnInit {
     } else {
       val.isEdit = false;
     }
+    if (val.active == "Off") {
+      val.active = false;
+    } else {
+      val.active = true;
+    }
+    if (val.email == "Off") {
+      val.email = false;
+    } else {
+      val.email = true;
+    }
+    val.product = null;
 
   }
 
-  //deleteElement(alert: any, element: any) {
-  //alert.products.filter((item: any) => element !== item)
-  //}
 
 
   getAlert() {
@@ -91,7 +110,7 @@ export class GestionAlertesComponent implements OnInit {
       next: (data) => {
         this.listAlert = data;
         this.listAlert.map((element: { idAlert: number; alerte: string; seuil: number; active: boolean; email: boolean; triggered: boolean; products: Object[] }) => {
-          let Tree = {} as ProductElement;
+          let Tree = {} as AlertElement;
           Tree.Id = element.idAlert;
           Tree.alerte = element.alerte;
           Tree.seuil = element.seuil;
@@ -120,6 +139,16 @@ export class GestionAlertesComponent implements OnInit {
     });
   }
 
+  deleteTypeProduct(idAlert: any, nameProduct: any) {
+    this.http.patch('http://localhost:8301/deleteTypeProduct/' + nameProduct + "/" + idAlert, null).subscribe({
+      next: (data) => {
+        location.reload();
+
+      },
+      error: (err) => { console.log(err) },
+    })
+  }
+
   deleteAlerte(val: any) {
     this.http.delete('http://localhost:8301/deleteAlert/' + val).subscribe({
       next: (data) => {
@@ -133,44 +162,67 @@ export class GestionAlertesComponent implements OnInit {
 
   createAlert(alert: any) {
     alert.triggered = false;
-    alert.products.push(alert.product)
-    console.log(alert)
+    if (alert.product != "") {
+      alert.products.push(alert.product)
+    }
     this.http.post('http://localhost:8301/createAlert', alert).subscribe({
       next: (data) => {
+        if (alert.active === true) {
+          alert.active = "On"
+        } else {
+          alert.active = "Off"
+        }
+        if (alert.email === true) {
+          alert.email = "On"
+        } else {
+          alert.email = "Off"
+        }
+        if (alert.triggered === true) {
+          alert.triggered = "On"
+        } else {
+          alert.triggered = "Off"
+        }
         alert.isEdit = false;
-        location.reload();
+        this.refreshAlert()
+
       },
       error: (err) => { console.log(err) }
     })
 
   }
 
-  modifAlert(alert: ProductElement) {
+  modifAlert(alert: AlertElement) {
     if (alert.Id == 0) {
       alert.Id = null;
       this.createAlert(alert)
     }
     else {
-      alert.products.push(alert.product)
-      if (alert.active == "Off") {
-        alert.active = false;
+      if (alert.triggered === "Off") {
+        alert.triggered = false
       } else {
-        alert.active = true;
+        alert.triggered = true
       }
-      if (alert.email == "Off") {
-        alert.email = false;
-      } else {
-        alert.email = true;
-      }
-      if (alert.triggered == "Off") {
-        alert.triggered = false;
-      } else {
-        alert.triggered = true;
+      if (alert.product != null) {
+        alert.products.push(alert.product)
       }
       this.http.patch('http://localhost:8301/modifyAlert/' + alert.Id, alert).subscribe({
         next: (data) => {
+          if (alert.active === true) {
+            alert.active = "On"
+          } else {
+            alert.active = "Off"
+          }
+          if (alert.email === true) {
+            alert.email = "On"
+          } else {
+            alert.email = "Off"
+          }
+          if (alert.triggered === true) {
+            alert.triggered = "On"
+          } else {
+            alert.triggered = "Off"
+          }
           alert.isEdit = false;
-          location.reload();
 
         },
         error: (err) => { console.log(err) },
@@ -182,6 +234,29 @@ export class GestionAlertesComponent implements OnInit {
     this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
       next: (data) => {
         this.listTypeProduct = data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  refreshAlert() {
+    this.http.get('http://localhost:8301/refreshAlert').subscribe({
+      next: (data) => {
+        this.refresh = data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  getTriggered() {
+    this.http.get('http://localhost:8301/getTrigger').subscribe({
+      next: (data) => {
+        this.listTriggered = data;
+        this.dataSourceT = new MatTableDataSource<AlertElement>(this.listTriggered);
       },
       error: (err) => {
         console.log(err);
