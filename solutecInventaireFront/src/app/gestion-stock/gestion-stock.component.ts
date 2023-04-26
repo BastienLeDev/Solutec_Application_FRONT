@@ -7,8 +7,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { from } from 'rxjs';
 
-export interface TypeProduct{
+export interface TypeProduct {
   idTypeProduct: number | null;
   nameProduct: string;
 }
@@ -74,13 +76,38 @@ const COLUMNS_SCHEMA = [
 
 export class GestionStockComponent implements OnInit {
   listProducts: any;
+  listProductsSorted: any;
   listTypeProduct: any;
   listDataSource: Array<any> = [];
   lengthDataSource: any;
   suppr = false;
 
-  sortByName=false;
+  listSortedByTypeProduct = [] as any;
+  listSortedByReference = [] as any;
+  listSortedByName = [] as any;
+  listSortedByEntryDate = [] as any;
+  listSortedByExitDate = [] as any;
+
+  typeProductToSort: any;
   nameToSort: any;
+  referenceToSort: any;
+  entryDateToSort: any;
+  exitDateToSort: any;
+
+  champsFiltres = this._formBuilder.group({
+    sortByTypeProduct : false,
+    sortByReference : false,
+    sortByName : false,
+    sortByEntryDate : false,
+    sortByExitDate : false,
+    typeProduct: new FormControl(''),
+    refProduct: new FormControl(''),
+    owner: new FormControl(''),
+    entryDate: new FormControl(''),
+    exitDate: new FormControl('')
+
+  })
+
 
 
 
@@ -93,20 +120,7 @@ export class GestionStockComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
-  /*
-  selection = new SelectionModel<Product>(true, []);
-  */
-
-  /*
-  ColumnsToDisplay(){
-    if(this.suppr==true){
-      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif', 'select'];
-    }
-    if(this.suppr==false){
-      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif'];
-    }
-
-  }*/
+  
 
   isAllSelected() {
     return this.dataSource.data.every((item: any) => item.isSelected);
@@ -121,7 +135,7 @@ export class GestionStockComponent implements OnInit {
     }));
   }
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder) {
 
   };
 
@@ -129,8 +143,9 @@ export class GestionStockComponent implements OnInit {
     const newRow: Product = {
       position: null,
       idProduct: 0,
-      typeProduct: {idTypeProduct:null,
-                    nameProduct:""
+      typeProduct: {
+        idTypeProduct: null,
+        nameProduct: ""
       },
       refProduct: "",
       owner: "",
@@ -143,14 +158,14 @@ export class GestionStockComponent implements OnInit {
 
 
   ngOnInit(): void {
-    /*this.ColumnsToDisplay();*/
+    
     this.listProducts = [];
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    /*this.selection.clear();*/
+
     this.getTypeProduct();
     this.getListProducts();
-    
+
 
 
   }
@@ -160,39 +175,27 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
-    if(this.sortByName==false){
-      this.http.get('http://localhost:8301/liste').subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
-    if(this.sortByName==true){
-      this.http.get('http://localhost:8301/filter3/'+ this.nameToSort).subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
+    this.http.get('http://localhost:8301/liste').subscribe({
+      next: (data) => {
+        this.listProducts = data;
+        this.createDatasource(this.listProducts);
+      },
+      error: (err) => { console.log(err) },
+    })
+
   }
 
-  createDatasource(listeProducts: any){
+  createDatasource(anyListProducts: any) {
     this.i = 1;
-    for (let index in this.listProducts) {
+    for (let index in anyListProducts) {
       let product = {} as any;
       product.position = this.i;
-      product.idProduct = this.listProducts[index].idProduct;
-      product.typeProduct = this.listProducts[index].typeProduct;
-      console.log(this.listProducts[index].typeProduct);
-      
-      product.refProduct = this.listProducts[index].refProduct;
-      product.owner = this.listProducts[index].owner;
-      product.entryDate = this.listProducts[index].entryDate;
-      product.exitDate = this.listProducts[index].exitDate;
+      product.idProduct = anyListProducts[index].idProduct;
+      product.typeProduct = anyListProducts[index].typeProduct;
+      product.refProduct = anyListProducts[index].refProduct;
+      product.owner = anyListProducts[index].owner;
+      product.entryDate = anyListProducts[index].entryDate;
+      product.exitDate = anyListProducts[index].exitDate;
       product.isEdit = false;
       this.listDataSource.push(product);
       this.i += 1;
@@ -200,9 +203,8 @@ export class GestionStockComponent implements OnInit {
     this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.lengthDataSource = this.listProducts.length;
+    this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
-    console.log(this.dataSource);
   }
 
   modeSuppression() {
@@ -256,12 +258,12 @@ export class GestionStockComponent implements OnInit {
     console.log(product)
     this.http.post('http://localhost:8301/add/database', product).subscribe({
       next: (data) => {
-        product.isEdit=false;
+        product.isEdit = false;
       },
       error: (err) => { console.log(err) },
     })
-   
-    
+
+
 
 
   }
@@ -275,7 +277,7 @@ export class GestionStockComponent implements OnInit {
       console.log(product)
       console.log(product.typeProduct)
       console.log(product.typeProduct.idTypeProduct);
-      
+
       this.http.patch('http://localhost:8301/patch/product', product).subscribe({
         next: (data) => {
           product.isEdit = false;
@@ -287,30 +289,90 @@ export class GestionStockComponent implements OnInit {
     }
   }
 
-    getTypeProduct(){
-      this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
-        next: (data) => {
-          this.listTypeProduct=data;
-          console.log(this.listTypeProduct);
-          
-        },
-        error: (err) => {console.log(err);
-        }
-      })
+  getTypeProduct() {
+    this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
+      next: (data) => {
+        this.listTypeProduct = data;
+            },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  public compareWith(object1: any, object2: any) {
+    console.log(object1);
+    console.log(object2);
+
+
+    return object1 && object2 && object1.nameProduct === object2.nameProduct;
+  }
+
+  fonctionSort(formValue: any){
+    this.listProductsSorted = [];
+    this.listDataSource = [];
+    this.dataSource = new MatTableDataSource;
+    
+    console.log(formValue);
+    if(formValue.sortByTypeProduct == false && formValue.sortByReference == false 
+      && formValue.sortByName == false && formValue.sortByEntryDate == false 
+      && formValue.sortByExitDate == false){
+        this.getListProducts();
+    }
+    
+    if(formValue.sortByTypeProduct == true && formValue.typeProduct !=""){
+      this.toSortByTypeProduct(formValue.typeProduct, this.listProducts);
+      this.listProductsSorted = this.listSortedByTypeProduct;
     }
 
-    public compareWith(object1: any, object2: any) {
-      console.log(object1);
-      console.log(object2);
-      
-      
-      return object1 && object2 && object1.nameProduct === object2.nameProduct;
+    if(formValue.sortByName == true && formValue.owner != ""){
+      this.toSortByName(formValue.owner, this.listProducts);
+      this.listProductsSorted = this.listSortedByName;
     }
 
-    toSortByName(name:any){
-      this.sortByName=true;
-      this.nameToSort=name;
-      this.getListProducts();
-    }
+
+    
+  
+    
+    this.createDatasource(this.listProductsSorted);
+    console.log(this.dataSource);
+    
+  
+  }
+
+  toSortByTypeProduct(typeProduct: any, listToSort: any){
+    this.listSortedByTypeProduct =[];
+    this.typeProductToSort = typeProduct.nameProduct;
+    console.log(this.typeProductToSort);
+    
+    listToSort.forEach((element: any) => {
+      console.log(element.typeProduct.nameProduct);
+      
+      if(element.typeProduct.nameProduct !=null && element.typeProduct.nameProduct.includes(this.typeProductToSort)){
+        this.listSortedByTypeProduct.push(element);
+      }
+      console.log(this.listSortedByTypeProduct);
+      
+      
+    });
+  }
+
+  
+
+  toSortByName(name: any, listToSort: any){
+    this.listSortedByName = [];
+    this.nameToSort = name;
+    
+    listToSort.forEach((element: any)=> {
+      if(element.owner!=null && element.owner.toString().toLowerCase().includes(this.nameToSort.toLowerCase())){
+        this.listSortedByName.push(element);
+      }   
+    })
+    
+  }
+
+ 
+
+
 
 }
