@@ -82,9 +82,11 @@ export class GestionStockComponent implements OnInit {
   lengthDataSource: any;
   suppr = false;
 
-
+  listSortedByTypeProduct = [] as any;
+  listSortedByReference = [] as any;
   listSortedByName = [] as any;
-  
+  listSortedByEntryDate = [] as any;
+  listSortedByExitDate = [] as any;
 
   typeProductToSort: any;
   nameToSort: any;
@@ -94,8 +96,8 @@ export class GestionStockComponent implements OnInit {
 
   champsFiltres = this._formBuilder.group({
     sortByTypeProduct : false,
-    sortByName : false,
     sortByReference : false,
+    sortByName : false,
     sortByEntryDate : false,
     sortByExitDate : false,
     typeProduct: new FormControl(''),
@@ -118,20 +120,7 @@ export class GestionStockComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
-  /*
-  selection = new SelectionModel<Product>(true, []);
-  */
-
-  /*
-  ColumnsToDisplay(){
-    if(this.suppr==true){
-      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif', 'select'];
-    }
-    if(this.suppr==false){
-      this.displayedColumns = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'exitDate','modif'];
-    }
-
-  }*/
+  
 
   isAllSelected() {
     return this.dataSource.data.every((item: any) => item.isSelected);
@@ -169,11 +158,11 @@ export class GestionStockComponent implements OnInit {
 
 
   ngOnInit(): void {
-    /*this.ColumnsToDisplay();*/
+    
     this.listProducts = [];
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    /*this.selection.clear();*/
+
     this.getTypeProduct();
     this.getListProducts();
 
@@ -193,54 +182,12 @@ export class GestionStockComponent implements OnInit {
       },
       error: (err) => { console.log(err) },
     })
-    
-    /*
-    if (this.sortByName == true) {
-      this.http.get('http://localhost:8301/filter3/' + this.nameToSort).subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
-    if (this.sortByReference == true) {
-      this.http.get('http://localhost:8301/filter2/' + this.referenceToSort).subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
-    if (this.sortByEntryDate == true) {
-      this.http.get('http://localhost:8301/filter4/' + this.entryDateToSort).subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
-    if (this.sortByExitDate == true) {
-      this.http.get('http://localhost:8301/filter5/' + this.exitDateToSort).subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
-
-    */
 
   }
 
   createDatasource(anyListProducts: any) {
     this.i = 1;
     for (let index in anyListProducts) {
-      console.log(anyListProducts[index]);
-      
       let product = {} as any;
       product.position = this.i;
       product.idProduct = anyListProducts[index].idProduct;
@@ -373,10 +320,18 @@ export class GestionStockComponent implements OnInit {
         this.getListProducts();
     }
     
+    if(formValue.sortByTypeProduct == true && formValue.typeProduct !=""){
+      this.toSortByTypeProduct(formValue.typeProduct, this.listProducts);
+      this.listProductsSorted = this.listSortedByTypeProduct;
+    }
+
     if(formValue.sortByName == true && formValue.owner != ""){
-      this.toSortByName(formValue.owner);
+      this.toSortByName(formValue.owner, this.listProducts);
       this.listProductsSorted = this.listSortedByName;
     }
+
+
+    
   
     
     this.createDatasource(this.listProductsSorted);
@@ -385,14 +340,30 @@ export class GestionStockComponent implements OnInit {
   
   }
 
+  toSortByTypeProduct(typeProduct: any, listToSort: any){
+    this.listSortedByTypeProduct =[];
+    this.typeProductToSort = typeProduct.nameProduct;
+    console.log(this.typeProductToSort);
+    
+    listToSort.forEach((element: any) => {
+      console.log(element.typeProduct.nameProduct);
+      
+      if(element.typeProduct.nameProduct !=null && element.typeProduct.nameProduct.includes(this.typeProductToSort)){
+        this.listSortedByTypeProduct.push(element);
+      }
+      console.log(this.listSortedByTypeProduct);
+      
+      
+    });
+  }
+
   
 
-  toSortByName(name: any){
+  toSortByName(name: any, listToSort: any){
     this.listSortedByName = [];
     this.nameToSort = name;
-    console.log(this.listProducts);
     
-    this.listProducts.forEach((element: { owner: string | any[]; })=> {
+    listToSort.forEach((element: any)=> {
       if(element.owner!=null && element.owner.toString().toLowerCase().includes(this.nameToSort.toLowerCase())){
         this.listSortedByName.push(element);
       }   
@@ -400,61 +371,7 @@ export class GestionStockComponent implements OnInit {
     
   }
 
-
-
-
-
-/*
-  toSortByName(name: any) {
-    if (name.owner != "") {
-      this.sortByName = true;
-      this.nameToSort = name.owner;
-      this.getListProducts();
-    }
-    else {
-      this.sortByName = false;
-      this.getListProducts();
-    }
-  }
-
-  toSortByReference(reference: any) {
-    if (reference.refProduct != "") {
-      this.sortByReference = true;
-      this.referenceToSort = reference.refProduct;
-      this.getListProducts();
-    }
-    else {
-      this.sortByReference = false;
-      this.getListProducts();
-    }
-  }
-
-  toSortByEntryDate(entryDate: any) {
-    if (entryDate != "") {
-      this.sortByEntryDate = true;
-      this.entryDateToSort = entryDate;
-      this.getListProducts();
-    }
-    else {
-      this.sortByEntryDate = false;
-      this.getListProducts();
-    }
-  }
-
-  toSortByExitDate(exitDate: any) {
-    if (exitDate != "") {
-      this.sortByExitDate = true;
-      this.exitDateToSort = exitDate;
-      this.getListProducts();
-    }
-    else {
-      this.sortByExitDate = false;
-      this.getListProducts();
-    }
-  }
-*/
-
-
+ 
 
 
 
