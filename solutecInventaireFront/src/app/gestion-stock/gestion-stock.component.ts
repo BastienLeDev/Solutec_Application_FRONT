@@ -325,6 +325,11 @@ export class GestionStockComponent implements OnInit {
       this.listProductsSorted = this.listSortedByTypeProduct;
     }
 
+    if(formValue.sortByReference == true && formValue.refProduct !=""){
+      this.toSortByRefProduct(formValue.refProduct, this.listProducts);
+      this.listProductsSorted = this.listSortedByReference;
+    }
+
     if(formValue.sortByName == true && formValue.owner != ""){
       this.toSortByName(formValue.owner, this.listProducts);
       this.listProductsSorted = this.listSortedByName;
@@ -343,20 +348,25 @@ export class GestionStockComponent implements OnInit {
   toSortByTypeProduct(typeProduct: any, listToSort: any){
     this.listSortedByTypeProduct =[];
     this.typeProductToSort = typeProduct.nameProduct;
-    console.log(this.typeProductToSort);
-    
+
     listToSort.forEach((element: any) => {
-      console.log(element.typeProduct.nameProduct);
-      
       if(element.typeProduct.nameProduct !=null && element.typeProduct.nameProduct.includes(this.typeProductToSort)){
         this.listSortedByTypeProduct.push(element);
       }
-      console.log(this.listSortedByTypeProduct);
-      
-      
     });
   }
 
+
+  toSortByRefProduct(ref: any, listToSort: any){
+    this.listSortedByReference = [];
+    this.referenceToSort = ref;
+
+    listToSort.forEach((element: any)=> {
+      if(element.refProduct != null && element.refProduct.includes(this.referenceToSort)){
+        this.listSortedByReference.push(element);
+      }
+    });
+  }
   
 
   toSortByName(name: any, listToSort: any){
