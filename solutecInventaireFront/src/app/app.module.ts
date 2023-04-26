@@ -9,7 +9,7 @@ import { GestionStockComponent } from './gestion-stock/gestion-stock.component';
 import { GenerationRapportsComponent } from './generation-rapports/generation-rapports.component';
 import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.component';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSortModule } from '@angular/material/sort';
@@ -59,6 +59,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatInputModule,
     MatDialogModule,
     MatSelectModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

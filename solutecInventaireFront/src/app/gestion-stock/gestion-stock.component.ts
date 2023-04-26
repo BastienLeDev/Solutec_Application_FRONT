@@ -7,6 +7,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { from } from 'rxjs';
 
 export interface TypeProduct {
   idTypeProduct: number | null;
@@ -74,22 +76,36 @@ const COLUMNS_SCHEMA = [
 
 export class GestionStockComponent implements OnInit {
   listProducts: any;
+  listProductsSorted: any;
   listTypeProduct: any;
   listDataSource: Array<any> = [];
   lengthDataSource: any;
   suppr = false;
 
-  sortByName = false;
+
+  listSortedByName = [] as any;
+  
+
+  typeProductToSort: any;
   nameToSort: any;
-
-  sortByReference = false;
   referenceToSort: any;
-
-  sortByEntryDate = false;
   entryDateToSort: any;
-
-  sortByExitDate = false;
   exitDateToSort: any;
+
+  champsFiltres = this._formBuilder.group({
+    sortByTypeProduct : false,
+    sortByName : false,
+    sortByReference : false,
+    sortByEntryDate : false,
+    sortByExitDate : false,
+    typeProduct: new FormControl(''),
+    refProduct: new FormControl(''),
+    owner: new FormControl(''),
+    entryDate: new FormControl(''),
+    exitDate: new FormControl('')
+
+  })
+
 
 
 
@@ -130,7 +146,7 @@ export class GestionStockComponent implements OnInit {
     }));
   }
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder) {
 
   };
 
@@ -170,19 +186,15 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
-    console.log(this.nameToSort);
-    console.log(this.referenceToSort);
-
-
-    if (this.sortByName == false && this.sortByReference == false && this.sortByEntryDate == false && this.sortByExitDate == false) {
-      this.http.get('http://localhost:8301/liste').subscribe({
-        next: (data) => {
-          this.listProducts = data;
-          this.createDatasource(this.listDataSource);
-        },
-        error: (err) => { console.log(err) },
-      })
-    }
+    this.http.get('http://localhost:8301/liste').subscribe({
+      next: (data) => {
+        this.listProducts = data;
+        this.createDatasource(this.listProducts);
+      },
+      error: (err) => { console.log(err) },
+    })
+    
+    /*
     if (this.sortByName == true) {
       this.http.get('http://localhost:8301/filter3/' + this.nameToSort).subscribe({
         next: (data) => {
@@ -219,21 +231,24 @@ export class GestionStockComponent implements OnInit {
         error: (err) => { console.log(err) },
       })
     }
+
+    */
+
   }
 
-  createDatasource(listeProducts: any) {
+  createDatasource(anyListProducts: any) {
     this.i = 1;
-    for (let index in this.listProducts) {
+    for (let index in anyListProducts) {
+      console.log(anyListProducts[index]);
+      
       let product = {} as any;
       product.position = this.i;
-      product.idProduct = this.listProducts[index].idProduct;
-      product.typeProduct = this.listProducts[index].typeProduct;
-      console.log(this.listProducts[index].typeProduct);
-
-      product.refProduct = this.listProducts[index].refProduct;
-      product.owner = this.listProducts[index].owner;
-      product.entryDate = this.listProducts[index].entryDate;
-      product.exitDate = this.listProducts[index].exitDate;
+      product.idProduct = anyListProducts[index].idProduct;
+      product.typeProduct = anyListProducts[index].typeProduct;
+      product.refProduct = anyListProducts[index].refProduct;
+      product.owner = anyListProducts[index].owner;
+      product.entryDate = anyListProducts[index].entryDate;
+      product.exitDate = anyListProducts[index].exitDate;
       product.isEdit = false;
       this.listDataSource.push(product);
       this.i += 1;
@@ -241,9 +256,8 @@ export class GestionStockComponent implements OnInit {
     this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.lengthDataSource = this.listProducts.length;
+    this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
-    console.log(this.dataSource);
   }
 
   modeSuppression() {
@@ -332,9 +346,7 @@ export class GestionStockComponent implements OnInit {
     this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
       next: (data) => {
         this.listTypeProduct = data;
-        console.log(this.listTypeProduct);
-
-      },
+            },
       error: (err) => {
         console.log(err);
       }
@@ -349,6 +361,50 @@ export class GestionStockComponent implements OnInit {
     return object1 && object2 && object1.nameProduct === object2.nameProduct;
   }
 
+  fonctionSort(formValue: any){
+    this.listProductsSorted = [];
+    this.listDataSource = [];
+    this.dataSource = new MatTableDataSource;
+    
+    console.log(formValue);
+    if(formValue.sortByTypeProduct == false && formValue.sortByReference == false 
+      && formValue.sortByName == false && formValue.sortByEntryDate == false 
+      && formValue.sortByExitDate == false){
+        this.getListProducts();
+    }
+    
+    if(formValue.sortByName == true && formValue.owner != ""){
+      this.toSortByName(formValue.owner);
+      this.listProductsSorted = this.listSortedByName;
+    }
+  
+    
+    this.createDatasource(this.listProductsSorted);
+    console.log(this.dataSource);
+    
+  
+  }
+
+  
+
+  toSortByName(name: any){
+    this.listSortedByName = [];
+    this.nameToSort = name;
+    console.log(this.listProducts);
+    
+    this.listProducts.forEach((element: { owner: string | any[]; })=> {
+      if(element.owner!=null && element.owner.toString().toLowerCase().includes(this.nameToSort.toLowerCase())){
+        this.listSortedByName.push(element);
+      }   
+    })
+    
+  }
+
+
+
+
+
+/*
   toSortByName(name: any) {
     if (name.owner != "") {
       this.sortByName = true;
@@ -396,6 +452,10 @@ export class GestionStockComponent implements OnInit {
       this.getListProducts();
     }
   }
+*/
+
+
+
 
 
 }

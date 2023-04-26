@@ -106,48 +106,115 @@
       </div>
 
     </div>
-    <!-- FILTRE RESPONSABLE -->
-    <div class="row">
-      <form #nomResponsable="ngForm" (ngSubmit)="toSortByName(nomResponsable.value)">
-        <mat-form-field appearance="fill">
-          <mat-label>Input</mat-label>
-          <input name="owner" ngModel="" type="text" class="form-control" matInput>
-        </mat-form-field>
-        <button type="submit">ok</button>
-      </form>
-    </div>
 
-    <!-- FILTRE REFERENCE PRODUCT -->
-    <div class="row">
-      <form #reference="ngForm" (ngSubmit)="toSortByReference(reference.value)">
-        <mat-form-field appearance="fill">
-          <mat-label>Input</mat-label>
-          <input name="refProduct" ngModel="" type="text" class="form-control" matInput>
-        </mat-form-field>
-        <button type="submit">ok</button>
-      </form>
-    </div>
+    <!-- FILTRES -->
+    <div>
 
-    <!-- FILTRE REFERENCE PRODUCT -->
-    <div class="row">
-      <form #entryDateForm="ngForm" (ngSubmit)="toSortByEntryDate(entryDateForm.value.entryDate)">
-        <mat-form-field appearance="fill">
-          <mat-label>Input</mat-label>
-          <input name="entryDate" ngModel="" type="text" class="form-control" matInput>
-        </mat-form-field>
-        <button type="submit">ok</button>
-      </form>
-    </div>
+      <form [formGroup]="champsFiltres" (ngSubmit)="fonctionSort(champsFiltres.value)">
 
 
-    <!-- FILTRE REFERENCE PRODUCT -->
-    <div class="row">
-      <form #exitDateForm="ngForm" (ngSubmit)="toSortByExitDate(exitDateForm.value.exitDate)">
-        <mat-form-field appearance="fill">
-          <mat-label>Input</mat-label>
-          <input name="exitDate" ngModel="" type="text" class="form-control" matInput>
-        </mat-form-field>
-        <button type="submit">ok</button>
+        <div class="row">
+          <h1>Trier par :</h1>
+        </div>
+
+        <!-- FILTRE TYPE DE PRODUIT -->
+        <div class="row">
+
+          <mat-checkbox formControlName="sortByTypeProduct" >     
+          </mat-checkbox> 
+          
+          <div *ngIf="!champsFiltres.value.sortByTypeProduct">
+            <p>Type de produit</p>
+          </div>
+
+          <div *ngIf="champsFiltres.value.sortByTypeProduct">
+            <mat-form-field>
+              <mat-select formControlName="typeProduct">
+                <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+
+
+        <!-- FILTRE REFERENCE PRODUIT -->
+        <div class="row">
+
+          <mat-checkbox formControlName="sortByReference">     
+          </mat-checkbox> 
+          
+          <div *ngIf="!champsFiltres.value.sortByReference">
+            <p>Référence du produit</p>
+          </div>
+
+          <div *ngIf="champsFiltres.value.sortByReference">
+            <mat-form-field >
+              <mat-label>Référence du produit</mat-label>
+              <input  formControlName="refProduct"   type="text" class="form-control" placeholder="A0000000" matInput>
+            </mat-form-field>
+          </div>
+        </div>
+
+
+        <!-- FILTRE RESPONSABLE -->
+        <div class="row">
+
+          <mat-checkbox formControlName="sortByName">        
+          </mat-checkbox> 
+
+          <div *ngIf="!champsFiltres.value.sortByName">
+            <p>Référent</p>
+          </div>
+
+          <div *ngIf="champsFiltres.value.sortByName">
+            <mat-form-field appearance="fill">
+              <mat-label>Référent</mat-label>
+              <input formControlName="owner" type="text" class="form-control" placeholder="Jean Dupond" matInput>
+            </mat-form-field>
+          </div>
+        </div>
+
+        
+
+        <!-- FILTRE ENTRY DATE -->
+        <div class="row">
+
+          <mat-checkbox formControlName="sortByEntryDate">      
+          </mat-checkbox> 
+
+          <div *ngIf="!champsFiltres.value.sortByEntryDate">
+            <p>Date d'entrée en stock</p>
+          </div>
+
+          <div *ngIf="champsFiltres.value.sortByEntryDate">
+            <mat-form-field appearance="fill">
+              <mat-label>Date entrée en stock</mat-label>
+              <input formControlName="entryDate" type="text" class="form-control" placeholder="2022-01-01" matInput>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- FILTRE EXIT DATE -->
+        <div class="row">
+
+          <mat-checkbox formControlName="sortByExitDate">        
+          </mat-checkbox> 
+
+          <div *ngIf="!champsFiltres.value.sortByExitDate">
+            <p>Date de sortie de stock</p>
+          </div>
+
+          <div *ngIf="champsFiltres.value.sortByExitDate">
+            <mat-form-field appearance="fill">
+              <mat-label>Date sortie de stock</mat-label>
+              <input formControlName="exitDate" type="text" class="form-control" placeholder="2022-01-01" matInput>
+            </mat-form-field>
+          </div>
+          
+        </div>
+
+        <button type="submit"> Trier </button>
       </form>
     </div>
 
