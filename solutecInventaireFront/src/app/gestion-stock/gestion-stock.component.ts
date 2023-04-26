@@ -335,7 +335,15 @@ export class GestionStockComponent implements OnInit {
       this.listProductsSorted = this.listSortedByName;
     }
 
+    if(formValue.sortByEntryDate == true && formValue.entryDate != null){
+      this.toSortByEntryDate(formValue.entryDate, this.listProducts);
+      this.listProductsSorted = this.listSortedByEntryDate;
+    }
 
+    if(formValue.sortByExitDate == true && formValue.exitDate != null){
+      this.toSortByExitDate(formValue.exitDate, this.listProducts);
+      this.listProductsSorted = this.listSortedByExitDate;
+    }
     
   
     
@@ -377,10 +385,31 @@ export class GestionStockComponent implements OnInit {
       if(element.owner!=null && element.owner.toString().toLowerCase().includes(this.nameToSort.toLowerCase())){
         this.listSortedByName.push(element);
       }   
-    })
-    
+    });
   }
 
+
+  toSortByEntryDate(date: any, listToSort: any){
+    this.listSortedByEntryDate = [];
+    this.entryDateToSort = date;
+
+    listToSort.forEach((element: any) => {
+      if(element.entryDate != null && element.entryDate.includes(this.entryDateToSort)){
+        this.listSortedByEntryDate.push(element);
+      }
+    });
+  }
+
+  toSortByExitDate(date: any, listToSort: any){
+    this.listSortedByExitDate = [];
+    this.exitDateToSort = date;
+
+    listToSort.forEach((element: any) => {
+      if(element.exitDate != null && element.exitDate.includes(this.exitDateToSort)){
+        this.listSortedByExitDate.push(element);
+      }
+    });
+  }
  
 
 
