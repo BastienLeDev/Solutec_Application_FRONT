@@ -277,6 +277,9 @@ export class GestionStockComponent implements OnInit {
       console.log(product)
       console.log(product.typeProduct)
       console.log(product.typeProduct.idTypeProduct);
+      if(product.owner == ""){
+        product.owner = null;
+      }
 
       this.http.patch('http://localhost:8301/patch/product', product).subscribe({
         next: (data) => {
