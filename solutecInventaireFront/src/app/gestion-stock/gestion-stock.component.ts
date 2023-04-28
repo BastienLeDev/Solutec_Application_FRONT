@@ -82,11 +82,18 @@ export class GestionStockComponent implements OnInit {
   lengthDataSource: any;
   suppr = false;
 
+  chaineVide="";
+
+  listSortedByStock = [] as any;
   listSortedByTypeProduct = [] as any;
   listSortedByReference = [] as any;
   listSortedByName = [] as any;
   listSortedByEntryDate = [] as any;
   listSortedByExitDate = [] as any;
+
+  stockToSort: any;
+  inStock = "En stock";
+  notInStock = "Sorti de stock";
 
   typeProductToSort: any;
   nameToSort: any;
@@ -95,11 +102,7 @@ export class GestionStockComponent implements OnInit {
   exitDateToSort: any;
 
   champsFiltres = this._formBuilder.group({
-    sortByTypeProduct : false,
-    sortByReference : false,
-    sortByName : false,
-    sortByEntryDate : false,
-    sortByExitDate : false,
+    isInStock: new FormControl(''),
     typeProduct: new FormControl(''),
     refProduct: new FormControl(''),
     owner: new FormControl(''),
@@ -202,6 +205,14 @@ export class GestionStockComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
     this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (row:Product,columnName:string) : string => {
+    
+      console.log(row,columnName);
+      if(columnName=="typeProduct") return row.typeProduct.nameProduct;
+      var columnValue = row[columnName as keyof Product] as string;
+      return columnValue;
+    
+    }
     this.dataSource.paginator = this.paginator;
     this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
@@ -317,44 +328,92 @@ export class GestionStockComponent implements OnInit {
     this.dataSource = new MatTableDataSource;
     
     console.log(formValue);
-    if(formValue.sortByTypeProduct == false && formValue.sortByReference == false 
-      && formValue.sortByName == false && formValue.sortByEntryDate == false 
-      && formValue.sortByExitDate == false){
+    if(formValue.isInStock == "" && formValue.typeProduct == "" 
+      && formValue.refProduct ==""  && formValue.owner == "" 
+      && formValue.entryDate == ""  && formValue.exitDate == "" ){
         this.getListProducts();
     }
+
+    if(formValue.isInStock != ""){
+      console.log('stock');
+      
+      this.toSortByStock(formValue.isInStock, this.listProducts);
+      console.log(this.listSortedByStock);
+      this.listProductsSorted = this.listSortedByStock;
+      console.log(this.listProductsSorted);
+      
+    }
     
-    if(formValue.sortByTypeProduct == true && formValue.typeProduct !=""){
+    if(formValue.typeProduct !="" ){
+      console.log('typeP');
+      
       this.toSortByTypeProduct(formValue.typeProduct, this.listProducts);
       this.listProductsSorted = this.listSortedByTypeProduct;
     }
 
-    if(formValue.sortByReference == true && formValue.refProduct !=""){
+    if(formValue.refProduct !=""){
+      console.log('refP');
+      
       this.toSortByRefProduct(formValue.refProduct, this.listProducts);
       this.listProductsSorted = this.listSortedByReference;
     }
 
-    if(formValue.sortByName == true && formValue.owner != ""){
+    if(formValue.owner != ""){
+      console.log('owner');
+      
       this.toSortByName(formValue.owner, this.listProducts);
       this.listProductsSorted = this.listSortedByName;
     }
 
-    if(formValue.sortByEntryDate == true && formValue.entryDate != null){
+    if(formValue.entryDate != ""){
+      console.log('entryD');
+      
       this.toSortByEntryDate(formValue.entryDate, this.listProducts);
       this.listProductsSorted = this.listSortedByEntryDate;
     }
 
-    if(formValue.sortByExitDate == true && formValue.exitDate != null){
+    if(formValue.exitDate != ""){
+      console.log('exitD');
+      
       this.toSortByExitDate(formValue.exitDate, this.listProducts);
       this.listProductsSorted = this.listSortedByExitDate;
     }
     
   
+    console.log(this.listProductsSorted);
     
     this.createDatasource(this.listProductsSorted);
     console.log(this.dataSource);
     
   
   }
+
+
+  toSortByStock(isInStock: any, listToSort: any){
+    this.stockToSort = isInStock;
+    
+    if(this.stockToSort==this.inStock){
+    this.listSortedByStock = [];
+
+      listToSort.forEach((element: any) => {
+        if(element.owner == null){
+          this.listSortedByStock.push(element);
+        }
+      });
+      console.log(this.listSortedByStock);
+      
+    }
+    if(this.stockToSort==this.notInStock){
+    this.listSortedByStock = [];
+
+      listToSort.forEach((element: any) => {
+        if(element.owner != null){
+          this.listSortedByStock.push(element);
+        }
+      });
+    }
+  }
+
 
   toSortByTypeProduct(typeProduct: any, listToSort: any){
     this.listSortedByTypeProduct =[];
