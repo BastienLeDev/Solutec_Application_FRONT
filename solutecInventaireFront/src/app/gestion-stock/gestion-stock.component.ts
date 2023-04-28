@@ -330,18 +330,15 @@ export class GestionStockComponent implements OnInit {
     console.log(formValue);
     if(formValue.isInStock == "" && formValue.typeProduct == "" 
       && formValue.refProduct ==""  && formValue.owner == "" 
-      && formValue.entryDate == ""  && formValue.exitDate == "" ){
+      && formValue.entryDate == ""  && formValue.exitDate == ""){
         this.getListProducts();
     }
 
-    if(formValue.isInStock != ""){
+    if(formValue.isInStock != "" ){
       console.log('stock');
       
       this.toSortByStock(formValue.isInStock, this.listProducts);
-      console.log(this.listSortedByStock);
-      this.listProductsSorted = this.listSortedByStock;
-      console.log(this.listProductsSorted);
-      
+      this.listProductsSorted = this.listSortedByStock;     
     }
     
     if(formValue.typeProduct !="" ){

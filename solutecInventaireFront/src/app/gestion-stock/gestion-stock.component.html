@@ -120,8 +120,9 @@
         <!-- FILTRE EN STOCK -->
         <div class="row">
           <mat-form-field>
+            <mat-label>En stock ou non</mat-label>
             <mat-select formControlName="isInStock"  placeholder="En stock ou non" >
-              <mat-option [value]="chaineVide"> Aucun filtre </mat-option>
+              <mat-option [value]="chaineVide">Aucun filtre</mat-option>
               <mat-option [value]="inStock"> En stock </mat-option>
               <mat-option [value]="notInStock"> Sorti de stock </mat-option>
             </mat-select>
@@ -132,6 +133,7 @@
         <!-- FILTRE TYPE DE PRODUIT -->
         <div class="row">
             <mat-form-field>
+              <mat-label>Type de produit </mat-label>
               <mat-select formControlName="typeProduct"  placeholder="Type de produit" >
                 <mat-option [value]="chaineVide"> Aucun filtre </mat-option>
                 <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
