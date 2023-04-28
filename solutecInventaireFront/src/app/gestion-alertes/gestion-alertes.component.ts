@@ -43,7 +43,7 @@ export class GestionAlertesComponent implements OnInit {
   //Table des alertes
   listAlert: any;
   dataSource: AlertElement[];
-  columnsToDisplay = ['alerte', "seuil", 'active', 'triggered', 'email'];
+  columnsToDisplay = ['alerte', "seuil", 'active', 'email'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand', 'isEdit', 'supprimer'];
   expandedElement: AlertElement | null;
   listDataSource: Array<any> = [];
@@ -52,8 +52,9 @@ export class GestionAlertesComponent implements OnInit {
   listTypeProduct: any;
   refresh: any;
 
+
   //Table des alertes déclenchées
-  displayedColumns: string[] = ['Alerte', 'Seuil', 'Heure', 'Actions'];
+  displayedColumns: string[] = ['Alerte', 'Seuil', 'Date', 'Heure', 'Actions'];
   dataSourceT = new MatTableDataSource<AlertElement>();
   listTriggered: any;
 
@@ -61,7 +62,6 @@ export class GestionAlertesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.refreshAlert();
     this.getAlert();
     this.getTypeProduct();
     this.getTriggered();
@@ -161,6 +161,16 @@ export class GestionAlertesComponent implements OnInit {
   }
 
   createAlert(alert: any) {
+    if (alert.email === "Off") {
+      alert.email = false
+    } else {
+      alert.email = true
+    }
+    if (alert.active === "Off") {
+      alert.active = false
+    } else {
+      alert.active = true
+    }
     alert.triggered = false;
     if (alert.product != "") {
       alert.products.push(alert.product)
@@ -184,6 +194,8 @@ export class GestionAlertesComponent implements OnInit {
         }
         alert.isEdit = false;
         this.refreshAlert()
+        location.reload()
+
 
       },
       error: (err) => { console.log(err) }
@@ -197,6 +209,9 @@ export class GestionAlertesComponent implements OnInit {
       this.createAlert(alert)
     }
     else {
+      if (alert.active == false) {
+        alert.triggered = "Off"
+      }
       if (alert.triggered === "Off") {
         alert.triggered = false
       } else {
@@ -223,7 +238,7 @@ export class GestionAlertesComponent implements OnInit {
             alert.triggered = "Off"
           }
           alert.isEdit = false;
-
+          this.refreshAlert()
         },
         error: (err) => { console.log(err) },
       })
@@ -244,7 +259,7 @@ export class GestionAlertesComponent implements OnInit {
   refreshAlert() {
     this.http.get('http://localhost:8301/refreshAlert').subscribe({
       next: (data) => {
-        this.refresh = data;
+        this.ngOnInit()
       },
       error: (err) => {
         console.log(err);

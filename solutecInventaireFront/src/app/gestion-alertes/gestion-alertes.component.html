@@ -1,5 +1,5 @@
 <body>
-    <div class="col-8 tableau">
+    <div class="col-7 tableau">
         <h1>Liste des alertes</h1>
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
             <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
@@ -7,26 +7,23 @@
                 <td mat-cell *matCellDef="let element">
                     <div *ngIf="!element.isEdit">{{element[column]}}</div>
                     <div *ngIf="element.isEdit">
-                        <mat-form-field *ngIf="column==='alerte'">
+                        <mat-form-field style="width:170px !important" *ngIf="column==='alerte'">
                             <input name="Alerte" [(ngModel)]="element.alerte" placeholder="Nom de l'alerte" matInput />
                         </mat-form-field>
-                        <mat-form-field *ngIf="column==='seuil'">
+                        <mat-form-field style="width:70px !important" *ngIf="column==='seuil'">
                             <input name="Seuil" [(ngModel)]="element.seuil" placeholder="Limite minimale" matInput
-                                [type]="'number'" />
+                                [type]="'number'" min="0" />
                         </mat-form-field>
-                        <div *ngIf="column==='triggered'">
-                            {{element[column]}}
-                        </div>
-                        <mat-form-field *ngIf="column==='active'">
-                            <mat-select name="Active" [(ngModel)]="element.active" placeholder="Activer/Désactiver">
-                                <mat-option [value]="true">Activer</mat-option>
-                                <mat-option [value]="false">Désactiver</mat-option>
+                        <mat-form-field style="width:100px !important" *ngIf="column==='active'">
+                            <mat-select name="Active" [(ngModel)]="element.active" placeholder="On/Off">
+                                <mat-option [value]="true">On</mat-option>
+                                <mat-option [value]="false">Off</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field *ngIf="column==='email'">
-                            <mat-select name="Email" [(ngModel)]="element.email" placeholder="Activer/Désactiver">
-                                <mat-option [value]="true">Activer</mat-option>
-                                <mat-option [value]="false">Désactiver</mat-option>
+                        <mat-form-field style="width:100px !important" *ngIf="column==='email'">
+                            <mat-select name="Email" [(ngModel)]="element.email" placeholder="On/Off">
+                                <mat-option [value]="true">On</mat-option>
+                                <mat-option [value]="false">Off</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -45,7 +42,7 @@
             <ng-container matColumnDef="isEdit">
                 <th mat-header-cell *matHeaderCellDef>Modifier</th>
                 <td mat-cell *matCellDef="let element">
-                    <button *ngIf="element.isEdit" (click)="modifAlert(element)"
+                    <button *ngIf="element.isEdit" type="submit" (click)="modifAlert(element)"
                         mat-icon-button><mat-icon>done</mat-icon>
                     </button>
                     <button *ngIf="!element.isEdit" (click)="editMode(element)"
@@ -104,8 +101,8 @@
         </button>
 
     </div>
-    <div class="col-8 tableau">
-        <h1>Déclenchements <mat-icon color="warn">warning</mat-icon></h1>
+    <div class="col-7 tableau">
+        <h1>Déclenchement(s) <mat-icon color="warn">warning</mat-icon></h1>
         <mat-card>
             <mat-card-content>
                 <table mat-table [dataSource]="dataSourceT" matSort>
@@ -126,11 +123,19 @@
                     </ng-container>
 
                     <!-- Destinataire Column -->
+                    <ng-container matColumnDef="Date">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
+                            Date </th>
+                        <td mat-cell *matCellDef="let row"> </td>
+                    </ng-container>
+
+                    <!-- Destinataire Column -->
                     <ng-container matColumnDef="Heure">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by hour">
                             Heure </th>
                         <td mat-cell *matCellDef="let row"> </td>
                     </ng-container>
+
 
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="Actions">
