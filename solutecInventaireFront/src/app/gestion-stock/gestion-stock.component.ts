@@ -202,6 +202,14 @@ export class GestionStockComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
     this.dataSource.sort = this.sort;
+    this.dataSource.sortingDataAccessor = (row:Product,columnName:string) : string => {
+    
+      console.log(row,columnName);
+      if(columnName=="typeProduct") return row.typeProduct.nameProduct;
+      var columnValue = row[columnName as keyof Product] as string;
+      return columnValue;
+    
+    }
     this.dataSource.paginator = this.paginator;
     this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
