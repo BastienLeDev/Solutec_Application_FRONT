@@ -173,7 +173,9 @@ export class GestionStockComponent implements OnInit {
 
   }
 
-
+clearFiltres(){
+  this.champsFiltres.reset();
+}
 
   i: any;
 
@@ -322,6 +324,47 @@ export class GestionStockComponent implements OnInit {
     return object1 && object2 && object1.nameProduct === object2.nameProduct;
   }
 
+
+  fonctionSort(formValue: any){
+    this.listProductsSorted = this.listProducts;
+    this.listDataSource = [];
+    this.dataSource = new MatTableDataSource;
+    
+    for(let i in formValue){
+      if(i == 'isInStock' && formValue[i]!=""){
+        this.toSortByStock(formValue[i], this.listProductsSorted);
+        this.listProductsSorted = this.listSortedByStock;  
+      }
+      if(i == 'typeProduct' && formValue[i]!=""){
+        this.toSortByTypeProduct(formValue[i], this.listProductsSorted);
+        this.listProductsSorted = this.listSortedByTypeProduct;
+      }
+      if(i == 'refProduct' && formValue[i]!=""){
+        this.toSortByRefProduct(formValue[i], this.listProductsSorted);
+        this.listProductsSorted = this.listSortedByReference;
+      }
+      if(i == 'owner' && formValue[i]!=""){
+        this.toSortByName(formValue[i], this.listProductsSorted);
+        this.listProductsSorted = this.listSortedByName;
+
+      }
+      if(i == 'entryDate' && formValue[i]!=""){
+        this.toSortByEntryDate(formValue[i], this.listProductsSorted);
+        this.listProductsSorted = this.listSortedByEntryDate;
+
+      }
+      if(i == 'exitDate' && formValue[i]!=""){
+        this.toSortByExitDate(formValue[i], this.listProductsSorted);
+        this.listProductsSorted = this.listSortedByExitDate;
+
+      }
+      
+    }
+    this.createDatasource(this.listProductsSorted);
+  }
+
+/*
+
   fonctionSort(formValue: any){
     this.listProductsSorted = [];
     this.listDataSource = [];
@@ -385,6 +428,7 @@ export class GestionStockComponent implements OnInit {
   
   }
 
+  */
 
   toSortByStock(isInStock: any, listToSort: any){
     this.stockToSort = isInStock;
