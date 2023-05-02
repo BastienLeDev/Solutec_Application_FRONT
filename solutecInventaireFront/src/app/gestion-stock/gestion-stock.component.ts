@@ -30,6 +30,11 @@ export interface Product {
 }
 const COLUMNS_SCHEMA = [
   {
+    key: "isInStock",
+    type: "isInStock",
+    label: "En stock"
+  },
+  {
     key: "typeProduct",
     type: "TypeProduct",
     label: "Type de produit"
@@ -202,6 +207,12 @@ clearFiltres(){
       product.entryDate = anyListProducts[index].entryDate;
       product.exitDate = anyListProducts[index].exitDate;
       product.isEdit = false;
+      if(product.owner != null){
+        product.isInStock = true
+      }
+      else{
+        product.isInStock = false;
+      }
       this.listDataSource.push(product);
       this.i += 1;
     }
@@ -292,6 +303,12 @@ clearFiltres(){
       console.log(product.typeProduct.idTypeProduct);
       if(product.owner == ""){
         product.owner = null;
+      }
+      if(product.owner == ""){
+        product.isInStock = false;
+      }
+      else{
+        product.isInStock = true;
       }
 
       this.http.patch('http://localhost:8301/patch/product', product).subscribe({

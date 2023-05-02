@@ -41,6 +41,14 @@
               <div *ngSwitchCase="'TypeProduct'">
                 {{ element[col.key].nameProduct }}
               </div>
+              <div *ngSwitchCase="'isInStock'">
+                  <div *ngIf="element.isInStock == true">
+                    <mat-icon class="pastilleInStock">fiber_manual_record</mat-icon>
+                  </div>
+                  <div *ngIf="element.isInStock == false">
+                    <mat-icon class="pastilleOutOfStock">fiber_manual_record</mat-icon>
+                  </div>
+              </div>
               <span *ngSwitchDefault>
                 {{ element[col.key] }}
               </span>
