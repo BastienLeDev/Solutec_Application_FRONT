@@ -54,6 +54,7 @@ export class AccueilComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.refreshAlert()
     this.getPC();
     this.getAlim();
     this.getBadgeIntercontrat();
@@ -280,6 +281,16 @@ export class AccueilComponent implements OnInit {
         this.ngOnInit();
       },
       error: (err) => { console.log(err) },
+    })
+  }
+
+  refreshAlert() {
+    this.http.patch('http://localhost:8301/refreshAlert', null).subscribe({
+      next: (data) => {
+      },
+      error: (err) => {
+        console.log(err);
+      }
     })
   }
 

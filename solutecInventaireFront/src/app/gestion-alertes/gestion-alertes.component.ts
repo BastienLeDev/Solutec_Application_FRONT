@@ -4,6 +4,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
 
 export interface AlertElement {
   Id: any;
@@ -12,9 +13,11 @@ export interface AlertElement {
   active: any;
   triggered: any;
   email: any;
-  product: String;
+  product: any;
   products: any;
   isEdit: boolean;
+  isEditT: boolean;
+  action: string;
 }
 @Component({
   selector: 'app-gestion-alertes',
@@ -54,14 +57,18 @@ export class GestionAlertesComponent implements OnInit {
 
 
   //Table des alertes déclenchées
-  displayedColumns: string[] = ['Alerte', 'Seuil', 'Date', 'Heure', 'Actions'];
+  displayedColumns: string[] = ['Alerte', 'Seuil', 'Date/Heure', 'Actions', 'Modification'];
   dataSourceT = new MatTableDataSource<AlertElement>();
   listTriggered: any;
+  disableSelect: any;
+  date = new Date();
+  actions = new FormControl('')
 
   constructor(private http: HttpClient) { }
 
 
   ngOnInit(): void {
+    this.refreshAlert2()
     this.getAlert();
     this.getTypeProduct();
     this.getTriggered();
@@ -78,9 +85,19 @@ export class GestionAlertesComponent implements OnInit {
       product: "",
       email: "Off",
       isEdit: true,
+      isEditT: false,
       products: [],
+      action: '',
     };
     this.dataSource = [newRow, ...this.dataSource];
+  }
+
+  editTMode(row: any) {
+    if (row.isEditT === false) {
+      row.isEditT = true
+    } else {
+      row.isEditT = false
+    }
   }
 
   editMode(val: any) {
@@ -143,7 +160,7 @@ export class GestionAlertesComponent implements OnInit {
     this.http.patch('http://localhost:8301/deleteTypeProduct/' + nameProduct + "/" + idAlert, null).subscribe({
       next: (data) => {
         location.reload();
-
+        this.refreshAlert()
       },
       error: (err) => { console.log(err) },
     })
@@ -173,7 +190,7 @@ export class GestionAlertesComponent implements OnInit {
     }
     alert.triggered = false;
     if (alert.product != "") {
-      alert.products.push(alert.product)
+      alert.product.map((object: any) => { alert.products.push(object) })
     }
     this.http.post('http://localhost:8301/createAlert', alert).subscribe({
       next: (data) => {
@@ -218,7 +235,7 @@ export class GestionAlertesComponent implements OnInit {
         alert.triggered = true
       }
       if (alert.product != null) {
-        alert.products.push(alert.product)
+        alert.product.map((object: any) => { alert.products.push(object) })
       }
       this.http.patch('http://localhost:8301/modifyAlert/' + alert.Id, alert).subscribe({
         next: (data) => {
@@ -257,9 +274,19 @@ export class GestionAlertesComponent implements OnInit {
   }
 
   refreshAlert() {
-    this.http.get('http://localhost:8301/refreshAlert').subscribe({
+    this.http.patch('http://localhost:8301/refreshAlert', null).subscribe({
       next: (data) => {
         this.ngOnInit()
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  refreshAlert2() {
+    this.http.patch('http://localhost:8301/refreshAlert', null).subscribe({
+      next: (data) => {
       },
       error: (err) => {
         console.log(err);
