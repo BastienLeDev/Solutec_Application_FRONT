@@ -33,20 +33,23 @@
             </th>
           </div>
 
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let element" [ngClass]="{'inStock':element.isInStock == true, 'notInStock':element.isInStock == false }">
             <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
               <div class="btn-edit" *ngSwitchCase="'isEdit'">
-                <button mat-button (click)="element.isEdit = !element.isEdit">Edit</button>
+                <button mat-button (click)="element.isEdit = !element.isEdit">
+                  <mat-icon>edit</mat-icon>
+                </button>
               </div>
               <div *ngSwitchCase="'TypeProduct'">
                 {{ element[col.key].nameProduct }}
               </div>
               <div *ngSwitchCase="'isInStock'">
                   <div *ngIf="element.isInStock == true">
-                    <mat-icon class="pastilleInStock">fiber_manual_record</mat-icon>
+                    <mat-icon class="pastilleInStock" >archive</mat-icon>
                   </div>
+                  
                   <div *ngIf="element.isInStock == false">
-                    <mat-icon class="pastilleOutOfStock">fiber_manual_record</mat-icon>
+                    <mat-icon class="pastilleOutOfStock">unarchive</mat-icon>
                   </div>
               </div>
               <span *ngSwitchDefault>
@@ -64,7 +67,7 @@
                 <button mat-button (click)="modifProduct(element)">Done</button>
               </div>
               <ng-template #dataField>
-                <div *ngIf="col.key!='isSelected'&& col.key!='typeProduct'">
+                <div *ngIf="col.key!='isSelected'&& col.key!='typeProduct' && col.key!='isInStock'">
                   <mat-form-field>
                     <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
                   </mat-form-field>

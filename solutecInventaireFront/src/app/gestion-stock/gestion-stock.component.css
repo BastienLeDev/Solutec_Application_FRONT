@@ -22,10 +22,12 @@ table {
 }
 */
 
-
+/*
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: #ff001947;
+
 }
+*/
 
 .tableau{
   padding: 50px;
@@ -35,8 +37,16 @@ table {
   padding: 50px;
 }
 
+.mat-mdc-row:hover .inStock{
+  background-color: #3cff0047;
+}
+
+.mat-mdc-row:hover .notInStock {
+  background-color: #ff001947;
+}
+
 .pastilleInStock{
-  color: greenyellow;
+  color: rgb(130, 216, 0);
 }
 
 .pastilleOutOfStock{

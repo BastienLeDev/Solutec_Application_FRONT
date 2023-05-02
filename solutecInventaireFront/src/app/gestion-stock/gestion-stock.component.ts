@@ -207,7 +207,7 @@ clearFiltres(){
       product.entryDate = anyListProducts[index].entryDate;
       product.exitDate = anyListProducts[index].exitDate;
       product.isEdit = false;
-      if(product.owner != null){
+      if(product.owner == null){
         product.isInStock = true
       }
       else{
@@ -304,11 +304,11 @@ clearFiltres(){
       if(product.owner == ""){
         product.owner = null;
       }
-      if(product.owner == ""){
-        product.isInStock = false;
+      if(product.owner == null){
+        product.isInStock = true;
       }
       else{
-        product.isInStock = true;
+        product.isInStock = false;
       }
 
       this.http.patch('http://localhost:8301/patch/product', product).subscribe({
