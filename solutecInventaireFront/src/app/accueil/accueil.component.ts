@@ -45,6 +45,8 @@ export class AccueilComponent implements OnInit {
   lengthDataSource: any;
   currentDate = new Date();
 
+  listStock: any;
+
   displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'star'];
   dataSource = new MatTableDataSource<ProductReserved>();
   @ViewChild(MatSort) sort: MatSort;
@@ -76,6 +78,11 @@ export class AccueilComponent implements OnInit {
     this.getPosteMission();
     this.getPosteStructure();
     this.getReservation();
+
+    this.getListStock();
+    console.log(this.listStock);
+
+
   }
 
   getPC() {
@@ -287,6 +294,21 @@ export class AccueilComponent implements OnInit {
   refreshAlert() {
     this.http.patch('http://localhost:8301/refreshAlert', null).subscribe({
       next: (data) => {
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  getListStock() {
+    this.http.get('http://localhost:8301/products/getStock').subscribe({
+      next: (data) => {
+        console.log(data);
+
+        this.listStock = data;
+        console.log(this.listStock);
+
       },
       error: (err) => {
         console.log(err);
