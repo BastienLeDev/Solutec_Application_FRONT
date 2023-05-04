@@ -25,6 +25,7 @@ export interface Product {
   owner: string;
   entryDate: Date | null;
   exitDate: Date | null;
+  reservation: boolean;
   isEdit: boolean;
 
 }
@@ -48,6 +49,12 @@ const COLUMNS_SCHEMA = [
     key: "owner",
     type: "text",
     label: "Référent"
+  },
+
+  {
+    key: "reservation",
+    type: "isReserved",
+    label: "Réservé"
   },
   {
     key: "entryDate",
@@ -87,7 +94,7 @@ export class GestionStockComponent implements OnInit {
   lengthDataSource: any;
   suppr = false;
 
-  chaineVide="";
+  chaineVide = "";
 
   listSortedByStock = [] as any;
   listSortedByTypeProduct = [] as any;
@@ -128,7 +135,7 @@ export class GestionStockComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   delete: Object;
 
-  
+
 
   isAllSelected() {
     return this.dataSource.data.every((item: any) => item.isSelected);
@@ -160,13 +167,14 @@ export class GestionStockComponent implements OnInit {
       entryDate: null,
       isEdit: true,
       exitDate: null,
+      reservation: false,
     };
     this.dataSource.data = [newRow, ...this.dataSource.data];
   }
 
 
   ngOnInit(): void {
-    
+
     this.listProducts = [];
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
@@ -178,9 +186,9 @@ export class GestionStockComponent implements OnInit {
 
   }
 
-clearFiltres(){
-  this.champsFiltres.reset();
-}
+  clearFiltres() {
+    this.champsFiltres.reset();
+  }
 
   i: any;
 
@@ -206,11 +214,12 @@ clearFiltres(){
       product.owner = anyListProducts[index].owner;
       product.entryDate = anyListProducts[index].entryDate;
       product.exitDate = anyListProducts[index].exitDate;
+      product.reservation = anyListProducts[index].reservation;
       product.isEdit = false;
-      if(product.owner == null){
+      if (product.owner == null) {
         product.isInStock = true
       }
-      else{
+      else {
         product.isInStock = false;
       }
       this.listDataSource.push(product);
@@ -218,13 +227,12 @@ clearFiltres(){
     }
     this.dataSource = new MatTableDataSource<Product>(this.listDataSource);
     this.dataSource.sort = this.sort;
-    this.dataSource.sortingDataAccessor = (row:Product,columnName:string) : string => {
-    
-      console.log(row,columnName);
-      if(columnName=="typeProduct") return row.typeProduct.nameProduct;
+    this.dataSource.sortingDataAccessor = (row: Product, columnName: string): string => {
+
+      if (columnName == "typeProduct") return row.typeProduct.nameProduct;
       var columnValue = row[columnName as keyof Product] as string;
       return columnValue;
-    
+
     }
     this.dataSource.paginator = this.paginator;
     this.lengthDataSource = anyListProducts.length;
@@ -233,14 +241,12 @@ clearFiltres(){
 
   modeSuppression() {
     this.suppr = true;
-    console.log(this.suppr);
     this.displayedColumns = COLUMNS_SCHEMA.map((col) => col.key);
     this.ngOnInit();
   }
 
   removeSelectedRows() {
     const products = this.dataSource.data.filter((p: any) => p.isSelected);
-    console.log(products)
     if (products.length == 0) {
       this.suppr = false;
     }
@@ -259,8 +265,6 @@ clearFiltres(){
 
   DeleteProduct() {
     this.suppr = false;
-    /*this.ColumnsToDisplay();*/
-    console.log(this.suppr)
     const products = this.dataSource.data.filter((p: any) => p.isSelected);
     for (let index in products) {
 
@@ -301,13 +305,13 @@ clearFiltres(){
       console.log(product)
       console.log(product.typeProduct)
       console.log(product.typeProduct.idTypeProduct);
-      if(product.owner == ""){
+      if (product.owner == "") {
         product.owner = null;
       }
-      if(product.owner == null){
+      if (product.owner == null) {
         product.isInStock = true;
       }
-      else{
+      else {
         product.isInStock = false;
       }
 
@@ -326,7 +330,7 @@ clearFiltres(){
     this.http.get('http://localhost:8301/typeProduct/liste').subscribe({
       next: (data) => {
         this.listTypeProduct = data;
-            },
+      },
       error: (err) => {
         console.log(err);
       }
@@ -334,138 +338,67 @@ clearFiltres(){
   }
 
   public compareWith(object1: any, object2: any) {
-    console.log(object1);
-    console.log(object2);
-
 
     return object1 && object2 && object1.nameProduct === object2.nameProduct;
   }
 
 
-  fonctionSort(formValue: any){
+  fonctionSort(formValue: any) {
     this.listProductsSorted = this.listProducts;
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    
-    for(let i in formValue){
-      if(i == 'isInStock' && formValue[i]!=""){
+
+    for (let i in formValue) {
+      if (i == 'isInStock' && formValue[i] != "") {
         this.toSortByStock(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByStock;  
+        this.listProductsSorted = this.listSortedByStock;
       }
-      if(i == 'typeProduct' && formValue[i]!=""){
+      if (i == 'typeProduct' && formValue[i] != "") {
         this.toSortByTypeProduct(formValue[i], this.listProductsSorted);
         this.listProductsSorted = this.listSortedByTypeProduct;
       }
-      if(i == 'refProduct' && formValue[i]!=""){
+      if (i == 'refProduct' && formValue[i] != "") {
         this.toSortByRefProduct(formValue[i], this.listProductsSorted);
         this.listProductsSorted = this.listSortedByReference;
       }
-      if(i == 'owner' && formValue[i]!=""){
+      if (i == 'owner' && formValue[i] != "") {
         this.toSortByName(formValue[i], this.listProductsSorted);
         this.listProductsSorted = this.listSortedByName;
 
       }
-      if(i == 'entryDate' && formValue[i]!=""){
+      if (i == 'entryDate' && formValue[i] != "") {
         this.toSortByEntryDate(formValue[i], this.listProductsSorted);
         this.listProductsSorted = this.listSortedByEntryDate;
 
       }
-      if(i == 'exitDate' && formValue[i]!=""){
+      if (i == 'exitDate' && formValue[i] != "") {
         this.toSortByExitDate(formValue[i], this.listProductsSorted);
         this.listProductsSorted = this.listSortedByExitDate;
 
       }
-      
+
     }
     this.createDatasource(this.listProductsSorted);
   }
 
-/*
-
-  fonctionSort(formValue: any){
-    this.listProductsSorted = [];
-    this.listDataSource = [];
-    this.dataSource = new MatTableDataSource;
-    
-    console.log(formValue);
-    if(formValue.isInStock == "" && formValue.typeProduct == "" 
-      && formValue.refProduct ==""  && formValue.owner == "" 
-      && formValue.entryDate == ""  && formValue.exitDate == ""){
-        this.getListProducts();
-    }
-
-    if(formValue.isInStock != "" ){
-      console.log('stock');
-      
-      this.toSortByStock(formValue.isInStock, this.listProducts);
-      this.listProductsSorted = this.listSortedByStock;     
-    }
-    
-    if(formValue.typeProduct !="" ){
-      console.log('typeP');
-      
-      this.toSortByTypeProduct(formValue.typeProduct, this.listProducts);
-      this.listProductsSorted = this.listSortedByTypeProduct;
-    }
-
-    if(formValue.refProduct !=""){
-      console.log('refP');
-      
-      this.toSortByRefProduct(formValue.refProduct, this.listProducts);
-      this.listProductsSorted = this.listSortedByReference;
-    }
-
-    if(formValue.owner != ""){
-      console.log('owner');
-      
-      this.toSortByName(formValue.owner, this.listProducts);
-      this.listProductsSorted = this.listSortedByName;
-    }
-
-    if(formValue.entryDate != ""){
-      console.log('entryD');
-      
-      this.toSortByEntryDate(formValue.entryDate, this.listProducts);
-      this.listProductsSorted = this.listSortedByEntryDate;
-    }
-
-    if(formValue.exitDate != ""){
-      console.log('exitD');
-      
-      this.toSortByExitDate(formValue.exitDate, this.listProducts);
-      this.listProductsSorted = this.listSortedByExitDate;
-    }
-    
-  
-    console.log(this.listProductsSorted);
-    
-    this.createDatasource(this.listProductsSorted);
-    console.log(this.dataSource);
-    
-  
-  }
-
-  */
-
-  toSortByStock(isInStock: any, listToSort: any){
+  toSortByStock(isInStock: any, listToSort: any) {
     this.stockToSort = isInStock;
-    
-    if(this.stockToSort==this.inStock){
-    this.listSortedByStock = [];
+
+    if (this.stockToSort == this.inStock) {
+      this.listSortedByStock = [];
 
       listToSort.forEach((element: any) => {
-        if(element.owner == null){
+        if (element.owner == null) {
           this.listSortedByStock.push(element);
         }
       });
-      console.log(this.listSortedByStock);
-      
+
     }
-    if(this.stockToSort==this.notInStock){
-    this.listSortedByStock = [];
+    if (this.stockToSort == this.notInStock) {
+      this.listSortedByStock = [];
 
       listToSort.forEach((element: any) => {
-        if(element.owner != null){
+        if (element.owner != null) {
           this.listSortedByStock.push(element);
         }
       });
@@ -473,64 +406,64 @@ clearFiltres(){
   }
 
 
-  toSortByTypeProduct(typeProduct: any, listToSort: any){
-    this.listSortedByTypeProduct =[];
+  toSortByTypeProduct(typeProduct: any, listToSort: any) {
+    this.listSortedByTypeProduct = [];
     this.typeProductToSort = typeProduct.nameProduct;
 
     listToSort.forEach((element: any) => {
-      if(element.typeProduct.nameProduct !=null && element.typeProduct.nameProduct.includes(this.typeProductToSort)){
+      if (element.typeProduct.nameProduct != null && element.typeProduct.nameProduct.includes(this.typeProductToSort)) {
         this.listSortedByTypeProduct.push(element);
       }
     });
   }
 
 
-  toSortByRefProduct(ref: any, listToSort: any){
+  toSortByRefProduct(ref: any, listToSort: any) {
     this.listSortedByReference = [];
     this.referenceToSort = ref;
 
-    listToSort.forEach((element: any)=> {
-      if(element.refProduct != null && element.refProduct.includes(this.referenceToSort)){
+    listToSort.forEach((element: any) => {
+      if (element.refProduct != null && element.refProduct.includes(this.referenceToSort)) {
         this.listSortedByReference.push(element);
       }
     });
   }
-  
 
-  toSortByName(name: any, listToSort: any){
+
+  toSortByName(name: any, listToSort: any) {
     this.listSortedByName = [];
     this.nameToSort = name;
-    
-    listToSort.forEach((element: any)=> {
-      if(element.owner!=null && element.owner.toString().toLowerCase().includes(this.nameToSort.toLowerCase())){
+
+    listToSort.forEach((element: any) => {
+      if (element.owner != null && element.owner.toString().toLowerCase().includes(this.nameToSort.toLowerCase())) {
         this.listSortedByName.push(element);
-      }   
+      }
     });
   }
 
 
-  toSortByEntryDate(date: any, listToSort: any){
+  toSortByEntryDate(date: any, listToSort: any) {
     this.listSortedByEntryDate = [];
     this.entryDateToSort = date;
 
     listToSort.forEach((element: any) => {
-      if(element.entryDate != null && element.entryDate.includes(this.entryDateToSort)){
+      if (element.entryDate != null && element.entryDate.includes(this.entryDateToSort)) {
         this.listSortedByEntryDate.push(element);
       }
     });
   }
 
-  toSortByExitDate(date: any, listToSort: any){
+  toSortByExitDate(date: any, listToSort: any) {
     this.listSortedByExitDate = [];
     this.exitDateToSort = date;
 
     listToSort.forEach((element: any) => {
-      if(element.exitDate != null && element.exitDate.includes(this.exitDateToSort)){
+      if (element.exitDate != null && element.exitDate.includes(this.exitDateToSort)) {
         this.listSortedByExitDate.push(element);
       }
     });
   }
- 
+
 
 
 
