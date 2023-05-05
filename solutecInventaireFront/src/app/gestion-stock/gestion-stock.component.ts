@@ -9,6 +9,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { from } from 'rxjs';
+import { RedirectionService } from '../services/redirection.service';
 
 export interface TypeProduct {
   idTypeProduct: number | null;
@@ -113,6 +114,11 @@ export class GestionStockComponent implements OnInit {
   entryDateToSort: any;
   exitDateToSort: any;
 
+
+  redirect = this.redirectService.getToRedirect();
+  filtreToRedirect = this.redirectService.getNameProductToRedirect();
+
+
   champsFiltres = this._formBuilder.group({
     isInStock: new FormControl(''),
     typeProduct: new FormControl(''),
@@ -150,7 +156,7 @@ export class GestionStockComponent implements OnInit {
     }));
   }
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService) {
 
   };
 
@@ -181,10 +187,16 @@ export class GestionStockComponent implements OnInit {
 
     this.getTypeProduct();
     this.getListProducts();
-
+    console.log(this.listProducts);
+    
+    console.log(this.redirect);
+    
+    
 
 
   }
+
+  
 
   clearFiltres() {
     this.champsFiltres.reset();
@@ -193,10 +205,19 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
+    console.log("list product ok");
+    
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
         this.listProducts = data;
+        console.log(this.listProducts);
+        
         this.createDatasource(this.listProducts);
+        if(this.redirect == true){
+      
+          this.fonctionSort(this.filtreToRedirect);
+        }
+    
       },
       error: (err) => { console.log(err) },
     })
@@ -237,6 +258,8 @@ export class GestionStockComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
+    console.log(this.listProducts);
+    
   }
 
   modeSuppression() {
@@ -343,42 +366,69 @@ export class GestionStockComponent implements OnInit {
   }
 
 
+
   fonctionSort(formValue: any) {
+    console.log("fonction sort");
+    
     this.listProductsSorted = this.listProducts;
+    console.log(this.listProducts);
+    
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
+    if(this.redirect == true){
+      console.log("sortByRedirect");
+      
+      this.toSortByRedirectedProduct(formValue, this.listProductsSorted);
+      console.log(formValue);
+      console.log(this.listProductsSorted);
+      
+      
+          this.listProductsSorted = this.listSortedByTypeProduct;
+          console.log(this.listProductsSorted);
+          
+    }
 
-    for (let i in formValue) {
-      if (i == 'isInStock' && formValue[i] != "") {
-        this.toSortByStock(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByStock;
-      }
-      if (i == 'typeProduct' && formValue[i] != "") {
-        this.toSortByTypeProduct(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByTypeProduct;
-      }
-      if (i == 'refProduct' && formValue[i] != "") {
-        this.toSortByRefProduct(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByReference;
-      }
-      if (i == 'owner' && formValue[i] != "") {
-        this.toSortByName(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByName;
-
-      }
-      if (i == 'entryDate' && formValue[i] != "") {
-        this.toSortByEntryDate(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByEntryDate;
-
-      }
-      if (i == 'exitDate' && formValue[i] != "") {
-        this.toSortByExitDate(formValue[i], this.listProductsSorted);
-        this.listProductsSorted = this.listSortedByExitDate;
-
+    if(this.redirect==false){
+      for (let i in formValue) {
+        if (i == 'isInStock' && formValue[i] != "") {
+          this.toSortByStock(formValue[i], this.listProductsSorted);
+          this.listProductsSorted = this.listSortedByStock;
+        }
+        if (i == 'typeProduct' && formValue[i] != "") {
+          this.toSortByTypeProduct(formValue[i], this.listProductsSorted);
+          this.listProductsSorted = this.listSortedByTypeProduct;
+        }
+        if (i == 'refProduct' && formValue[i] != "") {
+          this.toSortByRefProduct(formValue[i], this.listProductsSorted);
+          this.listProductsSorted = this.listSortedByReference;
+        }
+        if (i == 'owner' && formValue[i] != "") {
+          this.toSortByName(formValue[i], this.listProductsSorted);
+          this.listProductsSorted = this.listSortedByName;
+  
+        }
+        if (i == 'entryDate' && formValue[i] != "") {
+          this.toSortByEntryDate(formValue[i], this.listProductsSorted);
+          this.listProductsSorted = this.listSortedByEntryDate;
+  
+        }
+        if (i == 'exitDate' && formValue[i] != "") {
+          this.toSortByExitDate(formValue[i], this.listProductsSorted);
+          this.listProductsSorted = this.listSortedByExitDate;
+  
+        }
+  
       }
 
     }
+    
     this.createDatasource(this.listProductsSorted);
+    console.log(this.listProductsSorted);
+    
+    this.redirectService.setToRedirectFalse();
+    this.redirect=this.redirectService.getToRedirect();
+    
+    
   }
 
   toSortByStock(isInStock: any, listToSort: any) {
@@ -405,6 +455,20 @@ export class GestionStockComponent implements OnInit {
     }
   }
 
+  toSortByRedirectedProduct(typeProduct: any, listToSort: any){
+    this.listSortedByTypeProduct = [];
+    this.typeProductToSort = typeProduct;
+    console.log(listToSort);
+    
+
+    listToSort.forEach((element: any) => {
+      if (element.typeProduct.nameProduct != null && element.typeProduct.nameProduct.includes(this.typeProductToSort)) {
+        this.listSortedByTypeProduct.push(element);
+      }
+    });
+    console.log(this.listSortedByTypeProduct);
+    
+  }
 
   toSortByTypeProduct(typeProduct: any, listToSort: any) {
     this.listSortedByTypeProduct = [];
