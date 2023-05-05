@@ -33,7 +33,8 @@
             </th>
           </div>
 
-          <td mat-cell *matCellDef="let element" [ngClass]="{'inStock':element.isInStock == true, 'notInStock':element.isInStock == false }">
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'inStock':element.isInStock == true || element.reservation == true, 'notInStock':element.isInStock == false && element.reservation == false }">
             <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
               <div class="btn-edit" *ngSwitchCase="'isEdit'">
                 <button mat-button (click)="element.isEdit = !element.isEdit">
@@ -44,13 +45,18 @@
                 {{ element[col.key].nameProduct }}
               </div>
               <div *ngSwitchCase="'isInStock'">
-                  <div *ngIf="element.isInStock == true">
-                    <mat-icon class="pastilleInStock" >archive</mat-icon>
-                  </div>
-                  
-                  <div *ngIf="element.isInStock == false">
-                    <mat-icon class="pastilleOutOfStock">unarchive</mat-icon>
-                  </div>
+                <div *ngIf="element.isInStock == true || element.reservation == true">
+                  <mat-icon class="pastilleInStock">archive</mat-icon>
+                </div>
+
+                <div *ngIf="element.isInStock == false && element.reservation == false">
+                  <mat-icon class="pastilleOutOfStock">unarchive</mat-icon>
+                </div>
+              </div>
+              <div *ngSwitchCase="'isReserved'">
+                <div *ngIf="element.reservation == true">
+                  <mat-icon>check</mat-icon>
+                </div>
               </div>
               <span *ngSwitchDefault>
                 {{ element[col.key] }}
@@ -67,10 +73,14 @@
                 <button mat-button (click)="modifProduct(element)">Done</button>
               </div>
               <ng-template #dataField>
-                <div *ngIf="col.key!='isSelected'&& col.key!='typeProduct' && col.key!='isInStock'">
+                <div
+                  *ngIf="col.key!='isSelected'&& col.key!='typeProduct' && col.key!='isInStock' && col.key!='reservation'">
                   <mat-form-field>
                     <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
                   </mat-form-field>
+                </div>
+                <div *ngIf="col.key=='reservation'">
+                  <mat-checkbox [(ngModel)]="element[col.key]"></mat-checkbox>
                 </div>
                 <div *ngIf="col.key=='typeProduct'">
                   <mat-form-field>
@@ -78,7 +88,6 @@
                       <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
                     </mat-select>
                   </mat-form-field>
-
                 </div>
 
               </ng-template>
@@ -132,63 +141,63 @@
         <div class="row">
           <mat-form-field>
             <mat-label>En stock ou non</mat-label>
-            <mat-select formControlName="isInStock"  placeholder="En stock ou non" >
+            <mat-select formControlName="isInStock" placeholder="En stock ou non">
               <mat-option [value]="chaineVide">Aucun filtre</mat-option>
               <mat-option [value]="inStock"> En stock </mat-option>
               <mat-option [value]="notInStock"> Sorti de stock </mat-option>
             </mat-select>
           </mat-form-field>
-      </div>
+        </div>
 
 
         <!-- FILTRE TYPE DE PRODUIT -->
         <div class="row">
-            <mat-form-field>
-              <mat-label>Type de produit </mat-label>
-              <mat-select formControlName="typeProduct"  placeholder="Type de produit" >
-                <mat-option [value]="chaineVide"> Aucun filtre </mat-option>
-                <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+          <mat-form-field>
+            <mat-label>Type de produit </mat-label>
+            <mat-select formControlName="typeProduct" placeholder="Type de produit">
+              <mat-option [value]="chaineVide"> Aucun filtre </mat-option>
+              <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
 
 
         <!-- FILTRE REFERENCE PRODUIT -->
         <div class="row">
-            <mat-form-field >
-              <mat-label>Référence du produit</mat-label>
-              <input  formControlName="refProduct"   type="text" class="form-control" placeholder="A0000000" matInput>
-            </mat-form-field>
+          <mat-form-field>
+            <mat-label>Référence du produit</mat-label>
+            <input formControlName="refProduct" type="text" class="form-control" placeholder="A0000000" matInput>
+          </mat-form-field>
         </div>
 
 
         <!-- FILTRE RESPONSABLE -->
         <div class="row">
-            <mat-form-field appearance="fill">
-              <mat-label>Référent</mat-label>
-              <input formControlName="owner" type="text" class="form-control" placeholder="Jean Dupond" matInput>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Référent</mat-label>
+            <input formControlName="owner" type="text" class="form-control" placeholder="Jean Dupond" matInput>
+          </mat-form-field>
         </div>
 
-        
+
 
         <!-- FILTRE ENTRY DATE -->
         <div class="row">
-            <mat-form-field appearance="fill">
-              <mat-label>Date entrée en stock</mat-label>
-              <input formControlName="entryDate" type="text" class="form-control" placeholder="2022-01-01" matInput>
-            </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Date entrée en stock</mat-label>
+            <input formControlName="entryDate" type="text" class="form-control" placeholder="2022-01-01" matInput>
+          </mat-form-field>
         </div>
 
         <!-- FILTRE EXIT DATE -->
         <div class="row">
 
-            <mat-form-field appearance="fill">
-              <mat-label>Date sortie de stock</mat-label>
-              <input formControlName="exitDate" type="text" class="form-control" placeholder="2022-01-01" matInput>
-            </mat-form-field>
-          
+          <mat-form-field appearance="fill">
+            <mat-label>Date sortie de stock</mat-label>
+            <input formControlName="exitDate" type="text" class="form-control" placeholder="2022-01-01" matInput>
+          </mat-form-field>
+
         </div>
 
         <button type="submit"> Trier </button>
