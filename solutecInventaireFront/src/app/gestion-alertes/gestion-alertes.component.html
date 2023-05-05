@@ -141,7 +141,7 @@
                     <ng-container matColumnDef="Date/Heure">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by date">
                             Date </th>
-                        <td mat-cell *matCellDef="let row"> {{row.date}} </td>
+                        <td mat-cell *matCellDef="let row"> {{row.date | date: 'le dd/MM/yy, à HH:mm' }} </td>
                     </ng-container>
 
                     <!-- Symbol Column -->
@@ -149,10 +149,11 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Action">
                             Action </th>
                         <td mat-cell *matCellDef="let row">
-                            <div *ngIf="!row.isEditT">{{row.action}}</div>
+                            <p *ngIf="!row.isEditT">{{row.action}}</p>
                             <div *ngIf="row.isEditT">
                                 <mat-form-field appearance="fill">
-                                    <textarea [(ngModel)]="row.action" matInput></textarea>
+                                    <textarea style="align-content: center;" placeholder="Action à mener"
+                                        [(ngModel)]="row.action" matInput></textarea>
                                 </mat-form-field>
                             </div>
                         </td>
@@ -164,7 +165,7 @@
                             <button *ngIf="!row.isEditT" mat-icon-button (click)="editTMode(row)">
                                 <mat-icon>keyboard</mat-icon>
                             </button>
-                            <button *ngIf="row.isEditT" (click)="editTMode(row)"
+                            <button *ngIf="row.isEditT" (click)="editTMode(row); modifAction(row)"
                                 mat-icon-button><mat-icon>done</mat-icon>
                             </button>
                         </td>

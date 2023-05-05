@@ -179,14 +179,10 @@ export class GestionAlertesComponent implements OnInit {
 
   createAlert(alert: any) {
     if (alert.email === "Off") {
-      alert.email = false
-    } else {
-      alert.email = true
+      alert.email = false;
     }
     if (alert.active === "Off") {
-      alert.active = false
-    } else {
-      alert.active = true
+      alert.email = false;
     }
     alert.triggered = false;
     if (alert.product != "") {
@@ -218,6 +214,15 @@ export class GestionAlertesComponent implements OnInit {
       error: (err) => { console.log(err) }
     })
 
+  }
+
+  modifAction(row: any) {
+    console.log(row)
+    this.http.patch('http://localhost:8301/modifyAlert/' + row.idAlert, row).subscribe({
+      next: (data) => {
+      },
+      error: (err) => { console.log(err) },
+    })
   }
 
   modifAlert(alert: AlertElement) {
