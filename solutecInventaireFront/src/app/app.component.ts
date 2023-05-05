@@ -12,10 +12,12 @@ export class AppComponent implements OnInit {
   constructor(private NotifService: NotifService, private route: Router) { }
 
   ngOnInit(): void {
+
     this.NotifService.getNotifs().subscribe(data => {
       this.notification = data;
+      console.log(this.notification)
     })
-    console.log(this.notification)
+
   }
 
   goToAlerte() {
