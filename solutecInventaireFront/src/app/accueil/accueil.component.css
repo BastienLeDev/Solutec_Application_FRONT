@@ -1,5 +1,6 @@
 .anyClass {
-    height: 300px;
+    margin-right: 15px;
+    height: auto;
     overflow-y: scroll;
 }
 
@@ -8,9 +9,45 @@
 }
 
 .card {
+    width: auto;
+    height: 120px;
     transition: all .3s ease-in-out;
+    justify-content: center;
 }
 
 .card:hover {
+   
     transform: scale(1.07);
+}
+
+#cardHeader{
+    justify-content: center;
+
+}
+
+#cardTitle{
+    font-size: medium;
+
+}
+
+#cardContent{
+    justify-content: center;
+    text-align: center;
+    vertical-align: bottom;
+    
+    
+}
+
+#cardParagraph{
+    
+}
+
+#invisibleButton{
+    margin-left: 15px;
+    margin-bottom: 20px;
+    width: 120px;
+    height: 120px;
+    border: none;
+    background: none;
+    outline: none;
 }

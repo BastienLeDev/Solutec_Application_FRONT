@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { GestionStockComponent } from '../gestion-stock/gestion-stock.component';
+import { RedirectionService } from '../services/redirection.service';
 
 export interface ProductReserved {
   //Propriétées pour le tableau
@@ -53,7 +56,7 @@ export class AccueilComponent implements OnInit {
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private route: Router, private redirectService : RedirectionService) { }
 
   ngOnInit(): void {
     this.refreshAlert()
@@ -314,6 +317,13 @@ export class AccueilComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  goToGestionStockElement(val: any){
+    this.route.navigateByUrl('stock');
+    this.redirectService.setNameProductToRedirect(val[0]);
+    this.redirectService.setToRedirect();
+    
   }
 
 }

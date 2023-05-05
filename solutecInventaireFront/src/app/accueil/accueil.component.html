@@ -163,69 +163,83 @@
         </mat-card>
     </div>
     -->
-    <div class="row m-5">
-        <div *ngFor="let l of listStock">
-            <mat-card class="  card col-2 m-3">
+    
+    <div class="row">
+        <div class="col-7 p-3">
+            <div class="row" id="">
+                <div *ngFor="let l of listStock" class="col-2">
+                    <button type="submit" (click)="goToGestionStockElement(l)" id="invisibleButton">
+                    <mat-card class="card">
+                       
+                        <mat-card-header id="cardHeader">
+                            <mat-card-title id="cardTitle">{{l[0]}}</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content class="m-1" id="cardContent">
+                            <p id="cardParagraph">{{l[1]}}</p>
+                        </mat-card-content>
+                    
+                    </mat-card>
+                </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-5 p-3"> 
+            <mat-card class=" anyClass">
                 <mat-card-header>
-                    <mat-card-title>{{l[0]}}</mat-card-title>
+                    <h2>Réservations en attente de réception</h2>
                 </mat-card-header>
-                <mat-card-content class="m-1">
-                    <p>{{l[1]}}</p>
+                <mat-card-content>
+                    <table mat-table [dataSource]="dataSource" matSort>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="nameProduct">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nameProduct">
+                                Matériel
+                            </th>
+                            <td mat-cell *matCellDef="let row"> {{row.typeProduct.nameProduct}} </td>
+                        </ng-container>
+        
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="refProduct">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by refProduct">
+                                Référence </th>
+                            <td mat-cell *matCellDef="let row"> {{row.refProduct}} </td>
+                        </ng-container>
+        
+                        <!-- Destinataire Column -->
+                        <ng-container matColumnDef="owner">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by owner">
+                                Destinataire </th>
+                            <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
+                        </ng-container>
+        
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="entryDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDate">
+                                Date d'entrée </th>
+                            <td mat-cell *matCellDef="let row"> {{row.entryDate | date:'dd-MM-yyyy'}} </td>
+                        </ng-container>
+        
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="star">
+                            <th mat-header-cell *matHeaderCellDef>Retirer</th>
+                            <td mat-cell *matCellDef="let row"><button (click)="removeReservation(row.idProduct)"
+                                    mat-icon-button
+                                    aria-label="Example icon button with a delete icon"><mat-icon>remove</mat-icon>
+                                </button></td>
+                        </ng-container>
+        
+        
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
                 </mat-card-content>
             </mat-card>
         </div>
+
     </div>
 
 
 
-    <mat-card class="m-5 anyClass">
-        <mat-card-header>
-            <h2>Réservations en attente de réception</h2>
-        </mat-card-header>
-        <mat-card-content>
-            <table mat-table [dataSource]="dataSource" matSort>
-                <!-- Position Column -->
-                <ng-container matColumnDef="nameProduct">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by nameProduct">
-                        Matériel
-                    </th>
-                    <td mat-cell *matCellDef="let row"> {{row.typeProduct.nameProduct}} </td>
-                </ng-container>
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="refProduct">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by refProduct">
-                        Référence </th>
-                    <td mat-cell *matCellDef="let row"> {{row.refProduct}} </td>
-                </ng-container>
-
-                <!-- Destinataire Column -->
-                <ng-container matColumnDef="owner">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by owner">
-                        Destinataire </th>
-                    <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
-                </ng-container>
-
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="entryDate">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDate">
-                        Date d'entrée </th>
-                    <td mat-cell *matCellDef="let row"> {{row.entryDate | date:'dd-MM-yyyy'}} </td>
-                </ng-container>
-
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="star">
-                    <th mat-header-cell *matHeaderCellDef>Retirer</th>
-                    <td mat-cell *matCellDef="let row"><button (click)="removeReservation(row.idProduct)"
-                            mat-icon-button
-                            aria-label="Example icon button with a delete icon"><mat-icon>remove</mat-icon>
-                        </button></td>
-                </ng-container>
-
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </mat-card-content>
-    </mat-card>
+    
 </body>
