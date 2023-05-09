@@ -31,3 +31,24 @@ li a:focus {
 mat-icon {
     color: white;
 }
+
+span {
+    opacity: 0.7;
+}
+
+#notif:hover {
+    background-color: #ff001947;
+}
+
+#notif {
+    border: none;
+    background-color: white;
+}
+
+#notification {
+    color: red
+}
+
+#noNotification {
+    color: white
+}

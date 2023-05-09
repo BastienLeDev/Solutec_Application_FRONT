@@ -6,10 +6,18 @@
       <li><a routerLinkActive="menu-active" routerLink='rapports'>Générer des rapports</a></li>
       <li><a routerLinkActive="menu-active" routerLink='alertes'>Gestion des alertes</a></li>
     </div>
-    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon matBadge="1"
-        matBadgeColor="warn">notifications</mat-icon></button>
-    <mat-menu #menu="matMenu">
+    <button mat-icon-button *ngIf="length == 0" [matMenuTriggerFor]="menu"><mat-icon
+        id="noNotification">notifications</mat-icon></button>
+    <button mat-icon-button *ngIf="length != 0" [matMenuTriggerFor]="menu"><mat-icon id="notification"
+        matBadge="{{length}}" matBadgeColor="warn">notification_important</mat-icon></button>
 
+    <mat-menu #menu="matMenu">
+      <div class="m-2" id="notif" *ngFor="let notif of notification">
+        <span (click)="goToAlerte()"><i>{{notif.date | date: 'le dd/MM/yy, à HH:mm :'}}</i></span> <button
+          (click)="deleteNotifs(notif.idNotification)" mat-icon-button><mat-icon style="color: black;">clear</mat-icon>
+        </button>
+        <p (click)="goToAlerte()"><b>"{{notif.alerte}}"</b> à été déclenchée.</p>
+      </div>
     </mat-menu>
   </div>
 </ul>

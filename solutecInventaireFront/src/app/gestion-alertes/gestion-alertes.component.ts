@@ -68,7 +68,7 @@ export class GestionAlertesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.refreshAlert2()
+    this.refreshAlert2();
     this.getAlert();
     this.getTypeProduct();
     this.getTriggered();
