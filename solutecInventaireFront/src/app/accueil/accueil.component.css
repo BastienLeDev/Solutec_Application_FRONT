@@ -16,33 +16,30 @@
 }
 
 .card:hover {
-   
+
     transform: scale(1.07);
 }
 
-#cardHeader{
+#cardHeader {
     justify-content: center;
 
 }
 
-#cardTitle{
+#cardTitle {
     font-size: medium;
 
 }
 
-#cardContent{
+#cardContent {
     justify-content: center;
     text-align: center;
     vertical-align: bottom;
-    
-    
+
+
 }
 
-#cardParagraph{
-    
-}
 
-#invisibleButton{
+#invisibleButton {
     margin-left: 15px;
     margin-bottom: 20px;
     width: 120px;

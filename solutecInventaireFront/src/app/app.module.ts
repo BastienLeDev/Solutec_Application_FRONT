@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
 
 
 
@@ -61,7 +62,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

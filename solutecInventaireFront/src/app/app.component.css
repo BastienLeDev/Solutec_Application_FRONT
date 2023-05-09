@@ -45,6 +45,10 @@ span {
     background-color: white;
 }
 
-#deleteNotif {
-    left: 50px
+#notification {
+    color: red
+}
+
+#noNotification {
+    color: white
 }
