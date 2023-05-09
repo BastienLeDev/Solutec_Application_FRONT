@@ -30,6 +30,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDividerModule} from '@angular/material/divider';
+import { ConfirmSuppressionTypeProductComponent } from './confirm-suppression-type-product/confirm-suppression-type-product.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     GenerationRapportsComponent,
     GestionAlertesComponent,
     ConfirmDialogComponent,
+    ConfirmSuppressionTypeProductComponent,
 
   ],
   imports: [
@@ -63,7 +68,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSelectModule,
     ReactiveFormsModule,
     MatMenuModule,
-    MatBadgeModule
+    MatExpansionModule,
+    MatBadgeModule,
+    MatSnackBarModule,
+    MatDividerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

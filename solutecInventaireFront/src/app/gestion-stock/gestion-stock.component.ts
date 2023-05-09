@@ -10,6 +10,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { from } from 'rxjs';
 import { RedirectionService } from '../services/redirection.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmSuppressionTypeProductComponent } from '../confirm-suppression-type-product/confirm-suppression-type-product.component';
 
 export interface TypeProduct {
   idTypeProduct: number | null;
@@ -114,6 +116,13 @@ export class GestionStockComponent implements OnInit {
   entryDateToSort: any;
   exitDateToSort: any;
 
+  messageSnackBar: string;
+
+  step: number;
+
+  advancedMode = false;
+
+  existDataOfTypeProduct = false;
 
   redirect = this.redirectService.getToRedirect();
   filtreToRedirect = this.redirectService.getNameProductToRedirect();
@@ -139,8 +148,29 @@ export class GestionStockComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('addTypeProduct') inputName: any;
   delete: Object;
 
+  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService, private _snackBar : MatSnackBar) {
+
+  };
+
+  ngOnInit(): void {
+
+    this.listProducts = [];
+    this.listDataSource = [];
+    this.dataSource = new MatTableDataSource;
+
+    this.getTypeProduct();
+    this.getListProducts();
+    console.log(this.listProducts);
+    
+    console.log(this.redirect);
+    
+    
+
+
+  }
 
 
   isAllSelected() {
@@ -156,9 +186,7 @@ export class GestionStockComponent implements OnInit {
     }));
   }
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService) {
-
-  };
+ 
 
   addRow() {
     const newRow: Product = {
@@ -179,23 +207,7 @@ export class GestionStockComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
-
-    this.listProducts = [];
-    this.listDataSource = [];
-    this.dataSource = new MatTableDataSource;
-
-    this.getTypeProduct();
-    this.getListProducts();
-    console.log(this.listProducts);
-    
-    console.log(this.redirect);
-    
-    
-
-
-  }
-
+ 
   
 
   clearFiltres() {
@@ -528,7 +540,108 @@ export class GestionStockComponent implements OnInit {
     });
   }
 
+  newTypeEquipment(value: any){
+    console.log(value);
+    
+    this.http.post('http://localhost:8301/typeProduct/add',value).subscribe({
+      next: (data) => {
+        this.ngOnInit();
+        this.nextStep();
+        this.messageSnackBar = "Vous avez bien ajouté le type de produit : " + value.nameProduct;
+        this.openSnackBar();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
 
 
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  handleClear(){
+    // clearing the value
+  this.inputName.nativeElement.value = ' ';
+  }
+
+  openSnackBar() {
+    this._snackBar.open(this.messageSnackBar, 'OK', {
+      duration: 5 * 1000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
+
+  verifyExistProductOfTypeEquipment( val: any){
+    console.log(val);
+    console.log(val.nameProduct);
+    
+    console.log(this.listProducts);
+    
+    this.listProducts.forEach((element: any)=> {
+      console.log(element);
+      console.log(element.typeProduct.nameProduct);
+      
+      if(element.typeProduct.idTypeProduct == val.idTypeProduct){
+      
+        console.log(val.nameProduct);
+        
+        
+        this.existDataOfTypeProduct = true;
+      }
+    });
+    console.log(this.existDataOfTypeProduct);
+    
+    if(this.existDataOfTypeProduct == false){
+      this.deleteTypeEquipment(val);
+    }
+    if(this.existDataOfTypeProduct == true){
+      console.log("ohohoh");
+      
+      this.dialog
+        .open(ConfirmSuppressionTypeProductComponent)
+        .afterClosed()
+        .subscribe((confirm: any) => {
+          if (confirm) {
+            this.deleteTypeEquipment(val);
+            
+          }
+        });
+
+    }
+  }
+
+
+  deleteTypeEquipment(val: any){
+    console.log(val);
+    console.log(val);
+     
+    
+    this.http.delete('http://localhost:8301/typeProduct/delete/' + val.idTypeProduct).subscribe({
+      next: (data) => {
+        this.ngOnInit();
+        this.nextStep();
+        this.messageSnackBar = "Vous avez bien supprimé le type de produit : "+ val.nameProduct;
+        this.openSnackBar();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  activateAdvancedMode(){
+    this.advancedMode = true;
+  }
+
+  desactivateAdvancedMode(){
+    this.advancedMode = false;
+  }
 
 }
