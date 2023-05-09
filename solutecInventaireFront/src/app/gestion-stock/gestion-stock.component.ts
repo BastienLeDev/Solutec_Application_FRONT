@@ -163,13 +163,6 @@ export class GestionStockComponent implements OnInit {
 
     this.getTypeProduct();
     this.getListProducts();
-    console.log(this.listProducts);
-    
-    console.log(this.redirect);
-    
-    
-
-
   }
 
 
@@ -217,13 +210,10 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
-    console.log("list product ok");
     
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
         this.listProducts = data;
-        console.log(this.listProducts);
-        
         this.createDatasource(this.listProducts);
         if(this.redirect == true){
       
@@ -270,7 +260,6 @@ export class GestionStockComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
-    console.log(this.listProducts);
     
   }
 
@@ -312,13 +301,11 @@ export class GestionStockComponent implements OnInit {
         error: (err) => { console.log(err) },
       })
       this.ngOnInit();
-      console.log(this.suppr)
     }
   };
 
 
   addProduct(product: any) {
-    console.log(product)
     this.http.post('http://localhost:8301/add/database', product).subscribe({
       next: (data) => {
         product.isEdit = false;
@@ -337,9 +324,6 @@ export class GestionStockComponent implements OnInit {
       this.addProduct(product);
     }
     else {
-      console.log(product)
-      console.log(product.typeProduct)
-      console.log(product.typeProduct.idTypeProduct);
       if (product.owner == "") {
         product.owner = null;
       }
@@ -380,23 +364,13 @@ export class GestionStockComponent implements OnInit {
 
 
   fonctionSort(formValue: any) {
-    console.log("fonction sort");
-    
     this.listProductsSorted = this.listProducts;
-    console.log(this.listProducts);
     
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    if(this.redirect == true){
-      console.log("sortByRedirect");
-      
+    if(this.redirect == true){     
       this.toSortByRedirectedProduct(formValue, this.listProductsSorted);
-      console.log(formValue);
-      console.log(this.listProductsSorted);
-      
-      
-          this.listProductsSorted = this.listSortedByTypeProduct;
-          console.log(this.listProductsSorted);
+      this.listProductsSorted = this.listSortedByTypeProduct;
           
     }
 
@@ -434,9 +408,7 @@ export class GestionStockComponent implements OnInit {
 
     }
     
-    this.createDatasource(this.listProductsSorted);
-    console.log(this.listProductsSorted);
-    
+    this.createDatasource(this.listProductsSorted);  
     this.redirectService.setToRedirectFalse();
     this.redirect=this.redirectService.getToRedirect();
     
@@ -470,7 +442,6 @@ export class GestionStockComponent implements OnInit {
   toSortByRedirectedProduct(typeProduct: any, listToSort: any){
     this.listSortedByTypeProduct = [];
     this.typeProductToSort = typeProduct;
-    console.log(listToSort);
     
 
     listToSort.forEach((element: any) => {
@@ -478,7 +449,6 @@ export class GestionStockComponent implements OnInit {
         this.listSortedByTypeProduct.push(element);
       }
     });
-    console.log(this.listSortedByTypeProduct);
     
   }
 
@@ -579,30 +549,16 @@ export class GestionStockComponent implements OnInit {
   }
 
   verifyExistProductOfTypeEquipment( val: any){
-    console.log(val);
-    console.log(val.nameProduct);
-    
-    console.log(this.listProducts);
-    
-    this.listProducts.forEach((element: any)=> {
-      console.log(element);
-      console.log(element.typeProduct.nameProduct);
-      
-      if(element.typeProduct.idTypeProduct == val.idTypeProduct){
-      
-        console.log(val.nameProduct);
-        
-        
+    this.listProducts.forEach((element: any)=> {   
+      if(element.typeProduct.idTypeProduct == val.idTypeProduct){   
         this.existDataOfTypeProduct = true;
       }
     });
-    console.log(this.existDataOfTypeProduct);
-    
+
     if(this.existDataOfTypeProduct == false){
       this.deleteTypeEquipment(val);
     }
     if(this.existDataOfTypeProduct == true){
-      console.log("ohohoh");
       
       this.dialog
         .open(ConfirmSuppressionTypeProductComponent)
@@ -619,9 +575,6 @@ export class GestionStockComponent implements OnInit {
 
 
   deleteTypeEquipment(val: any){
-    console.log(val);
-    console.log(val);
-     
     
     this.http.delete('http://localhost:8301/typeProduct/delete/' + val.idTypeProduct).subscribe({
       next: (data) => {

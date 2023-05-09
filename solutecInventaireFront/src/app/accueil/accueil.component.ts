@@ -63,6 +63,8 @@ export class AccueilComponent implements OnInit {
     this.refreshAlert()
     this.getReservation();
     this.getListStock();
+  
+    
 
 
 
@@ -76,7 +78,6 @@ export class AccueilComponent implements OnInit {
         this.dataSource = new MatTableDataSource<ProductReserved>(this.ProductsReserved);
         this.dataSource.sort = this.sort;
         this.lengthDataSource = this.ProductsReserved.length;
-        console.log(this.dataSource)
 
       },
       error: (err) => { console.log(err) },
@@ -112,6 +113,7 @@ export class AccueilComponent implements OnInit {
     this.http.get('http://localhost:8301/products/getStock').subscribe({
       next: (data) => {
         this.listStock = data;
+        
       },
       error: (err) => {
         console.log(err);
