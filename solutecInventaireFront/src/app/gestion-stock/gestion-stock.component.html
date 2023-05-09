@@ -108,21 +108,43 @@
 
   <div class="col-3 filtres">
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         Ajouter un équipement
         <button mat-icon-button (click)="addRow()"><mat-icon>add</mat-icon>
         </button>
 
       </div>
-      <div *ngIf="suppr==false" class="col-6">
+      <div *ngIf="suppr==false" class="col-4">
         Supprimer équipement(s)
         <button mat-icon-button (click)="modeSuppression()"><mat-icon>delete</mat-icon>
         </button>
       </div>
-      <div *ngIf="suppr==true" class="col-6">
+      <div *ngIf="suppr==true" class="col-4">
         Supprimer équipement(s)
         <button mat-icon-button (click)="removeSelectedRows()"><mat-icon>delete</mat-icon>
         </button>
+      </div>
+      <div class="col-4">
+        Supprimer type produit
+        <button mat-icon-button (click)="addRow()"><mat-icon>add_shopping_cart</mat-icon>
+        </button>
+      </div>
+      <div class="row">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Nouveau type équipement
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form #newEquip="ngForm" (ngSubmit)="newTypeEquipment(newEquip.value)">
+          <mat-form-field appearance="fill" >
+            <mat-label>Nom produit</mat-label>
+            <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000" matInput>
+          </mat-form-field>
+
+          <button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
+        </form>
+        </mat-expansion-panel>
       </div>
 
     </div>

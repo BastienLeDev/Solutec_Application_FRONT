@@ -139,6 +139,7 @@ export class GestionStockComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('addTypeProduct') inputName: any;
   delete: Object;
 
 
@@ -526,6 +527,24 @@ export class GestionStockComponent implements OnInit {
         this.listSortedByExitDate.push(element);
       }
     });
+  }
+
+  newTypeEquipment(val: any){
+    console.log(val);
+    
+    this.http.post('http://localhost:8301/typeProduct/add',val).subscribe({
+      next: (data) => {
+        this.ngOnInit();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+  
+  handleClear(){
+    // clearing the value
+  this.inputName.nativeElement.value = ' ';
   }
 
 
