@@ -31,6 +31,9 @@ import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDividerModule} from '@angular/material/divider';
+import { ConfirmSuppressionTypeProductComponent } from './confirm-suppression-type-product/confirm-suppression-type-product.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     GenerationRapportsComponent,
     GestionAlertesComponent,
     ConfirmDialogComponent,
+    ConfirmSuppressionTypeProductComponent,
 
   ],
   imports: [
@@ -66,6 +70,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatMenuModule,
     MatExpansionModule,
     MatBadgeModule,
+    MatSnackBarModule,
+    MatDividerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

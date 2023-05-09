@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Etes-vous sûr de vouloir supprimer ce type de produit?</h1>
+<h2>ATTENTION :</h2>
+<p>Des entrées de ce type sont toujours présentes dans la base de données. </p>
+<p>La suppression de ce type entrainera la suppression de toutes les données associées.</p>
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]>Annuler</button>
+    <button class="delete-button" mat-button [mat-dialog-close]="true">Supprimer</button>
+</div>

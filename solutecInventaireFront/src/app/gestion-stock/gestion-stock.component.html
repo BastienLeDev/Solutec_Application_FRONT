@@ -125,32 +125,24 @@
         </button>
       </div>
       <div class="col-4">
-        Supprimer type produit
-        <button mat-icon-button (click)="addRow()"><mat-icon>add_shopping_cart</mat-icon>
+        <button mat-button [matMenuTriggerFor]="advanced"><mat-icon>more_vert</mat-icon>
         </button>
+        <mat-menu #advanced="matMenu" xPosition="before">
+          <div *ngIf="advancedMode === false">
+          <button mat-menu-item  (click)="activateAdvancedMode()">Mode avancé</button>
+          </div>
+          <div *ngIf="advancedMode === true">
+            <button mat-menu-item  (click)=" desactivateAdvancedMode()">Quitter le mode avancé</button>
+          </div>
+        </mat-menu>
       </div>
-      <div class="row">
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Nouveau type équipement
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <form #newEquip="ngForm" (ngSubmit)="newTypeEquipment(newEquip.value)">
-          <mat-form-field appearance="fill" >
-            <mat-label>Nom produit</mat-label>
-            <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000" matInput>
-          </mat-form-field>
 
-          <button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
-        </form>
-        </mat-expansion-panel>
-      </div>
+      
 
     </div>
 
     <!-- FILTRES -->
-    <div>
+    <div *ngIf="advancedMode === false" class="col-12">
 
       <form [formGroup]="champsFiltres" (ngSubmit)="fonctionSort(champsFiltres.value)">
 
@@ -226,6 +218,54 @@
         <button (onclick)="clearFiltres()"> clear</button>
       </form>
     </div>
+
+    <!-- ADVANCED MODE-->
+    <div *ngIf="advancedMode === true" >
+      <div class="row">
+        <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Nouveau type équipement
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form #newEquip="ngForm" (ngSubmit)="newTypeEquipment(newEquip.value)">
+            <mat-form-field appearance="fill" >
+              <mat-label>Nom produit</mat-label>
+              <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000" matInput>
+            </mat-form-field>
+
+            <button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
+          </form>
+        </mat-expansion-panel>
+      </div>
+
+      <div class="row">
+        
+        <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Supprimer un type d'équipement
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div *ngFor="let l of listTypeProduct">
+            <div class="row">
+              <div class="col-9">
+                {{l.nameProduct}}
+              </div>
+              <div class="col-3">
+                <button (click)="verifyExistProductOfTypeEquipment(l)"><mat-icon>delete_forever</mat-icon></button>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+          </div>
+          
+        </mat-expansion-panel>
+
+      </div>
+
+
+    </div>
+    
 
   </div>
 
