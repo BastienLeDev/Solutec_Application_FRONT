@@ -41,26 +41,29 @@
                   <mat-icon>edit</mat-icon>
                 </button>
               </div>
-              <div *ngSwitchCase="'TypeProduct'">
+              <div *ngSwitchCase="'TypeProduct'" >
                 {{ element[col.key].nameProduct }}
               </div>
               <div *ngSwitchCase="'isInStock'">
-                <div *ngIf="element.isInStock == true">
+                <div *ngIf="element.isInStock == true" class="pastilleInStock">
                   <mat-icon class="pastilleInStock">archive</mat-icon>
                 </div>
 
-                <div *ngIf="element.isInStock == false">
+                <div *ngIf="element.isInStock == false" class="pastilleOutOfStock">
                   <mat-icon class="pastilleOutOfStock">unarchive</mat-icon>
                 </div>
               </div>
               <div *ngSwitchCase="'isReserved'">
-                <div *ngIf="element.reservation == true">
+                <div *ngIf="element.reservation == true" class="contentTableau">
                   <mat-icon>check</mat-icon>
                 </div>
               </div>
-              <span *ngSwitchDefault>
-                {{ element[col.key] }}
-              </span>
+              <div [ngClass]="{'contentTableau': col.key!='owner'}">
+                <span *ngSwitchDefault class="contentTableau">
+                  {{ element[col.key] }}
+                </span>
+              </div>
+              
               <div *ngIf="suppr==true">
                 <ng-container *ngSwitchCase="'isSelected'">
                   <mat-checkbox (change)="element.isSelected = $event.checked" [checked]="element.isSelected">
@@ -75,7 +78,7 @@
               <ng-template #dataField>
                 <div
                   *ngIf="col.key!='isSelected'&& col.key!='typeProduct' && col.key!='isInStock' && col.key!='reservation'">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline" [ngClass]="{'inputTableau':col.key == 'owner', 'refProductTableau':col.key == 'refProduct', 'datesTableau': col.key == 'entryDate'||col.key == 'exitDate' }">
                     <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
                   </mat-form-field>
                 </div>
@@ -83,7 +86,7 @@
                   <mat-checkbox [(ngModel)]="element[col.key]"></mat-checkbox>
                 </div>
                 <div *ngIf="col.key=='typeProduct'">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline" class="inputTableau">
                     <mat-select [(ngModel)]="element[col.key]" [compareWith]="compareWith">
                       <mat-option *ngFor="let l of listTypeProduct" [value]="l">{{l.nameProduct}}</mat-option>
                     </mat-select>

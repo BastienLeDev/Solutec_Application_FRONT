@@ -47,8 +47,40 @@ table {
 
 .pastilleInStock{
   color: rgb(130, 216, 0);
+  text-align: center;
+  margin: 0%;
 }
 
 .pastilleOutOfStock{
   color: red;
+  text-align: center;
+  margin: 0%;
+}
+
+.inputTableau{
+  height: 60px;
+  max-width:150px;
+  width: fit-content;
+  font-size: 14px;
+  margin: 0%;
+}
+.refProductTableau{
+  height: 60px;
+  max-width:100px;
+  width: fit-content;
+  font-size: 14px;
+  margin: 0%;
+}
+
+.datesTableau{
+  height: 60px;
+  max-width:120px;
+  width: fit-content;
+  font-size: 14px;
+  margin: 0%;
+}
+
+.contentTableau{
+  text-align: center;
+
 }
