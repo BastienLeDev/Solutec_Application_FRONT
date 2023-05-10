@@ -37,7 +37,7 @@
             [ngClass]="{'inStock':element.isInStock == true, 'notInStock':element.isInStock == false }">
             <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
               <div class="btn-edit" *ngSwitchCase="'isEdit'">
-                <button mat-button (click)="element.isEdit = !element.isEdit">
+                <button mat-icon-button (click)="element.isEdit = !element.isEdit">
                   <mat-icon>edit</mat-icon>
                 </button>
               </div>
@@ -225,26 +225,33 @@
     <!-- ADVANCED MODE-->
     <div *ngIf="advancedMode === true" >
       <div class="row">
-        <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+        <mat-expansion-panel id="expansionPanel" [expanded]="step === 0" (opened)="setStep(0)">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Nouveau type équipement
             </mat-panel-title>
           </mat-expansion-panel-header>
+          
           <form #newEquip="ngForm" (ngSubmit)="newTypeEquipment(newEquip.value)">
-            <mat-form-field appearance="fill" >
-              <mat-label>Nom produit</mat-label>
-              <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000" matInput>
-            </mat-form-field>
-
-            <button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
+            <div class="row">
+            <div class="col-9">
+              <mat-form-field appearance="fill" >
+                <mat-label>Nom produit</mat-label>
+                <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000" matInput>
+              </mat-form-field>
+            </div>
+            <div class="col-3">
+              <button mat-icon-button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
+            </div>
+          </div>
           </form>
+        
         </mat-expansion-panel>
       </div>
 
       <div class="row">
         
-        <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+        <mat-expansion-panel id="expansionPanel" [expanded]="step === 2" (opened)="setStep(2)">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Supprimer un type d'équipement
@@ -256,7 +263,7 @@
                 {{l.nameProduct}}
               </div>
               <div class="col-3">
-                <button (click)="verifyExistProductOfTypeEquipment(l)"><mat-icon>delete_forever</mat-icon></button>
+                <button id="invisibleButton" (click)="verifyExistProductOfTypeEquipment(l)"><mat-icon>delete_forever</mat-icon></button>
               </div>
             </div>
             <mat-divider></mat-divider>

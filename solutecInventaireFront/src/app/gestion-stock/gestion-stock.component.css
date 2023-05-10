@@ -84,3 +84,16 @@ table {
   text-align: center;
 
 }
+
+
+#invisibleButton {
+  border: none;
+  background: none;
+  outline: none;
+}
+
+#expansionPanel{
+  max-width: 100%;
+  min-width: 100%;
+  margin: 10px;
+}
