@@ -16,11 +16,18 @@
         matBadge="{{length}}" matBadgeColor="warn">notification_important</mat-icon></button>
 
     <mat-menu #menu="matMenu">
-      <div class="m-2" id="notif" *ngFor="let notif of notification">
-        <span (click)="goToAlerte()"><i>{{notif.date | date: 'le dd/MM/yy, à HH:mm :'}}</i></span> <button
-          (click)="deleteNotifs(notif.idNotification)" mat-icon-button><mat-icon style="color: black;">clear</mat-icon>
-        </button>
-        <p (click)="goToAlerte()"><b>"{{notif.alerte}}"</b> à été déclenchée.</p>
+      <div class="m-2" *ngFor="let notif of notification">
+        <mat-card id="notif">
+          <mat-card-header>
+            <span (click)="goToAlerte()"><i>{{notif.date | date: 'le dd/MM/yy, à HH:mm :'}}</i></span> <button
+              (click)="deleteNotifs(notif.idNotification)" style="bottom: 15px; left: 15x;" mat-icon-button><mat-icon
+                style="color: black;">clear</mat-icon>
+            </button>
+          </mat-card-header>
+          <mat-card-content>
+            <p (click)="goToAlerte()"><b>"{{notif.alerte}}"</b> à été déclenchée.</p>
+          </mat-card-content>
+        </mat-card>
       </div>
     </mat-menu>
   </div>
