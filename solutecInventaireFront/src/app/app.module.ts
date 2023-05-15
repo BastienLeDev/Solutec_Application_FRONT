@@ -35,6 +35,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDividerModule} from '@angular/material/divider';
 import { ConfirmSuppressionTypeProductComponent } from './confirm-suppression-type-product/confirm-suppression-type-product.component';
 
+import { httpInterceptorProviders } from 'src/app/_helpers/auth.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,7 +75,7 @@ import { ConfirmSuppressionTypeProductComponent } from './confirm-suppression-ty
     MatSnackBarModule,
     MatDividerModule,
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
