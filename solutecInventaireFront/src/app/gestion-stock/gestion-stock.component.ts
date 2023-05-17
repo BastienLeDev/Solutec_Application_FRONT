@@ -9,7 +9,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { from } from 'rxjs';
-import { RedirectionService } from '../services/redirection.service';
+import { RedirectionService } from '../_services/redirection.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmSuppressionTypeProductComponent } from '../confirm-suppression-type-product/confirm-suppression-type-product.component';
 

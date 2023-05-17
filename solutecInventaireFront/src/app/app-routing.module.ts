@@ -11,7 +11,8 @@ const routes: Routes = [
   { path: 'accueil', component: AccueilComponent },
   { path: 'rapports', component: GenerationRapportsComponent },
   { path: 'alertes', component: GestionAlertesComponent },
-  { path: 'stock', component: GestionStockComponent }
+  { path: 'stock', component: GestionStockComponent },
+  { path: '', redirectTo: 'connexion', pathMatch: 'full' },
 
 ];
 

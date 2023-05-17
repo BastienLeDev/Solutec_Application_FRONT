@@ -52,3 +52,11 @@ span {
 #noNotification {
     color: white
 }
+
+.invisibleButton {
+    
+    text-align: center;
+    border: none;
+    background: none;
+    outline: none;
+}

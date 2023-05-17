@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { GestionStockComponent } from '../gestion-stock/gestion-stock.component';
-import { RedirectionService } from '../services/redirection.service';
+import { RedirectionService } from '../_services/redirection.service';
 
 export interface ProductReserved {
   //Propriétées pour le tableau
