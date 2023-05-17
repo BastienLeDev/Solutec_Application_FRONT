@@ -35,12 +35,6 @@ export class AuthService {
       );
   }
 
-  isUserLoggedIn() {
-    let user = sessionStorage.getItem("login");
-    console.log(!(user === null));
-    return !(user === null);
-  }
-
   logOut() {
     sessionStorage.removeItem("login");
   }

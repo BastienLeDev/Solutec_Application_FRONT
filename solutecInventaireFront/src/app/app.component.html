@@ -1,5 +1,5 @@
 <ul>
-  <div class="row">
+  <div *ngIf="isUserConnected.isUserLoggedIn()" class="row">
     <div class="col-10">
       <li (click)="ngOnInit()"><a routerLinkActive="menu-active" routerLink='accueil'>Accueil</a></li>
       <li (click)="ngOnInit()"><a routerLinkActive="menu-active" routerLink='stock'>Gestion de stock</a>
@@ -10,26 +10,33 @@
           alertes</a></li>
     </div>
 
-    <button mat-icon-button *ngIf="length == 0" [matMenuTriggerFor]="menu"><mat-icon
-        id="noNotification">notifications</mat-icon></button>
-    <button mat-icon-button *ngIf="length != 0" [matMenuTriggerFor]="menu"><mat-icon id="notification"
-        matBadge="{{length}}" matBadgeColor="warn">notification_important</mat-icon></button>
+    <div class="col-1">
+      <button mat-icon-button *ngIf="length == 0" [matMenuTriggerFor]="menu"><mat-icon
+      id="noNotification">notifications</mat-icon></button>
+  <button mat-icon-button *ngIf="length != 0" [matMenuTriggerFor]="menu"><mat-icon id="notification"
+      matBadge="{{length}}" matBadgeColor="warn">notification_important</mat-icon></button>
 
-    <mat-menu #menu="matMenu">
-      <div class="m-2" *ngFor="let notif of notification">
-        <mat-card id="notif">
-          <mat-card-header>
-            <span (click)="goToAlerte()"><i>{{notif.date | date: 'le dd/MM/yy, à HH:mm :'}}</i></span> <button
-              (click)="deleteNotifs(notif.idNotification)" style="bottom: 15px; left: 15x;" mat-icon-button><mat-icon
-                style="color: black;">clear</mat-icon>
-            </button>
-          </mat-card-header>
-          <mat-card-content>
-            <p (click)="goToAlerte()"><b>"{{notif.alerte}}"</b> à été déclenchée.</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </mat-menu>
+  <mat-menu #menu="matMenu">
+    <div class="m-2" *ngFor="let notif of notification">
+      <mat-card id="notif">
+        <mat-card-header>
+          <span (click)="goToAlerte()"><i>{{notif.date | date: 'le dd/MM/yy, à HH:mm :'}}</i></span> <button
+            (click)="deleteNotifs(notif.idNotification)" style="bottom: 15px; left: 15x;" mat-icon-button><mat-icon
+              style="color: black;">clear</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <p (click)="goToAlerte()"><b>"{{notif.alerte}}"</b> à été déclenchée.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-menu>
+    </div>
+   
+    <div class="col-1">
+      <button mat-icon-button (click)="logout()" class="invisibleButton"><mat-icon style="color: red;"
+        matSuffix>power_settings_new</mat-icon></button>
+    </div>
   </div>
 </ul>
 <router-outlet></router-outlet>

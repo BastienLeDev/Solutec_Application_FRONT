@@ -31,37 +31,17 @@ export class ConnexionComponent implements OnInit {
 
   onSubmit(): void {
     const { login, password } = this.form;
-    console.log(login);
-    console.log(password);
-    console.log(this.form);
-    console.log(this.errorMessage);
-        
-        this.errorMessage = '';
-        console.log(this.errorMessage);
+    this.errorMessage = '';
     
     this.authService.authenticate(login, password).subscribe({
       next: (data: any) => {
-        console.log(this.errorMessage);
-        
         this.errorMessage = '';
-        console.log(this.errorMessage);
-        
-        console.log(data);
-        
         this.storageService.saveUser(data);
-        console.log(this.storageService.getUser());
-        
-        console.log("ok");
-        
-
         this.isLoginFailed = false;
         this.isLoggedIn = true;
-        this.ngOnInit();
+        this.route.navigateByUrl('accueil')
       },
       error: (err: any) => {
-        console.log("erreur");
-        console.log(err);
-        
         if(err!=null){
           this.errorMessage = "Le nom d'utilisateur ou le mot de passe est incorrect";
         }
@@ -75,10 +55,6 @@ export class ConnexionComponent implements OnInit {
     window.location.reload();
   }
 
-  logout(){
-    this.authService.logOut();
-    console.log(this.storageService.getUser());
-    
-  }
+  
 
 }

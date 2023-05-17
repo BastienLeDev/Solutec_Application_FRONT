@@ -5,9 +5,6 @@
         <div class="alert alert-danger text-center" *ngIf="errorMessage != ''">
                 {{errorMessage}}
             </div>
-            <div *ngIf="errorMessage == ''">
-                <p>c'est ok</p>
-            </div>
         <h2> </h2>
         <div class="fel"> <input  placeholder="Login (ex: jdupond)" class="textinput form-control" name="login" [(ngModel)]="form.login" required #login="ngModel" type="text"
                 autocorrect="off" autocapitalize="off" style="width:245px"> 
@@ -24,7 +21,5 @@
         <div class="fer"> <input class="button" type="submit"> </div>
     </form>
 
-    <div>
-        <button (click)="logout()">déconnecter</button>
-    </div>
+   
 </section>

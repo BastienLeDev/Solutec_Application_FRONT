@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NotifService } from './notif.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from './_services/auth.service';
+import { IsUserConnectedService } from './_services/is-user-connected.service';
 
 
 @Component({
@@ -10,12 +12,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  
   notification: any;
   length: any;
-  constructor(private NotifService: NotifService, private route: Router, private http: HttpClient) { }
+  constructor(private NotifService: NotifService, private route: Router, private http: HttpClient, private authService: AuthService, public isUserConnected: IsUserConnectedService) { }
+
+
 
   ngOnInit(): void {
-
     this.NotifService.getNotifs().subscribe(data => {
       this.notification = data;
       this.length = this.notification.length
@@ -38,4 +42,9 @@ export class AppComponent implements OnInit {
   }
 
   title = 'solutecInventaireFront';
+
+  logout(){
+    this.authService.logOut(); 
+    this.route.navigateByUrl('connexion');
+  }
 }
