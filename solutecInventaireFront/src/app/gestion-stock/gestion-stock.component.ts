@@ -24,8 +24,8 @@ export interface Product {
   position: number | null;
   idProduct: number | null;
   typeProduct: TypeProduct;
-  refProduct: string;
-  owner: string;
+  refProduct: string|null;
+  owner: string| null;
   entryDate: Date | null;
   exitDate: Date | null;
   reservation: boolean;
@@ -187,10 +187,10 @@ export class GestionStockComponent implements OnInit {
       idProduct: 0,
       typeProduct: {
         idTypeProduct: null,
-        nameProduct: ""
+        nameProduct: '',
       },
-      refProduct: "",
-      owner: "",
+      refProduct:null,
+      owner: null,
       entryDate: null,
       isEdit: true,
       exitDate: null,
@@ -324,9 +324,6 @@ export class GestionStockComponent implements OnInit {
       this.addProduct(product);
     }
     else {
-      if (product.owner == "") {
-        product.owner = null;
-      }
       if (product.owner == null) {
         product.isInStock = true;
       }
