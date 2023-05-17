@@ -39,8 +39,8 @@ export class ConnexionComponent implements OnInit {
         this.errorMessage = '';
         console.log(this.errorMessage);
     
-    this.authService.login(login, password).subscribe({
-      next: data => {
+    this.authService.authenticate(login, password).subscribe({
+      next: (data: any) => {
         console.log(this.errorMessage);
         
         this.errorMessage = '';
@@ -58,7 +58,7 @@ export class ConnexionComponent implements OnInit {
         this.isLoggedIn = true;
         this.ngOnInit();
       },
-      error: err => {
+      error: (err: any) => {
         console.log("erreur");
         console.log(err);
         
@@ -76,7 +76,7 @@ export class ConnexionComponent implements OnInit {
   }
 
   logout(){
-    this.authService.logout();
+    this.authService.logOut();
     console.log(this.storageService.getUser());
     
   }

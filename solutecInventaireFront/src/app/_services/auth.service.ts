@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { map } from "rxjs/operators";
 
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+export class User {
+  constructor(public status: string) {}
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +13,35 @@ const httpOptions = {
 export class AuthService {
 
 
-  constructor(private route: Router, private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
+// Provide username and password for authentication, and once authentication is successful, 
+//store JWT token in session
+  authenticate(login : string, password:string) {
+    return this.httpClient
+      .post<any>("http://localhost:8301/authenticate", { login, password })
 
-  login(username: string, password: string) {
-    return this.http.post('http://localhost:8301/authenticate',
-      {
-        'login': username,
-        'password':password,
-      },
-      httpOptions
-    );
-  }
-  logout() {
-    return this.http.post('http://localhost:8301/logout', { }, httpOptions);
+      
+      .pipe(
+        map((userData: { token: string; })  => {
+          console.log("authenticate");
+          console.log(userData);
+          
+          
+          sessionStorage.setItem("login", login);
+          let tokenStr = userData.token;
+          sessionStorage.setItem("token", tokenStr);
+          return userData;
+        })
+      );
   }
 
+  isUserLoggedIn() {
+    let user = sessionStorage.getItem("login");
+    console.log(!(user === null));
+    return !(user === null);
+  }
+
+  logOut() {
+    sessionStorage.removeItem("login");
+  }
 }

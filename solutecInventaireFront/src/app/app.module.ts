@@ -8,7 +8,7 @@ import { AccueilComponent } from './accueil/accueil.component';
 import { GestionStockComponent } from './gestion-stock/gestion-stock.component';
 import { GenerationRapportsComponent } from './generation-rapports/generation-rapports.component';
 import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,6 +36,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import { ConfirmSuppressionTypeProductComponent } from './confirm-suppression-type-product/confirm-suppression-type-product.component';
 
 import { httpInterceptorProviders } from 'src/app/_helpers/auth.interceptor';
+import { BasicAuthHtppInterceptorService } from './_services/basic-auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,7 @@ import { httpInterceptorProviders } from 'src/app/_helpers/auth.interceptor';
     MatSnackBarModule,
     MatDividerModule,
   ],
-  providers: [httpInterceptorProviders],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: BasicAuthHtppInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
