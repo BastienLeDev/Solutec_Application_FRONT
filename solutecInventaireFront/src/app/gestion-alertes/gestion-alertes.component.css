@@ -42,3 +42,13 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-description-attribution {
     opacity: 0.5;
 }
+
+#bouton_Alerte {
+    border-style: none;
+    border-radius: 10px;
+    background-color: rgb(228, 226, 226);
+}
+
+#bouton_Alerte:hover {
+    background-color: rgb(189, 189, 189);
+}
