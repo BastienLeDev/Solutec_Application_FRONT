@@ -29,15 +29,15 @@ table {
 }
 */
 
-.tableau{
+.tableau {
   padding: 50px;
 }
 
-.filtres{
+.filtres {
   padding: 50px;
 }
 
-.mat-mdc-row:hover .inStock{
+.mat-mdc-row:hover .inStock {
   background-color: #3cff0047;
 }
 
@@ -45,42 +45,43 @@ table {
   background-color: #ff001947;
 }
 
-.pastilleInStock{
+.pastilleInStock {
   color: rgb(130, 216, 0);
   text-align: center;
   margin: 0%;
 }
 
-.pastilleOutOfStock{
+.pastilleOutOfStock {
   color: red;
   text-align: center;
   margin: 0%;
 }
 
-.inputTableau{
+.inputTableau {
   height: 60px;
-  max-width:150px;
-  width: fit-content;
-  font-size: 14px;
-  margin: 0%;
-}
-.refProductTableau{
-  height: 60px;
-  max-width:100px;
+  max-width: 150px;
   width: fit-content;
   font-size: 14px;
   margin: 0%;
 }
 
-.datesTableau{
+.refProductTableau {
   height: 60px;
-  max-width:120px;
+  max-width: 100px;
   width: fit-content;
   font-size: 14px;
   margin: 0%;
 }
 
-.contentTableau{
+.datesTableau {
+  height: 60px;
+  max-width: 120px;
+  width: fit-content;
+  font-size: 14px;
+  margin: 0%;
+}
+
+.contentTableau {
   text-align: center;
 
 }
@@ -92,8 +93,32 @@ table {
   outline: none;
 }
 
-#expansionPanel{
+#expansionPanel {
   max-width: 100%;
   min-width: 100%;
   margin: 10px;
+}
+
+#bouton {
+  border-style: solid 2px;
+  border-radius: 7px;
+  background-color: rgb(228, 226, 226);
+}
+
+#bouton:hover {
+  transform: scale(1.1);
+  font-weight: bold;
+  background-color: rgb(189, 189, 189);
+}
+
+#bouton_trier {
+  border-style: solid 2px;
+  background-color: rgb(228, 226, 226);
+  border-radius: 7px;
+}
+
+#bouton_trier:hover {
+  transform: scale(1.1);
+  font-weight: bold;
+  background-color: rgb(151, 199, 79);
 }

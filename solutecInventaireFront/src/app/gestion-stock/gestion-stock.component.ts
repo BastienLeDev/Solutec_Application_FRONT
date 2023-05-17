@@ -24,8 +24,8 @@ export interface Product {
   position: number | null;
   idProduct: number | null;
   typeProduct: TypeProduct;
-  refProduct: string|null;
-  owner: string| null;
+  refProduct: string | null;
+  owner: string | null;
   entryDate: Date | null;
   exitDate: Date | null;
   reservation: boolean;
@@ -151,7 +151,7 @@ export class GestionStockComponent implements OnInit {
   @ViewChild('addTypeProduct') inputName: any;
   delete: Object;
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService, private _snackBar : MatSnackBar) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService, private _snackBar: MatSnackBar) {
 
   };
 
@@ -179,7 +179,7 @@ export class GestionStockComponent implements OnInit {
     }));
   }
 
- 
+
 
   addRow() {
     const newRow: Product = {
@@ -189,7 +189,7 @@ export class GestionStockComponent implements OnInit {
         idTypeProduct: null,
         nameProduct: '',
       },
-      refProduct:null,
+      refProduct: null,
       owner: null,
       entryDate: null,
       isEdit: true,
@@ -200,8 +200,8 @@ export class GestionStockComponent implements OnInit {
   }
 
 
- 
-  
+
+
 
   clearFiltres() {
     this.champsFiltres.reset();
@@ -210,16 +210,16 @@ export class GestionStockComponent implements OnInit {
   i: any;
 
   getListProducts() {
-    
+
     this.http.get('http://localhost:8301/liste').subscribe({
       next: (data) => {
         this.listProducts = data;
         this.createDatasource(this.listProducts);
-        if(this.redirect == true){
-      
+        if (this.redirect == true) {
+
           this.fonctionSort(this.filtreToRedirect);
         }
-    
+
       },
       error: (err) => { console.log(err) },
     })
@@ -260,7 +260,7 @@ export class GestionStockComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.lengthDataSource = anyListProducts.length;
     this.listDataSource = [];
-    
+
   }
 
   modeSuppression() {
@@ -323,6 +323,9 @@ export class GestionStockComponent implements OnInit {
       product.idProduct = null;
       this.addProduct(product);
     }
+    if (product.owner == "") {
+      product.owner = null;
+    }
     else {
       if (product.owner == null) {
         product.isInStock = true;
@@ -362,16 +365,16 @@ export class GestionStockComponent implements OnInit {
 
   fonctionSort(formValue: any) {
     this.listProductsSorted = this.listProducts;
-    
+
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    if(this.redirect == true){     
+    if (this.redirect == true) {
       this.toSortByRedirectedProduct(formValue, this.listProductsSorted);
       this.listProductsSorted = this.listSortedByTypeProduct;
-          
+
     }
 
-    if(this.redirect==false){
+    if (this.redirect == false) {
       for (let i in formValue) {
         if (i == 'isInStock' && formValue[i] != "") {
           this.toSortByStock(formValue[i], this.listProductsSorted);
@@ -388,28 +391,28 @@ export class GestionStockComponent implements OnInit {
         if (i == 'owner' && formValue[i] != "") {
           this.toSortByName(formValue[i], this.listProductsSorted);
           this.listProductsSorted = this.listSortedByName;
-  
+
         }
         if (i == 'entryDate' && formValue[i] != "") {
           this.toSortByEntryDate(formValue[i], this.listProductsSorted);
           this.listProductsSorted = this.listSortedByEntryDate;
-  
+
         }
         if (i == 'exitDate' && formValue[i] != "") {
           this.toSortByExitDate(formValue[i], this.listProductsSorted);
           this.listProductsSorted = this.listSortedByExitDate;
-  
+
         }
-  
+
       }
 
     }
-    
-    this.createDatasource(this.listProductsSorted);  
+
+    this.createDatasource(this.listProductsSorted);
     this.redirectService.setToRedirectFalse();
-    this.redirect=this.redirectService.getToRedirect();
-    
-    
+    this.redirect = this.redirectService.getToRedirect();
+
+
   }
 
   toSortByStock(isInStock: any, listToSort: any) {
@@ -436,17 +439,17 @@ export class GestionStockComponent implements OnInit {
     }
   }
 
-  toSortByRedirectedProduct(typeProduct: any, listToSort: any){
+  toSortByRedirectedProduct(typeProduct: any, listToSort: any) {
     this.listSortedByTypeProduct = [];
     this.typeProductToSort = typeProduct;
-    
+
 
     listToSort.forEach((element: any) => {
       if (element.typeProduct.nameProduct != null && element.typeProduct.nameProduct.includes(this.typeProductToSort)) {
         this.listSortedByTypeProduct.push(element);
       }
     });
-    
+
   }
 
   toSortByTypeProduct(typeProduct: any, listToSort: any) {
@@ -507,10 +510,10 @@ export class GestionStockComponent implements OnInit {
     });
   }
 
-  newTypeEquipment(value: any){
+  newTypeEquipment(value: any) {
     console.log(value);
-    
-    this.http.post('http://localhost:8301/typeProduct/add',value).subscribe({
+
+    this.http.post('http://localhost:8301/typeProduct/add', value).subscribe({
       next: (data) => {
         this.ngOnInit();
         this.nextStep();
@@ -532,9 +535,9 @@ export class GestionStockComponent implements OnInit {
     this.step++;
   }
 
-  handleClear(){
+  handleClear() {
     // clearing the value
-  this.inputName.nativeElement.value = ' ';
+    this.inputName.nativeElement.value = ' ';
   }
 
   openSnackBar() {
@@ -545,25 +548,25 @@ export class GestionStockComponent implements OnInit {
     });
   }
 
-  verifyExistProductOfTypeEquipment( val: any){
-    this.listProducts.forEach((element: any)=> {   
-      if(element.typeProduct.idTypeProduct == val.idTypeProduct){   
+  verifyExistProductOfTypeEquipment(val: any) {
+    this.listProducts.forEach((element: any) => {
+      if (element.typeProduct.idTypeProduct == val.idTypeProduct) {
         this.existDataOfTypeProduct = true;
       }
     });
 
-    if(this.existDataOfTypeProduct == false){
+    if (this.existDataOfTypeProduct == false) {
       this.deleteTypeEquipment(val);
     }
-    if(this.existDataOfTypeProduct == true){
-      
+    if (this.existDataOfTypeProduct == true) {
+
       this.dialog
         .open(ConfirmSuppressionTypeProductComponent)
         .afterClosed()
         .subscribe((confirm: any) => {
           if (confirm) {
             this.deleteTypeEquipment(val);
-            
+
           }
         });
 
@@ -571,13 +574,13 @@ export class GestionStockComponent implements OnInit {
   }
 
 
-  deleteTypeEquipment(val: any){
-    
+  deleteTypeEquipment(val: any) {
+
     this.http.delete('http://localhost:8301/typeProduct/delete/' + val.idTypeProduct).subscribe({
       next: (data) => {
         this.ngOnInit();
         this.nextStep();
-        this.messageSnackBar = "Vous avez bien supprimé le type de produit : "+ val.nameProduct;
+        this.messageSnackBar = "Vous avez bien supprimé le type de produit : " + val.nameProduct;
         this.openSnackBar();
       },
       error: (err) => {
@@ -586,12 +589,22 @@ export class GestionStockComponent implements OnInit {
     })
   }
 
-  activateAdvancedMode(){
+  activateAdvancedMode() {
     this.advancedMode = true;
   }
 
-  desactivateAdvancedMode(){
+  desactivateAdvancedMode() {
     this.advancedMode = false;
+  }
+
+  refreshAlert() {
+    this.http.patch('http://localhost:8301/refreshAlert', null).subscribe({
+      next: (data) => {
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
 }

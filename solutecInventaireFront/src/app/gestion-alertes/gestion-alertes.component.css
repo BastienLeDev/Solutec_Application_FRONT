@@ -50,5 +50,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 #bouton_Alerte:hover {
+    transform: scale(1.02);
+    font-weight: bold;
     background-color: rgb(189, 189, 189);
 }

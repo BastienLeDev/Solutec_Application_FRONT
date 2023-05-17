@@ -41,7 +41,7 @@
                   <mat-icon>edit</mat-icon>
                 </button>
               </div>
-              <div *ngSwitchCase="'TypeProduct'" >
+              <div *ngSwitchCase="'TypeProduct'">
                 {{ element[col.key].nameProduct }}
               </div>
               <div *ngSwitchCase="'isInStock'">
@@ -63,7 +63,7 @@
                   {{ element[col.key] }}
                 </span>
               </div>
-              
+
               <div *ngIf="suppr==true">
                 <ng-container *ngSwitchCase="'isSelected'">
                   <mat-checkbox (change)="element.isSelected = $event.checked" [checked]="element.isSelected">
@@ -73,12 +73,13 @@
             </div>
             <div *ngIf="element.isEdit">
               <div class="btn-edit" *ngIf="col.key === 'isEdit'; else dataField">
-                <button mat-button (click)="modifProduct(element)">Done</button>
+                <button mat-button (click)="modifProduct(element)" (click)="refreshAlert()">Done</button>
               </div>
               <ng-template #dataField>
                 <div
                   *ngIf="col.key!='isSelected'&& col.key!='typeProduct' && col.key!='isInStock' && col.key!='reservation'">
-                  <mat-form-field appearance="outline" [ngClass]="{'inputTableau':col.key == 'owner', 'refProductTableau':col.key == 'refProduct', 'datesTableau': col.key == 'entryDate'||col.key == 'exitDate' }">
+                  <mat-form-field appearance="outline"
+                    [ngClass]="{'inputTableau':col.key == 'owner', 'refProductTableau':col.key == 'refProduct', 'datesTableau': col.key == 'entryDate'||col.key == 'exitDate' }">
                     <input [type]="col.type" matInput [(ngModel)]="element[col.key]" />
                   </mat-form-field>
                 </div>
@@ -132,15 +133,15 @@
         </button>
         <mat-menu #advanced="matMenu" xPosition="before">
           <div *ngIf="advancedMode === false">
-          <button mat-menu-item  (click)="activateAdvancedMode()">Mode avancé</button>
+            <button mat-menu-item (click)="activateAdvancedMode()">Mode avancé</button>
           </div>
           <div *ngIf="advancedMode === true">
-            <button mat-menu-item  (click)=" desactivateAdvancedMode()">Quitter le mode avancé</button>
+            <button mat-menu-item (click)=" desactivateAdvancedMode()">Quitter le mode avancé</button>
           </div>
         </mat-menu>
       </div>
 
-      
+
 
     </div>
 
@@ -216,14 +217,18 @@
           </mat-form-field>
 
         </div>
-
-        <button type="submit"> Trier </button>
-        <button (onclick)="clearFiltres()"> clear</button>
+        <div class="row">
+          <button id="bouton_trier" type="submit">
+            Trier
+          </button>
+          <div class="col-1"></div>
+          <button id="bouton" (onclick)="clearFiltres()"> clear</button>
+        </div>
       </form>
     </div>
 
     <!-- ADVANCED MODE-->
-    <div *ngIf="advancedMode === true" >
+    <div *ngIf="advancedMode === true">
       <div class="row">
         <mat-expansion-panel id="expansionPanel" [expanded]="step === 0" (opened)="setStep(0)">
           <mat-expansion-panel-header>
@@ -231,26 +236,27 @@
               Nouveau type équipement
             </mat-panel-title>
           </mat-expansion-panel-header>
-          
+
           <form #newEquip="ngForm" (ngSubmit)="newTypeEquipment(newEquip.value)">
             <div class="row">
-            <div class="col-9">
-              <mat-form-field appearance="fill" >
-                <mat-label>Nom produit</mat-label>
-                <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000" matInput>
-              </mat-form-field>
+              <div class="col-9">
+                <mat-form-field appearance="fill">
+                  <mat-label>Nom produit</mat-label>
+                  <input ngModel="" #addTypeProduct name="nameProduct" class="form-control" placeholder="A0000000"
+                    matInput>
+                </mat-form-field>
+              </div>
+              <div class="col-3">
+                <button mat-icon-button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
+              </div>
             </div>
-            <div class="col-3">
-              <button mat-icon-button type="submit" (click)="handleClear()"><mat-icon>send</mat-icon></button>
-            </div>
-          </div>
           </form>
-        
+
         </mat-expansion-panel>
       </div>
 
       <div class="row">
-        
+
         <mat-expansion-panel id="expansionPanel" [expanded]="step === 2" (opened)="setStep(2)">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -263,19 +269,20 @@
                 {{l.nameProduct}}
               </div>
               <div class="col-3">
-                <button id="invisibleButton" (click)="verifyExistProductOfTypeEquipment(l)"><mat-icon>delete_forever</mat-icon></button>
+                <button id="invisibleButton"
+                  (click)="verifyExistProductOfTypeEquipment(l)"><mat-icon>delete_forever</mat-icon></button>
               </div>
             </div>
             <mat-divider></mat-divider>
           </div>
-          
+
         </mat-expansion-panel>
 
       </div>
 
 
     </div>
-    
+
 
   </div>
 
