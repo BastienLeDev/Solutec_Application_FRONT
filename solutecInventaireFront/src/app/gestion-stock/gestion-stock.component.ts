@@ -313,12 +313,14 @@ export class GestionStockComponent implements OnInit {
   }
 
   modifProduct(product: any) {
-    if (product.idProduct == 0) {
-      this.addProduct(product);
-    }
     if (product.owner == "") {
       product.owner = null;
     }
+    
+    if (product.idProduct == 0) {
+      this.addProduct(product);
+    }
+    
     else if (product.idProduct != 0) {
       if (product.owner == null) {
         product.isInStock = true;
