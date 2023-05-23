@@ -373,31 +373,31 @@ export class GestionStockComponent implements OnInit {
 
       }
 
-      if (this.redirect == false && formValue.isInStock!=null && formValue.typeProduct!=null && formValue.refProduct!=null && formValue.owner!=null && formValue.entryDate!=null && formValue.exitDate!=null) {
+      if (this.redirect == false && (formValue.isInStock!=null ||formValue.typeProduct!=null || formValue.refProduct!=null || formValue.owner!=null || formValue.entryDate!=null || formValue.exitDate!=null)) {
         for (let i in formValue) {
-          if (i == 'isInStock' && (formValue[i] != "")) {
+          if (i == 'isInStock' && ((formValue[i] != "")||(formValue[i] != null))) {
             this.toSortByStock(formValue[i], this.listProductsSorted);
             this.listProductsSorted = this.listSortedByStock;
           }
-          if (i == 'typeProduct' && formValue[i] != "") {
+          if (i == 'typeProduct' && ((formValue[i] != "")&&(formValue[i] != null))) {
             this.toSortByTypeProduct(formValue[i], this.listProductsSorted);
             this.listProductsSorted = this.listSortedByTypeProduct;
           }
-          if (i == 'refProduct' && formValue[i] != "") {
+          if (i == 'refProduct' && ((formValue[i] != "")&&(formValue[i] != null))) {
             this.toSortByRefProduct(formValue[i], this.listProductsSorted);
             this.listProductsSorted = this.listSortedByReference;
           }
-          if (i == 'owner' && formValue[i] != "") {
+          if (i == 'owner' && ((formValue[i] != "")&&(formValue[i] != null))) {
             this.toSortByName(formValue[i], this.listProductsSorted);
             this.listProductsSorted = this.listSortedByName;
 
           }
-          if (i == 'entryDate' && formValue[i] != "") {
+          if (i == 'entryDate' && ((formValue[i] != "")&&(formValue[i] != null))) {
             this.toSortByEntryDate(formValue[i], this.listProductsSorted);
             this.listProductsSorted = this.listSortedByEntryDate;
 
           }
-          if (i == 'exitDate' && formValue[i] != "") {
+          if (i == 'exitDate' && ((formValue[i] != "")&&(formValue[i] != null))) {
             this.toSortByExitDate(formValue[i], this.listProductsSorted);
             this.listProductsSorted = this.listSortedByExitDate;
 
