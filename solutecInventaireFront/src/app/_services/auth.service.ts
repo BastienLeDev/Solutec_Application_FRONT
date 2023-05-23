@@ -23,10 +23,6 @@ export class AuthService {
       
       .pipe(
         map((userData: { token: string; })  => {
-          console.log("authenticate");
-          console.log(userData);
-          
-          
           sessionStorage.setItem("login", login);
           let tokenStr = userData.token;
           sessionStorage.setItem("token", tokenStr);

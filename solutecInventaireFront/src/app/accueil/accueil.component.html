@@ -45,7 +45,7 @@
                                 sortActionDescription="Sort by nameProduct">
                                 Matériel
                             </th>
-                            <td mat-cell *matCellDef="let row"> {{row.typeProduct.nameProduct}} </td>
+                            <td mat-cell *matCellDef="let row"> {{row.nameProduct}} </td>
                         </ng-container>
 
                         <!-- Name Column -->
@@ -63,12 +63,14 @@
                             <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
                         </ng-container>
 
+                       
+
                         <!-- Symbol Column -->
-                        <ng-container matColumnDef="entryDate">
+                        <ng-container matColumnDef="daysInStock">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                sortActionDescription="Sort by entryDate">
-                                Date d'entrée </th>
-                            <td mat-cell *matCellDef="let row"> {{row.entryDate | date:'dd-MM-yyyy'}} </td>
+                                sortActionDescription="Sort by daysInStock">
+                                Jours passés en stock</th>
+                            <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.daysInStock}} </td>
                         </ng-container>
 
                         <!-- Symbol Column -->

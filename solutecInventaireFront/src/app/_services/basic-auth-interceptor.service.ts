@@ -10,7 +10,6 @@ export class BasicAuthHtppInterceptorService implements HttpInterceptor {
   constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    console.log(sessionStorage.getItem('token'));
     if (sessionStorage.getItem('login') && sessionStorage.getItem('token')) {
       req = req.clone({
         setHeaders: {
@@ -18,9 +17,6 @@ export class BasicAuthHtppInterceptorService implements HttpInterceptor {
         }
       })
     }
-    console.log(sessionStorage.getItem('token'));
-    
-    console.log(req.headers);
     return next.handle(req);
 
   }

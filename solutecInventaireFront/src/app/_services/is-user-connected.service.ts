@@ -10,7 +10,6 @@ export class IsUserConnectedService {
   
   isUserLoggedIn() {
     let user = sessionStorage.getItem("login");
-    console.log(!(user === null));
     return !(user === null);
   }
 }

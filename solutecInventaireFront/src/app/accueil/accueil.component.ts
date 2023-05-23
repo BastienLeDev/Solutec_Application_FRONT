@@ -13,6 +13,7 @@ export interface ProductReserved {
   refProduct: string;
   owner: string;
   entryDate: Date;
+  daysInStock: number;
 
 }
 
@@ -43,14 +44,14 @@ export class AccueilComponent implements OnInit {
   Alimentation: any;
   Casque_mission: any;
   Casque_structure: any;
-  ProductsReserved: any;
+  ProductsReserved: ProductReserved[] = [];
   RemoveReservation: any;
   lengthDataSource: any;
   currentDate = new Date();
   listProductAlert: any;
   listStock: any;
 
-  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'entryDate', 'star'];
+  displayedColumns: string[] = ['nameProduct', 'refProduct', 'owner', 'daysInStock', 'star'];
   dataSource = new MatTableDataSource<ProductReserved>();
   @ViewChild(MatSort) sort: MatSort;
 
@@ -63,10 +64,44 @@ export class AccueilComponent implements OnInit {
     this.getReservation();
     this.getListStock();
   }
+
+
+  
   getReservation() {
     this.http.get('http://localhost:8301/getReservation').subscribe({
       next: (data) => {
-        this.ProductsReserved = data;
+        console.log(data);
+        let list: any;
+        list= data;
+        for(let i in list){
+          console.log(i);
+          
+          let entryDate = new Date(list[i].entryDate);
+          let date=new Date();
+
+          function difference(date1: any, date2 : any) {
+            const date1utc = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+            const date2utc = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+              let day = 1000*60*60*24;
+            return(date2utc - date1utc)/day
+          }
+
+          let time_difference = difference(entryDate,date);
+          let obj = {} as ProductReserved;
+          
+          obj.idProduct = list[i].idProduct;
+          obj.nameProduct= list[i].typeProduct.nameProduct;
+          obj.refProduct= list[i].refProduct;
+          obj.owner= list[i].owner;
+          obj.entryDate= list[i].entryDate;
+          obj.daysInStock= time_difference;
+        console.log(obj);
+        
+          this.ProductsReserved.push(obj);
+          
+        }
+       
+        
         this.dataSource = new MatTableDataSource<ProductReserved>(this.ProductsReserved);
         this.dataSource.sort = this.sort;
         this.lengthDataSource = this.ProductsReserved.length;
