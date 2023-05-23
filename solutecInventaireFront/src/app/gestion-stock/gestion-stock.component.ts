@@ -128,7 +128,7 @@ export class GestionStockComponent implements OnInit {
   filtreToRedirect = this.redirectService.getNameProductToRedirect();
 
 
-  champsFiltres = this._formBuilder.group({
+  champsFiltres = new FormGroup({
     isInStock: new FormControl(''),
     typeProduct: new FormControl(''),
     refProduct: new FormControl(''),
@@ -136,7 +136,7 @@ export class GestionStockComponent implements OnInit {
     entryDate: new FormControl(''),
     exitDate: new FormControl('')
 
-  })
+  });
 
 
 
@@ -200,12 +200,6 @@ export class GestionStockComponent implements OnInit {
   }
 
 
-
-
-
-  clearFiltres() {
-    this.champsFiltres.reset();
-  }
 
   i: any;
 
@@ -508,6 +502,11 @@ export class GestionStockComponent implements OnInit {
         this.listSortedByExitDate.push(element);
       }
     });
+  }
+
+
+  clearForm(){
+    this.champsFiltres.setValue({isInStock: null, typeProduct:null, refProduct:null, owner:null,entryDate:null, exitDate:null });
   }
 
   newTypeEquipment(value: any) {
