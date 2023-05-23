@@ -157,6 +157,7 @@ export class GestionStockComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.redirect = this.redirectService.getToRedirect();
     this.listProducts = [];
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
@@ -359,12 +360,12 @@ export class GestionStockComponent implements OnInit {
 
 
   fonctionSort(formValue: any) {
+    
     this.listProductsSorted = this.listProducts;
 
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    if(formValue.isInStock!=null && formValue.typeProduct!=null && formValue.refProduct!=null && formValue.owner!=null && formValue.entryDate!=null && formValue.exitDate!=null || this.redirect == true){
-
+   
     
       if (this.redirect == true) {
         this.toSortByRedirectedProduct(formValue, this.listProductsSorted);
@@ -372,7 +373,7 @@ export class GestionStockComponent implements OnInit {
 
       }
 
-      if (this.redirect == false) {
+      if (this.redirect == false && formValue.isInStock!=null && formValue.typeProduct!=null && formValue.refProduct!=null && formValue.owner!=null && formValue.entryDate!=null && formValue.exitDate!=null) {
         for (let i in formValue) {
           if (i == 'isInStock' && (formValue[i] != "")) {
             this.toSortByStock(formValue[i], this.listProductsSorted);
@@ -405,7 +406,7 @@ export class GestionStockComponent implements OnInit {
         }
 
       }
-  }
+  
   
 
     this.createDatasource(this.listProductsSorted);
