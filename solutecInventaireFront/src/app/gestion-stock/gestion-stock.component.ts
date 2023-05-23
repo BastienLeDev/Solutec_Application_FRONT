@@ -314,13 +314,12 @@ export class GestionStockComponent implements OnInit {
 
   modifProduct(product: any) {
     if (product.idProduct == 0) {
-      product.idProduct = null;
       this.addProduct(product);
     }
     if (product.owner == "") {
       product.owner = null;
     }
-    else {
+    else if (product.idProduct != 0) {
       if (product.owner == null) {
         product.isInStock = true;
       }
@@ -362,7 +361,7 @@ export class GestionStockComponent implements OnInit {
 
     this.listDataSource = [];
     this.dataSource = new MatTableDataSource;
-    if(formValue.isInStock!=null && formValue.typeProduct!=null && formValue.refProduct!=null && formValue.owner!=null && formValue.entryDate!=null && formValue.exitDate!=null){
+    if(formValue.isInStock!=null && formValue.typeProduct!=null && formValue.refProduct!=null && formValue.owner!=null && formValue.entryDate!=null && formValue.exitDate!=null || this.redirect == true){
 
     
       if (this.redirect == true) {
