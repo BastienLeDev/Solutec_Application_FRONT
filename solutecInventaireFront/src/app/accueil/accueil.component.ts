@@ -60,6 +60,7 @@ export class AccueilComponent implements OnInit {
   constructor(private http: HttpClient, private route: Router, private redirectService: RedirectionService) { }
 
   ngOnInit(): void {
+    this.ProductsReserved= [];
     this.refreshAlert()
     this.getReservation();
     this.getListStock();
