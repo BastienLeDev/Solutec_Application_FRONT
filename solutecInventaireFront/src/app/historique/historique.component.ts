@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface Historic {
   //Propriétées pour le tableau
@@ -37,6 +38,7 @@ export class HistoriqueComponent implements OnInit {
 
   displayedColumns: string[] = ['dateHistoric', 'typeModif', 'typeProduct', 'refProductA', 'ownerB', 'ownerA', 'entryDateB', 'entryDateA', 'exitDateB', 'exitDateA'];
   dataSource = new MatTableDataSource<Historic>();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private http: HttpClient) { }
@@ -88,6 +90,7 @@ export class HistoriqueComponent implements OnInit {
       this.listDataSource.push(historic);
     }
     this.dataSource = new MatTableDataSource<Historic>(this.listDataSource);
+    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.lengthDataSource = this.listDataSource.length;
   }

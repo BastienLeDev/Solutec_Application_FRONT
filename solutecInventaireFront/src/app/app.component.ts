@@ -12,7 +12,7 @@ import { IsUserConnectedService } from './_services/is-user-connected.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  
+
   notification: any;
   length: any;
   constructor(private NotifService: NotifService, private route: Router, private http: HttpClient, private authService: AuthService, public isUserConnected: IsUserConnectedService) { }
@@ -43,8 +43,8 @@ export class AppComponent implements OnInit {
 
   title = 'solutecInventaireFront';
 
-  logout(){
-    this.authService.logOut(); 
+  logout() {
+    this.authService.logOut();
     this.route.navigateByUrl('connexion');
   }
 }

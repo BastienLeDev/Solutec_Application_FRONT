@@ -55,7 +55,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDateB">
                         Entrée en stock avant modification</th>
                     <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.entryDateB | date:
-                        'dd-MM-yy'}} </td>
+                        'dd-MM-yyyy'}} </td>
                 </ng-container>
 
                 <!-- Symbol Column -->
@@ -63,14 +63,15 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDateA">
                         Entrée en stock après</th>
                     <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.entryDateA | date:
-                        'dd-MM-yy'}} </td>
+                        'dd-MM-yyyy'}} </td>
                 </ng-container>
 
                 <!-- Symbol Column -->
                 <ng-container matColumnDef="exitDateB">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by exitDateB">
                         Sortie de stock avant modification </th>
-                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.exitDateB | date: 'dd-MM-yy'}}
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.exitDateB | date:
+                        'dd-MM-yyyy'}}
                     </td>
                 </ng-container>
 
@@ -78,7 +79,8 @@
                 <ng-container matColumnDef="exitDateA">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by exitDateA">
                         Sortie de stock après</th>
-                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.exitDateA | date: 'dd-MM-yy'}}
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.exitDateA | date:
+                        'dd-MM-yyyy'}}
                     </td>
                 </ng-container>
 
