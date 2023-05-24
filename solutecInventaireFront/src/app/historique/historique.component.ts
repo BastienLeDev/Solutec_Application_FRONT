@@ -33,8 +33,9 @@ export class HistoriqueComponent implements OnInit {
 
   listHistoric: any;
   listDataSource: Historic[] = [];
+  lengthDataSource: any;
 
-  displayedColumns: string[] = ['dateHistoric', 'typeModif', 'typeProduct', 'refProductB', 'ownerB', 'entryDateB', 'exitDateB', 'reservationB', 'refProductA', 'ownerA', 'entryDateA', 'exitDateA', 'reservationA'];
+  displayedColumns: string[] = ['dateHistoric', 'typeModif', 'typeProduct', 'refProductA', 'ownerB', 'ownerA', 'entryDateB', 'entryDateA', 'exitDateB', 'exitDateA'];
   dataSource = new MatTableDataSource<Historic>();
   @ViewChild(MatSort) sort: MatSort;
 
@@ -42,6 +43,7 @@ export class HistoriqueComponent implements OnInit {
 
   ngOnInit(): void {
     this.getHistoric();
+    this.deleteHistoric();
   }
 
   getHistoric() {
@@ -55,6 +57,14 @@ export class HistoriqueComponent implements OnInit {
       error: (err) => { console.log(err) }
     })
 
+  }
+
+  deleteHistoric() {
+    this.http.delete('http://localhost:8301/deleteHistoric').subscribe({
+      next: (data) => {
+      },
+      error: (err) => { console.log(err) }
+    })
   }
 
   createDataSource(listhistoric: any) {
@@ -79,6 +89,7 @@ export class HistoriqueComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource<Historic>(this.listDataSource);
     this.dataSource.sort = this.sort;
+    this.lengthDataSource = this.listDataSource.length;
   }
 
 }
