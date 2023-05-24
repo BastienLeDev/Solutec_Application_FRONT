@@ -163,7 +163,6 @@ export class GestionAlertesComponent implements OnInit {
     this.http.patch('http://localhost:8301/deleteTypeProduct/' + nameProduct + "/" + idAlert, null).subscribe({
       next: (data) => {
         location.reload();
-        this.refreshAlert()
       },
       error: (err) => { console.log(err) },
     })
