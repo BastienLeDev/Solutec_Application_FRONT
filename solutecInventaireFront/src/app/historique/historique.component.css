@@ -1,0 +1,7 @@
+.tableau {
+    padding: 50px;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    background-color: #ff001947;
+}

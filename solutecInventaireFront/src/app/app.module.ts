@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { GestionStockComponent } from './gestion-stock/gestion-stock.component';
-import { GenerationRapportsComponent } from './generation-rapports/generation-rapports.component';
 import { GestionAlertesComponent } from './gestion-alertes/gestion-alertes.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,13 +29,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDividerModule } from '@angular/material/divider';
 import { ConfirmSuppressionTypeProductComponent } from './confirm-suppression-type-product/confirm-suppression-type-product.component';
 
 import { httpInterceptorProviders } from 'src/app/_helpers/auth.interceptor';
 import { BasicAuthHtppInterceptorService } from './_services/basic-auth-interceptor.service';
+import { HistoriqueComponent } from './historique/historique.component';
 
 @NgModule({
   declarations: [
@@ -44,10 +44,10 @@ import { BasicAuthHtppInterceptorService } from './_services/basic-auth-intercep
     ConnexionComponent,
     AccueilComponent,
     GestionStockComponent,
-    GenerationRapportsComponent,
     GestionAlertesComponent,
     ConfirmDialogComponent,
     ConfirmSuppressionTypeProductComponent,
+    HistoriqueComponent,
 
   ],
   imports: [
@@ -76,7 +76,7 @@ import { BasicAuthHtppInterceptorService } from './_services/basic-auth-intercep
     MatSnackBarModule,
     MatDividerModule,
   ],
-  providers: [ { provide: HTTP_INTERCEPTORS, useClass: BasicAuthHtppInterceptorService, multi: true }],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: BasicAuthHtppInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

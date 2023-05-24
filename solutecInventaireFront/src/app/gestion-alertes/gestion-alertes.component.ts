@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
+import { MatSort } from '@angular/material/sort';
 
 export interface AlertElement {
   Id: any;
@@ -59,10 +60,12 @@ export class GestionAlertesComponent implements OnInit {
   //Table des alertes déclenchées
   displayedColumns: string[] = ['Alerte', 'Seuil', 'Date/Heure', 'Actions', 'Modification'];
   dataSourceT = new MatTableDataSource<AlertElement>();
+  @ViewChild(MatSort) sort: MatSort;
   listTriggered: any;
   disableSelect: any;
   date = new Date();
   actions = new FormControl('')
+  lengthDataSourceT: any;
 
   constructor(private http: HttpClient) { }
 
@@ -304,6 +307,8 @@ export class GestionAlertesComponent implements OnInit {
       next: (data) => {
         this.listTriggered = data;
         this.dataSourceT = new MatTableDataSource<AlertElement>(this.listTriggered);
+        this.dataSourceT.sort = this.sort;
+        this.listTriggered.length = this.lengthDataSourceT;
       },
       error: (err) => {
         console.log(err);
