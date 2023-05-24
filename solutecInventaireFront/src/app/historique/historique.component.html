@@ -1,0 +1,95 @@
+<div class="col-12 p-3">
+
+    <mat-card>
+        <mat-card-header>
+            <h2>Historique des actions menées</h2>
+        </mat-card-header>
+        <mat-card-content>
+
+            <table mat-table [dataSource]="dataSource" matSort>
+                <!-- Position Column -->
+                <ng-container matColumnDef="dateHistoric">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by dateHistoric">
+                        Date de l'action
+                    </th>
+                    <td mat-cell *matCellDef="let row"> {{row.dateHistoric | date: 'dd/MM/yy, à HH:mm' }} </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="typeModif">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by typeModif">
+                        Type de modification </th>
+                    <td mat-cell *matCellDef="let row"> {{row.typeModif}} </td>
+                </ng-container>
+
+                <!-- Destinataire Column -->
+                <ng-container matColumnDef="typeProduct">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by typeProduct">
+                        Type de produit </th>
+                    <td mat-cell *matCellDef="let row"> {{row.typeProduct.nameProduct}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="refProductA">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by refProductA">
+                        Référence du produit</th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.refProductA}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="ownerB">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ownerB">
+                        Référent avant modification</th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.ownerB}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="ownerA">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ownerA">
+                        Référent après</th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.ownerA}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="entryDateB">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDateB">
+                        Entrée en stock avant modification</th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.entryDateB | date:
+                        'dd-MM-yy'}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="entryDateA">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by entryDateA">
+                        Entrée en stock après</th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.entryDateA | date:
+                        'dd-MM-yy'}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="exitDateB">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by exitDateB">
+                        Sortie de stock avant modification </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.exitDateB | date: 'dd-MM-yy'}}
+                    </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="exitDateA">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by exitDateA">
+                        Sortie de stock après</th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;"> {{row.exitDateA | date: 'dd-MM-yy'}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [length]="lengthDataSource" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
+                showFirstLastButtons></mat-paginator>
+        </mat-card-content>
+    </mat-card>
+    <h4 style="margin: 20px;">L'historique avec plus de 2 mois d'ancienneté sera automatiquement
+        supprimé.
+    </h4>
+</div>

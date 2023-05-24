@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { GestionStockComponent } from '../gestion-stock/gestion-stock.component';
 import { RedirectionService } from '../_services/redirection.service';
 
 export interface ProductReserved {
@@ -67,42 +66,41 @@ export class AccueilComponent implements OnInit {
   }
 
 
-  
+
   getReservation() {
     this.http.get('http://localhost:8301/getReservation').subscribe({
       next: (data) => {
-        console.log(data);
         let list: any;
-        list= data;
-        for(let i in list){
+        list = data;
+        for (let i in list) {
           console.log(i);
-          
-          let entryDate = new Date(list[i].entryDate);
-          let date=new Date();
 
-          function difference(date1: any, date2 : any) {
+          let entryDate = new Date(list[i].entryDate);
+          let date = new Date();
+
+          function difference(date1: any, date2: any) {
             const date1utc = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
             const date2utc = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-              let day = 1000*60*60*24;
-            return(date2utc - date1utc)/day
+            let day = 1000 * 60 * 60 * 24;
+            return (date2utc - date1utc) / day
           }
 
-          let time_difference = difference(entryDate,date);
+          let time_difference = difference(entryDate, date);
           let obj = {} as ProductReserved;
-          
+
           obj.idProduct = list[i].idProduct;
-          obj.nameProduct= list[i].typeProduct.nameProduct;
-          obj.refProduct= list[i].refProduct;
-          obj.owner= list[i].owner;
-          obj.entryDate= list[i].entryDate;
-          obj.daysInStock= time_difference;
-        console.log(obj);
-        
+          obj.nameProduct = list[i].typeProduct.nameProduct;
+          obj.refProduct = list[i].refProduct;
+          obj.owner = list[i].owner;
+          obj.entryDate = list[i].entryDate;
+          obj.daysInStock = time_difference;
+          console.log(obj);
+
           this.ProductsReserved.push(obj);
-          
+
         }
-       
-        
+
+
         this.dataSource = new MatTableDataSource<ProductReserved>(this.ProductsReserved);
         this.dataSource.sort = this.sort;
         this.lengthDataSource = this.ProductsReserved.length;
@@ -140,7 +138,7 @@ export class AccueilComponent implements OnInit {
     this.http.get('http://localhost:8301/products/getStock').subscribe({
       next: (data) => {
         this.listStock = data;
-        
+
       },
       error: (err) => {
         console.log(err);
