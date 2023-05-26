@@ -36,7 +36,7 @@ export class HistoriqueComponent implements OnInit {
   listDataSource: Historic[] = [];
   lengthDataSource: any;
 
-  displayedColumns: string[] = ['dateHistoric', 'typeModif', 'typeProduct', 'refProductA', 'ownerB', 'ownerA', 'entryDateB', 'entryDateA', 'exitDateB', 'exitDateA'];
+  displayedColumns: string[] = ['dateHistoric', 'user', 'typeModif', 'typeProduct', 'refProductA', 'ownerB', 'ownerA', 'entryDateB', 'entryDateA', 'exitDateB', 'exitDateA'];
   dataSource = new MatTableDataSource<Historic>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

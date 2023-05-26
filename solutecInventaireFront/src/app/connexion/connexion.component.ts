@@ -19,7 +19,7 @@ export class ConnexionComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
 
-  constructor(private http: HttpClient, private route: Router, private authService: AuthService, private storageService: StorageService){}
+  constructor(private http: HttpClient, private route: Router, private authService: AuthService, private storageService: StorageService) { }
 
 
   ngOnInit(): void {
@@ -27,25 +27,26 @@ export class ConnexionComponent implements OnInit {
       this.isLoggedIn = true;
     }
   }
-  
+
 
   onSubmit(): void {
     const { login, password } = this.form;
     this.errorMessage = '';
-    
+
     this.authService.authenticate(login, password).subscribe({
       next: (data: any) => {
         this.errorMessage = '';
         this.storageService.saveUser(data);
+        this.storageService.saveLogin(login);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.route.navigateByUrl('accueil')
       },
       error: (err: any) => {
-        if(err!=null){
+        if (err != null) {
           this.errorMessage = "Le nom d'utilisateur ou le mot de passe est incorrect";
         }
-        
+
         this.isLoginFailed = true;
         this.ngOnInit();
       }
@@ -55,6 +56,6 @@ export class ConnexionComponent implements OnInit {
     window.location.reload();
   }
 
-  
+
 
 }

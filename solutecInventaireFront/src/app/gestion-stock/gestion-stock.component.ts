@@ -12,6 +12,7 @@ import { from } from 'rxjs';
 import { RedirectionService } from '../_services/redirection.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmSuppressionTypeProductComponent } from '../confirm-suppression-type-product/confirm-suppression-type-product.component';
+import { StorageService } from '../_services/storage.service';
 
 export interface TypeProduct {
   idTypeProduct: number | null;
@@ -151,7 +152,7 @@ export class GestionStockComponent implements OnInit {
   @ViewChild('addTypeProduct') inputName: any;
   delete: Object;
 
-  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService, private _snackBar: MatSnackBar) {
+  constructor(private http: HttpClient, public dialog: MatDialog, private _formBuilder: FormBuilder, private redirectService: RedirectionService, private _snackBar: MatSnackBar, private storageService: StorageService) {
 
   };
 
@@ -287,7 +288,7 @@ export class GestionStockComponent implements OnInit {
     const products = this.dataSource.data.filter((p: any) => p.isSelected);
     for (let index in products) {
 
-      this.http.delete('http://localhost:8301/delete/' + products[index].idProduct).subscribe({
+      this.http.delete('http://localhost:8301/delete/' + products[index].idProduct + '/' + this.storageService.getLoginUser()).subscribe({
         next: (data) => {
           this.delete = data;
           this.ngOnInit();
@@ -301,7 +302,7 @@ export class GestionStockComponent implements OnInit {
 
 
   addProduct(product: any) {
-    this.http.post('http://localhost:8301/add/database', product).subscribe({
+    this.http.post('http://localhost:8301/add/database/' + this.storageService.getLoginUser(), product).subscribe({
       next: (data) => {
         product.isEdit = false;
       },
@@ -330,7 +331,7 @@ export class GestionStockComponent implements OnInit {
         product.isInStock = false;
       }
 
-      this.http.patch('http://localhost:8301/patch/product', product).subscribe({
+      this.http.patch('http://localhost:8301/patch/product/' + this.storageService.getLoginUser(), product).subscribe({
         next: (data) => {
           product.isEdit = false;
 
