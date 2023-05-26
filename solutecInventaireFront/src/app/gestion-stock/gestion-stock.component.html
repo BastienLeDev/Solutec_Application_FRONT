@@ -3,7 +3,7 @@
   <!-- DIV tableau gestion Stock  -->
   <div class="col-9 tableau">
     <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" matSort>
+      <table class="custom-table" mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
           <div *ngIf="col.key!='isEdit' && col.key!='isSelected' && col.key!='typeProduct'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by col.key"
@@ -222,7 +222,7 @@
             Trier
           </button>
           <div class="col-1"></div>
-          <button id="bouton" (click)="clearForm()"> clear</button>
+          <button id="bouton_clear" (click)="clearForm()"> clear</button>
         </div>
       </form>
     </div>

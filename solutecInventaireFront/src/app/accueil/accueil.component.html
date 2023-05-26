@@ -38,7 +38,7 @@
                     <h2>Réservations en attente de réception</h2>
                 </mat-card-header>
                 <mat-card-content>
-                    <table mat-table [dataSource]="dataSource" matSort>
+                    <table class="custom-table" mat-table [dataSource]="dataSource" matSort>
                         <!-- Position Column -->
                         <ng-container matColumnDef="nameProduct">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header
@@ -63,7 +63,7 @@
                             <td mat-cell *matCellDef="let row"> {{row.owner}} </td>
                         </ng-container>
 
-                       
+
 
                         <!-- Symbol Column -->
                         <ng-container matColumnDef="daysInStock">

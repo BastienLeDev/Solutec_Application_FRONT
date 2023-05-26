@@ -5,3 +5,15 @@
 .mat-mdc-row:hover .mat-mdc-cell {
     background-color: #ff001947;
 }
+
+.custom-table {
+    /* Vos styles personnalisés pour la table */
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.custom-table th {
+    /* Styles spécifiques pour les en-têtes de colonne */
+    background-color: #f2f2f2;
+    font-weight: bold;
+}

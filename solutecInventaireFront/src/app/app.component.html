@@ -10,8 +10,8 @@
     </div>
 
     <div class="col-1">
-      <button mat-icon-button *ngIf="length == ''"><mat-icon id="noNotification">notifications</mat-icon></button>
-      <button mat-icon-button *ngIf="length != ''" [matMenuTriggerFor]="menu"><mat-icon id="notification"
+      <button mat-icon-button *ngIf="length == 0"><mat-icon id="noNotification">notifications</mat-icon></button>
+      <button mat-icon-button *ngIf="length != 0" [matMenuTriggerFor]="menu"><mat-icon id="notification"
           matBadge="{{length}}" matBadgeColor="warn">notification_important</mat-icon></button>
 
       <mat-menu #menu="matMenu">
