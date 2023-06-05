@@ -521,7 +521,7 @@ export class GestionStockComponent implements OnInit {
   newTypeEquipment(value: any) {
     console.log(value);
 
-    this.http.post('http://localhost:8301/typeProduct/add', value).subscribe({
+    this.http.post('http://localhost:8301/typeProduct/add/' + this.storageService.getLoginUser(), value).subscribe({
       next: (data) => {
         this.ngOnInit();
         this.nextStep();
@@ -584,7 +584,7 @@ export class GestionStockComponent implements OnInit {
 
   deleteTypeEquipment(val: any) {
 
-    this.http.delete('http://localhost:8301/typeProduct/delete/' + val.idTypeProduct).subscribe({
+    this.http.delete('http://localhost:8301/typeProduct/delete/' + val.idTypeProduct + '/' + this.storageService.getLoginUser()).subscribe({
       next: (data) => {
         this.ngOnInit();
         this.nextStep();
