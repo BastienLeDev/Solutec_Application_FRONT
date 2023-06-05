@@ -73,7 +73,7 @@
             </div>
             <div *ngIf="element.isEdit">
               <div class="btn-edit" *ngIf="col.key === 'isEdit'; else dataField">
-                <button mat-button (click)="modifProduct(element)" (click)="refreshAlert()">Done</button>
+                <button mat-button (click)="modifProduct(element)" (click)="refreshAlert()"><mat-icon>done</mat-icon></button>
               </div>
               <ng-template #dataField>
                 <div
@@ -113,18 +113,18 @@
   <div class="col-3 filtres">
     <div class="row">
       <div class="col-4">
-        Ajouter un équipement
+        Ajouter un produit <br>  
         <button mat-icon-button (click)="addRow()"><mat-icon>add</mat-icon>
         </button>
 
       </div>
       <div *ngIf="suppr==false" class="col-4">
-        Supprimer équipement(s)
+        Supprimer produit(s)
         <button mat-icon-button (click)="modeSuppression()"><mat-icon>delete</mat-icon>
         </button>
       </div>
       <div *ngIf="suppr==true" class="col-4">
-        Supprimer équipement(s)
+        Supprimer produit(s)
         <button mat-icon-button (click)="removeSelectedRows()"><mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -222,7 +222,7 @@
             Trier
           </button>
           <div class="col-1"></div>
-          <button id="bouton_clear" (click)="clearForm()"> clear</button>
+          <button id="bouton_clear" (click)="clearForm()"> Effacer</button>
         </div>
       </form>
     </div>
@@ -233,7 +233,7 @@
         <mat-expansion-panel id="expansionPanel" [expanded]="step === 0" (opened)="setStep(0)">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Nouveau type équipement
+              Nouveau type de produit
             </mat-panel-title>
           </mat-expansion-panel-header>
 
@@ -260,7 +260,7 @@
         <mat-expansion-panel id="expansionPanel" [expanded]="step === 2" (opened)="setStep(2)">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Supprimer un type d'équipement
+              Supprimer un type de produit
             </mat-panel-title>
           </mat-expansion-panel-header>
           <div *ngFor="let l of listTypeProduct">
